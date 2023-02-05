@@ -7,5 +7,8 @@ class Paletter {
   static const Color blackText = Color.fromRGBO(43, 43, 43, 1);
   static const Color icons = Color.fromRGBO(75, 108, 183, 1);
   static const Color mainBg = Color.fromRGBO(24, 40, 72, 1);
-  static Color gray = Color.fromARGB(125, 114, 123, 129);
+  static const Color gray = Color.fromARGB(1, 217, 217, 217);
+  static const Color gradiant1 = Color.fromRGBO(29, 76, 108, 1);
+  static const Color gradiant2 = Color.fromARGB(44, 73, 132, 173);
+  static const Color gradiant3 = Color.fromRGBO(15, 28, 53, 1);
 }

@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               Image.asset(
-                'images/logo.png',
+                'assets/images/logo.png',
               ),
               const SizedBox(
                 height: 25.0,
@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextButton(
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Paletter.gray),
+                                MaterialStateProperty.all(Colors.grey[700]),
                             overlayColor:
                                 MaterialStateProperty.resolveWith<Color?>(
                                     (Set<MaterialState> states) {
