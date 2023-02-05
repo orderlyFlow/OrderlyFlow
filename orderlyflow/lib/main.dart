@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'LogIn/log_in.dart';
-import 'chatPage.dart';
+import 'main_page.dart';
 
 void main() {
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {
-      '/': (context) => chatPage(),
+      '/': (context) => mainPage(),
     },
   ));
 }
