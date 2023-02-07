@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
-
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/main_page.dart';
 import '../palette.dart';
+import 'package:orderlyflow/main_page.dart';
+
 
 class LogIn extends StatelessWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -198,10 +198,8 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => mainPage()) 
-                              );
+                              Navigator.push(context, 
+                              MaterialPageRoute(builder: (context)=> mainPage()));
                             }
                           },
                           child: const Text(
