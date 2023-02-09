@@ -1,2 +1,2 @@
-//mongoDB_URL = "";
-//collectionName = "";
+mongoDB_URL = "";
+collectionName = "";

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:orderlyflow/chatPage.dart';
 import 'LogIn/log_in.dart';
 import 'Database/db.dart';
+import 'package:orderlyflow/main_page.dart';
 
 //const mongoDB_URL = "";
 //const collName = "";
@@ -13,7 +15,7 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => chatPage(),
+      '/': (context) => mainPage(),
     },
   ));
 }
