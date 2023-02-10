@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_spinkit: ^5.1.0
+  cupertino_icons: ^1.0.2
+  loading_animation_widget: ^1.2.0+4
   cupertino_icons: ^1.0.2
   mongo_dart: ^0.8.2
   crypto: ^3.0.0
@@ -64,13 +67,9 @@ flutter:
       - family: conthrax
         fonts:
           - asset: assets/fonts/conthrax.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
       - family: iceland
         fonts:
           - asset: assets/fonts/Iceland.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
       - family: neuropol
         fonts:
-          - asset: assets/fonts/neuropol.otf
+          - asset: assets/fonts/neuropol.ttf
