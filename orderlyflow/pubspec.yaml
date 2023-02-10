@@ -33,6 +33,10 @@ dependencies:
   flutter_spinkit: ^5.1.0
   cupertino_icons: ^1.0.2
   loading_animation_widget: ^1.2.0+4
+  cupertino_icons: ^1.0.2
+  mongo_dart: ^0.8.2
+  crypto: ^3.0.0
+  page_transition: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +62,7 @@ flutter:
 
   assets:
       - assets/images/
+
   fonts:
       - family: conthrax
         fonts:

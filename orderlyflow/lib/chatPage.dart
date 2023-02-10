@@ -38,17 +38,29 @@ class chatPageState extends State<chatPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(22, 22, 0, 2),
-                      child: const Text(
-                        'Chats',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'conthrax',
-                            fontSize: 38),
+                    Row(children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(22, 22, 0, 2),
+                        child: const Text(
+                          'Chats',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'conthrax',
+                              fontSize: 38),
+                        ),
                       ),
-                    ),
+                      SizedBox(width: 268),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          width: 65,
+                          height: 65,
+                          alignment: Alignment.center,
+                        ),
+                      )
+                    ]),
                     Container(child: SearchInput()),
                   ]))),
     );

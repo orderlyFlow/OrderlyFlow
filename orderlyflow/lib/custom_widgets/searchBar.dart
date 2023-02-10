@@ -12,7 +12,7 @@ class _SearchInputState extends State<SearchInput> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 25, left: 25, right: 25),
-      width: 500,
+      width: 400,
       child: Column(
         children: [
           Row(children: [
