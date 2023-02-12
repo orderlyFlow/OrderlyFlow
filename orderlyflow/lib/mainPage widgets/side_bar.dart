@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/announcement.dart';
 import 'package:orderlyflow/calendar.dart';
@@ -47,15 +49,6 @@ class _SideBarState extends State<SideBar> {
             ),
             Center(
               child: InkWell(
-                onHover: (isHovered) =>
-                    setState(() => _isHoveredHome = isHovered),
-                child: Image.asset(
-                  _isHoveredHome
-                      ? 'assets/images/homeHover.png'
-                      : 'assets/images/home.png',
-                  height: 50,
-                  width: 50,
-                ),
                 onTap: () {
                   Navigator.push(
                       context,
@@ -65,6 +58,28 @@ class _SideBarState extends State<SideBar> {
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
+                onHover: (isHovered) =>
+                    setState(() => _isHoveredHome = isHovered),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      _isHoveredHome
+                          ? 'assets/images/homeHover.png'
+                          : 'assets/images/home.png',
+                      height: 50,
+                      width: 50,
+                    ),
+                    _isHoveredHome ? Container(
+                      child: Text(
+                        'Home',
+                        style: TextStyle(
+                          fontFamily: 'iceland',
+                          fontSize: 10,
+                        ),
+                      ),
+                    ) : Container()
+                  ],
+                ), 
               ),
             ),
             const SizedBox(
@@ -73,12 +88,25 @@ class _SideBarState extends State<SideBar> {
             Center(
               child: InkWell(
                 onHover: (isHovered) => setState(() => _isHoveredChat = isHovered),
-                child: Image.asset(
-                  _isHoveredChat
-                      ? 'assets/images/chatHover.png'
-                      : 'assets/images/chat.png',
-                  height: 50,
-                  width: 50,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      _isHoveredChat
+                          ? 'assets/images/chatHover.png'
+                          : 'assets/images/chat.png',
+                      height: 50,
+                      width: 50,
+                    ),
+                    _isHoveredChat ? Container(
+                      child: Text(
+                        'Chat',
+                        style: TextStyle(
+                          fontFamily: 'iceland',
+                          fontSize: 10,
+                        ),
+                      ),
+                    ) : Container()
+                  ],
                 ),
                 onTap: () {
                   Navigator.push(
@@ -97,12 +125,25 @@ class _SideBarState extends State<SideBar> {
             Center(
               child: InkWell(
                 onHover: (isHovered) => setState(() => _isHoveredCalendar = isHovered),
-                child: Image.asset(
-                  _isHoveredCalendar
-                      ? 'assets/images/calendarHover.png'
-                      : 'assets/images/calendar.png',
-                  height: 50,
-                  width: 50,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      _isHoveredCalendar
+                          ? 'assets/images/calendarHover.png'
+                          : 'assets/images/calendar.png',
+                      height: 50,
+                      width: 50,
+                    ),
+                    _isHoveredCalendar ? Container(
+                      child: Text(
+                        'Calendar',
+                        style: TextStyle(
+                          fontFamily: 'iceland',
+                          fontSize: 10,
+                        ),
+                      ),
+                    ) : Container()
+                  ],
                 ),
                 onTap: () {
                   Navigator.push(
@@ -119,12 +160,25 @@ class _SideBarState extends State<SideBar> {
              Center(
               child: InkWell(
                 onHover: (isHovered) => setState(() => _isHoveredTask = isHovered),
-                child: Image.asset(
-                  _isHoveredTask
-                      ? 'assets/images/tasksHover.png'
-                      : 'assets/images/tasks.png',
-                  height: 50,
-                  width: 50,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      _isHoveredTask
+                          ? 'assets/images/tasksHover.png'
+                          : 'assets/images/tasks.png',
+                      height: 50,
+                      width: 50,
+                    ),
+                    _isHoveredTask ? Container(
+                      child: Text(
+                        'Tasks',
+                        style: TextStyle(
+                          fontFamily: 'iceland',
+                          fontSize: 10,
+                        ),
+                      ),
+                    ) : Container()
+                  ],
                 ),
                 onTap: () {
                   Navigator.push(
@@ -141,12 +195,25 @@ class _SideBarState extends State<SideBar> {
              Center(
               child: InkWell(
                 onHover: (isHovered) => setState(() => _isHoveredAnnoucement = isHovered),
-                child: Image.asset(
-                  _isHoveredAnnoucement
-                      ? 'assets/images/announcementHover.png'
-                      : 'assets/images/announcement.png',
-                  height: 50,
-                  width: 50,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      _isHoveredAnnoucement
+                          ? 'assets/images/announcementHover.png'
+                          : 'assets/images/announcement.png',
+                      height: 50,
+                      width: 50,
+                    ),
+                    _isHoveredAnnoucement ? Container(
+                      child: Text(
+                        'Announcement',
+                        style: TextStyle(
+                          fontFamily: 'iceland',
+                          fontSize: 10,
+                        ),
+                      ),
+                    ) : Container()
+                  ],
                 ),
                 onTap: () {
                   Navigator.push(
@@ -163,12 +230,25 @@ class _SideBarState extends State<SideBar> {
              Center(
               child: InkWell(
                 onHover: (isHovered) => setState(() => _isHoveredRequests = isHovered),
-                child: Image.asset(
-                  _isHoveredRequests
-                      ? 'assets/images/requestsHover.png'
-                      : 'assets/images/requests.png',
-                  height: 50,
-                  width: 50,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      _isHoveredRequests
+                          ? 'assets/images/requestsHover.png'
+                          : 'assets/images/requests.png',
+                      height: 50,
+                      width: 50,
+                    ),
+                    _isHoveredRequests ? Container(
+                      child: Text(
+                        'Requests',
+                        style: TextStyle(
+                          fontFamily: 'iceland',
+                          fontSize: 10,
+                        ),
+                      ),
+                    ) : Container()
+                  ],
                 ),
                 onTap: () {
                   Navigator.push(

@@ -36,6 +36,13 @@ dependencies:
   mongo_dart: ^0.8.2
   crypto: ^3.0.0
   page_transition: ^2.0.9
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding
+      path: plugins/window_size
+  glassmorphism: ^3.0.0
+  table_calendar: ^3.0.9
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:
