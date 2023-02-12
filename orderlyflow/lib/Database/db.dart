@@ -8,10 +8,10 @@ import 'dart:developer';
 class MongoDB {
   static connect() async {
     var db = await Db.create(mongoDB_URL);
-    await db.open(secure: true);
+    await db.open();
     inspect(db);
     var status = db.serverStatus();
     print(status);
-    var colection = db.collection(collectionName);
+    var collection = db.collection(collectionName);
   }
 }

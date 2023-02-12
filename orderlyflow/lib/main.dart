@@ -11,12 +11,12 @@ import 'package:orderlyflow/main_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoDB.connect();
+  //await MongoDB.connect();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => mainPage(),
+      '/': (context) => chatPage(),
     },
   ));
 }
