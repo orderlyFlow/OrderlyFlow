@@ -1,2 +1,2 @@
-mongoDB_URL = "";
-collectionName = "";
+String mongoDB_URL = "";
+String collectionName = "";
