@@ -126,7 +126,7 @@ class _calendarMainState extends State<calendarMain> {
       decoration: BoxDecoration(
           color: Paletter.containerLight,
           borderRadius: BorderRadius.circular(15)),
-      width: 700,
+      width: 600,
       height: 400,
       child: Column(
         children: [

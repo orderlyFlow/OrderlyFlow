@@ -15,12 +15,12 @@ class _inboxState extends State<inbox> {
        decoration: BoxDecoration(
           color: Paletter.containerDark,
           borderRadius: BorderRadius.circular(15)),
-      width: 700,
-      height: 250,
+      width: 600,
+      height: 225,
       child: Column(
         children: [
           Container(
-            width: 700,
+            width: 600,
             height: 50,
             alignment: Alignment.topLeft,
             decoration: const BoxDecoration(

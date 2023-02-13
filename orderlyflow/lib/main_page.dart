@@ -18,7 +18,7 @@ class mainPage extends StatelessWidget {
             Expanded(child: SideBar()),
             //Main Body part
             Expanded(
-              flex: 8,
+              flex: 7,
               child: Dashboard()
               ),
           ],
