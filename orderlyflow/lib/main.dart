@@ -16,7 +16,7 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => chatPage(),
+      '/': (context) => mainPage(),
     },
   ));
 }
