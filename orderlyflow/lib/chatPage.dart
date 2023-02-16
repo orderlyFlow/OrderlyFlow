@@ -3,7 +3,7 @@ import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 
 import 'custom_widgets/BlueBg.dart';
-import 'mainPage widgets/side_bar.dart';
+import 'side_bar.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key});

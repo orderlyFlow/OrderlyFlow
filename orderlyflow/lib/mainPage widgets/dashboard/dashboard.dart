@@ -27,8 +27,7 @@ class _DashboardState extends State<Dashboard> {
             ], // Gradient
             tileMode: TileMode.clamp,
           ),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))),
+        ),
     );
   }
 }
