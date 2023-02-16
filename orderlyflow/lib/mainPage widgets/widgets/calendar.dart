@@ -15,11 +15,11 @@ class calendarMain extends StatefulWidget {
 }
 
 class _calendarMainState extends State<calendarMain> {
-  late double ScreenWidth = MediaQuery.of(context).size.width;
-  late double ScreenHeight = MediaQuery.of(context).size.height;
+
   DateTime today = DateTime.now();
   List events = [];
-
+  late double ScreenWidth = MediaQuery.of(context).size.width;
+  late double ScreenHeight = MediaQuery.of(context).size.height;
   void _DisplayDialog(
       BuildContext context, DateTime selectedDate, List events) {
     setState(() {
@@ -124,12 +124,14 @@ class _calendarMainState extends State<calendarMain> {
 
   @override
   Widget build(BuildContext context) {
+  late double ScreenWidth = MediaQuery.of(context).size.width;
+  late double ScreenHeight = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
           color: Paletter.containerLight,
           borderRadius: BorderRadius.circular(15)),
       width: ScreenWidth * 0.5,
-      height: ScreenHeight * 0.72,
+      height: ScreenHeight * 0.6,
       child: Column(
         children: [
           TableCalendar(
@@ -174,7 +176,7 @@ class _calendarMainState extends State<calendarMain> {
               ),
             ),
             headerStyle: HeaderStyle(
-              headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.2),
+              headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.02),
               titleCentered: true,
               formatButtonVisible: false,
               titleTextStyle: TextStyle(

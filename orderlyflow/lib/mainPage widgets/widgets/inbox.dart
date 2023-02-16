@@ -9,16 +9,17 @@ class inbox extends StatefulWidget {
 }
 
 class _inboxState extends State<inbox> {
-  late double ScreenWidth = MediaQuery.of(context).size.width;
-  late double ScreenHeight = MediaQuery.of(context).size.height;
   @override
   Widget build(BuildContext context) {
+    late double ScreenWidth = MediaQuery.of(context).size.width;
+    late double ScreenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-       decoration: BoxDecoration(
+      decoration: BoxDecoration(
           color: Paletter.containerDark,
           borderRadius: BorderRadius.circular(15)),
       width: ScreenWidth * 0.5,
-      height: ScreenHeight * 0.22,
+      height: ScreenHeight * 0.34,
       child: Column(
         children: [
           Container(
@@ -28,27 +29,22 @@ class _inboxState extends State<inbox> {
             decoration: const BoxDecoration(
               color: Color.fromRGBO(149, 171, 185, 1),
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15)
-              ),
-            
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             ),
             child: Padding(
               padding: const EdgeInsets.only(top: 10, left: 10),
               child: Text(
                 'Inbox',
                 style: TextStyle(
-                  fontFamily: 'neuropol',
-                  fontSize: 24,
-                  color: Color.fromRGBO(20, 70, 103, 1),
-                  shadows: <Shadow> [
-                    Shadow(
-                      offset: Offset(0.8, 2.0),
-                      blurRadius: 3,
-                      color: Color.fromARGB(122, 35, 35, 35)
-                    )
-                  ]
-                ),
+                    fontFamily: 'neuropol',
+                    fontSize: 24,
+                    color: Color.fromRGBO(20, 70, 103, 1),
+                    shadows: <Shadow>[
+                      Shadow(
+                          offset: Offset(0.8, 2.0),
+                          blurRadius: 3,
+                          color: Color.fromARGB(122, 35, 35, 35))
+                    ]),
               ),
             ),
           )

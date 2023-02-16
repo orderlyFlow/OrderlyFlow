@@ -17,31 +17,32 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  late double ScreenWidth = MediaQuery.of(context).size.width;
-  late double ScreenHeight = MediaQuery.of(context).size.height;
   late final List<AnnouncementData> announcements;
   late String name;
 
   @override
   Widget build(BuildContext context) {
+    late double ScreenWidth = MediaQuery.of(context).size.width;
+    late double ScreenHeight = MediaQuery.of(context).size.height;
     return Material(
       color: Paletter.mainBgLight,
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.fromLTRB(
+            0.01 * ScreenWidth, 0.02 * ScreenHeight, 0.01 * ScreenWidth, 0),
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment(0.8, 2),
-              // ignore: prefer_const_literals_to_create_immutables
-              colors: <Color>[
-                Paletter.gradiant1,
-                //Paletter.gradiant2,
-                Paletter.gradiant3,
-                Paletter.mainBg,
-              ], // Gradient
-              tileMode: TileMode.clamp,
-            ),
-           ),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment(0.8, 2),
+            // ignore: prefer_const_literals_to_create_immutables
+            colors: <Color>[
+              Paletter.gradiant1,
+              //Paletter.gradiant2,
+              Paletter.gradiant3,
+              Paletter.mainBg,
+            ], // Gradient
+            tileMode: TileMode.clamp,
+          ),
+        ),
         child: Row(
           children: [
             Column(
@@ -59,7 +60,7 @@ class _DashboardState extends State<Dashboard> {
             Column(
               children: [
                 Container(
-                  width: ScreenWidth * 0.36,
+                  width: ScreenWidth * 0.397,
                   height: ScreenHeight * 0.5,
                   decoration: BoxDecoration(
                       color: Paletter.containerDark,
