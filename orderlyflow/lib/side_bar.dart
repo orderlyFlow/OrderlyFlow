@@ -144,9 +144,6 @@ class _SideBarState extends State<SideBar> {
               SizedBox(
                 height: ScreenHeight * 0.035,
               ),
-              SizedBox(
-                height: ScreenHeight * 0.035,
-              ),
               Center(
                   child: InkWell(
                 onHover: (isHovered) =>

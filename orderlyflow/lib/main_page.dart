@@ -1,6 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-// import 'package:orderlyflow/mainPage widgets copy/dashboard/';
+import 'package:orderlyflow/mainPage widgets/dashboard.dart';
 import 'package:orderlyflow/side_bar.dart';
 import 'package:orderlyflow/palette.dart';
 
@@ -16,11 +16,11 @@ class mainPage extends StatelessWidget {
           children: [
             //Side Access Bar
             Expanded(child: SideBar()),
-            //Main Body part
-            // Expanded(
-            //   flex: 8,
-            //   child: Dashboard()
-            //   ),
+            // Main Body part
+            Expanded(
+              flex: 8,
+              child: Dashboard()
+              ),
           ],
         ),
       ),
