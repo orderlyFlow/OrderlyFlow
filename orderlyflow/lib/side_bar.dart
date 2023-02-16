@@ -192,40 +192,6 @@ class _SideBarState extends State<SideBar> {
               )
             ),
             const SizedBox(height: 30,),
-             Center(
-              child: InkWell(
-                onHover: (isHovered) => setState(() => _isHoveredAnnoucement = isHovered),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      _isHoveredAnnoucement
-                          ? 'assets/images/announcementHover.png'
-                          : 'assets/images/announcement.png',
-                      height: 50,
-                      width: 50,
-                    ),
-                    _isHoveredAnnoucement ? Container(
-                      child: Text(
-                        'Announcement',
-                        style: TextStyle(
-                          fontFamily: 'iceland',
-                          fontSize: 10,
-                        ),
-                      ),
-                    ) : Container()
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          childCurrent: const theAnnoucement(),
-                          child: mainPage(),
-                          type: PageTransitionType.theme,
-                          duration: const Duration(seconds: 2)));
-                },
-              )
-            ),
                 const SizedBox(height: 30,),
              Center(
               child: InkWell(

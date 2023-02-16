@@ -1,7 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/mainPage%20widgets/dashboard/dashboard.dart';
-import 'package:orderlyflow/mainPage%20widgets/side_bar.dart';
+import 'package:orderlyflow/side_bar.dart';
 import 'package:orderlyflow/palette.dart';
 
 class mainPage extends StatelessWidget {
