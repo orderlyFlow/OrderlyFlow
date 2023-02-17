@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:orderlyflow/palette.dart';
 
 class calendar extends StatefulWidget {
   const calendar({super.key});
@@ -11,6 +13,8 @@ class calendar extends StatefulWidget {
 class _calendarState extends State<calendar> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      color: Paletter.gradiant2,
+    );
   }
 }

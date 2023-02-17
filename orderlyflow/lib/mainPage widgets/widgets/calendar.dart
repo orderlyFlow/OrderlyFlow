@@ -132,68 +132,70 @@ class _calendarMainState extends State<calendarMain> {
           borderRadius: BorderRadius.circular(15)),
       width: ScreenWidth * 0.5,
       height: ScreenHeight * 0.6,
-      child: Column(
-        children: [
-          TableCalendar(
-            calendarStyle: CalendarStyle(
-              todayTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            TableCalendar(
+              calendarStyle: CalendarStyle(
+                todayTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                selectedTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                defaultTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                outsideDaysVisible: false,
+                weekendTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                holidayTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
               ),
-              selectedTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: TextStyle(
+                  fontFamily: 'neuropol',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                weekendStyle: TextStyle(
+                  fontFamily: 'neuropol',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
               ),
-              defaultTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
+              headerStyle: HeaderStyle(
+                headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.02),
+                titleCentered: true,
+                formatButtonVisible: false,
+                titleTextStyle: TextStyle(
+                  fontFamily: 'neuropol',
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              outsideDaysVisible: false,
-              weekendTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              holidayTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-            ),
-            daysOfWeekStyle: DaysOfWeekStyle(
-              weekdayStyle: TextStyle(
-                fontFamily: 'neuropol',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              weekendStyle: TextStyle(
-                fontFamily: 'neuropol',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-            ),
-            headerStyle: HeaderStyle(
-              headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.02),
-              titleCentered: true,
-              formatButtonVisible: false,
-              titleTextStyle: TextStyle(
-                fontFamily: 'neuropol',
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            focusedDay: today,
-            firstDay: DateTime.utc(2000, 1, 1),
-            lastDay: DateTime.utc(2030, 1, 1),
-            selectedDayPredicate: (day) => isSameDay(day, today),
-            onDaySelected: (today, event) {
-              _DisplayDialog(context, today, events);
-            },
-          )
-        ],
+              focusedDay: today,
+              firstDay: DateTime.utc(2000, 1, 1),
+              lastDay: DateTime.utc(2030, 1, 1),
+              selectedDayPredicate: (day) => isSameDay(day, today),
+              onDaySelected: (today, event) {
+                _DisplayDialog(context, today, events);
+              },
+            )
+          ],
+        ),
       ),
     );
   }

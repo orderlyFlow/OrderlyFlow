@@ -14,7 +14,7 @@ class _commentsState extends State<comments> {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
     return Container(
-      height: ScreenHeight * 0.44,
+      height: ScreenHeight * 0.45,
       width: ScreenWidth * 0.5,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
