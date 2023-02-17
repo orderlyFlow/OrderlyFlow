@@ -44,12 +44,26 @@ class _notesState extends State<notes> {
                   Indexed(
                     index: 2,
                     child: TextFormField(
-                      style: TextStyle(
-                        // height: ScreenHeight * 0.0002,
-                        fontFamily: 'iceland',
-                        fontSize: 20
-                      ),
+                      controller: notesController,
+                      keyboardType: TextInputType.multiline,
                       maxLines: null,
+                      style: TextStyle(
+                        fontFamily: "iceland",
+                        fontSize: 16,
+                        color: Paletter.blackText,
+                        letterSpacing: 2.0,
+                        wordSpacing: 2.0,
+                        height: 1.5
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'This is where you enter any notes you deem necessary for your work, it could be used for writing important points seen from the comment, or what you consider helpful for your tasks, it could be suggestion acquired during meetings and you don\'t what to write on paper or worry of losing it',
+                      hintStyle: TextStyle(
+                        fontSize: 16,
+                        letterSpacing: 2.0
+                    ),
+                 
+                    ),
+     
                       onChanged: (text){
                         int numLines = (text.length / 25).ceil();
                         if(numLines > lineNbr){
@@ -58,10 +72,7 @@ class _notesState extends State<notes> {
                           });
                         }
                       },
-                      decoration: InputDecoration(
-                        hintText: 'yes',
-                        border: InputBorder.none
-                      ),
+                     
                     ),
                   ),
                 Indexed(
