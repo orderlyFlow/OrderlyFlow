@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:orderlyflow/calendar.dart';
 import 'package:orderlyflow/chatPage.dart';
 import 'package:orderlyflow/tasks.dart';
 import 'LogIn/log_in.dart';
@@ -16,7 +17,7 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => myTasks(),
+      '/': (context) => calendar(),
     },
   ));
 }
