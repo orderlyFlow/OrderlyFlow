@@ -12,8 +12,7 @@ class tasks extends StatefulWidget {
 }
 
 class _tasksState extends State<tasks> {
-  late double ScreenWidth = MediaQuery.of(context).size.width;
-  late double ScreenHeight = MediaQuery.of(context).size.height;
+
   bool showTasks = false;
 
   void initState(){
@@ -27,8 +26,10 @@ class _tasksState extends State<tasks> {
 
   @override
   Widget build(BuildContext context) {
+  late double ScreenWidth = MediaQuery.of(context).size.width;
+  late double ScreenHeight = MediaQuery.of(context).size.height;
     return Container(
-      width: ScreenWidth * 0.36,
+      width: ScreenWidth * 0.397,
       height: ScreenHeight * 0.44,
       decoration: BoxDecoration(
         color: Paletter.containerLight,

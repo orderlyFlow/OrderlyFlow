@@ -15,11 +15,11 @@ class calendarMain extends StatefulWidget {
 }
 
 class _calendarMainState extends State<calendarMain> {
-  late double ScreenWidth = MediaQuery.of(context).size.width;
-  late double ScreenHeight = MediaQuery.of(context).size.height;
+
   DateTime today = DateTime.now();
   List events = [];
-
+  late double ScreenWidth = MediaQuery.of(context).size.width;
+  late double ScreenHeight = MediaQuery.of(context).size.height;
   void _DisplayDialog(
       BuildContext context, DateTime selectedDate, List events) {
     setState(() {
@@ -124,74 +124,78 @@ class _calendarMainState extends State<calendarMain> {
 
   @override
   Widget build(BuildContext context) {
+  late double ScreenWidth = MediaQuery.of(context).size.width;
+  late double ScreenHeight = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
           color: Paletter.containerLight,
           borderRadius: BorderRadius.circular(15)),
       width: ScreenWidth * 0.5,
-      height: ScreenHeight * 0.72,
-      child: Column(
-        children: [
-          TableCalendar(
-            calendarStyle: CalendarStyle(
-              todayTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
+      height: ScreenHeight * 0.6,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            TableCalendar(
+              calendarStyle: CalendarStyle(
+                todayTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                selectedTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                defaultTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                outsideDaysVisible: false,
+                weekendTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                holidayTextStyle: TextStyle(
+                  fontFamily: 'iceland',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
               ),
-              selectedTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: TextStyle(
+                  fontFamily: 'neuropol',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
+                weekendStyle: TextStyle(
+                  fontFamily: 'neuropol',
+                  color: Paletter.blackText,
+                  fontSize: 20,
+                ),
               ),
-              defaultTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
+              headerStyle: HeaderStyle(
+                headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.02),
+                titleCentered: true,
+                formatButtonVisible: false,
+                titleTextStyle: TextStyle(
+                  fontFamily: 'neuropol',
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              outsideDaysVisible: false,
-              weekendTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              holidayTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-            ),
-            daysOfWeekStyle: DaysOfWeekStyle(
-              weekdayStyle: TextStyle(
-                fontFamily: 'neuropol',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              weekendStyle: TextStyle(
-                fontFamily: 'neuropol',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-            ),
-            headerStyle: HeaderStyle(
-              headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.2),
-              titleCentered: true,
-              formatButtonVisible: false,
-              titleTextStyle: TextStyle(
-                fontFamily: 'neuropol',
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            focusedDay: today,
-            firstDay: DateTime.utc(2000, 1, 1),
-            lastDay: DateTime.utc(2030, 1, 1),
-            selectedDayPredicate: (day) => isSameDay(day, today),
-            onDaySelected: (today, event) {
-              _DisplayDialog(context, today, events);
-            },
-          )
-        ],
+              focusedDay: today,
+              firstDay: DateTime.utc(2000, 1, 1),
+              lastDay: DateTime.utc(2030, 1, 1),
+              selectedDayPredicate: (day) => isSameDay(day, today),
+              onDaySelected: (today, event) {
+                _DisplayDialog(context, today, events);
+              },
+            )
+          ],
+        ),
       ),
     );
   }

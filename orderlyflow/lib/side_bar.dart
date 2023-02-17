@@ -113,7 +113,7 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const calendar(),
-                          child: mainPage(),
+                          child: calendar(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
@@ -136,7 +136,7 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const myTasks(),
-                          child: mainPage(),
+                          child: myTasks(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
@@ -160,7 +160,7 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const requests(),
-                          child: mainPage(),
+                          child: requests(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
