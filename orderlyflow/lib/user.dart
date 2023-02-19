@@ -1,16 +1,72 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/material.dart';
 
-class _annoucementSState extends StatefulWidget {
-  const _annoucementSState({super.key});
+class userData extends StatefulWidget {
+  const userData({super.key});
 
   @override
-  State<_annoucementSState> createState() => __annoucementSStateState();
+  State<userData> createState() => _userDataState();
 }
 
-class __annoucementSStateState extends State<_annoucementSState> {
+class _userDataState extends State<userData> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return  Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 7,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    alignment: Alignment.center,
+                    color: Color(0xFF2AA650),
+                    child: Text(
+                      "personal data",
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Column(children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Color(0XFF58AAE8),
+                        child: Text(
+                          "hours of work/week",
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 8,
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Color(0XFFE74E33),
+                        child: Text(
+                          "hours of work/week",
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Container(
+              alignment: Alignment.center,
+              color: Color(0xff8D4383),
+              child: Text(
+                "salary",
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
