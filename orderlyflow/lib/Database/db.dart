@@ -5,13 +5,27 @@ import 'constant.dart';
 import 'db.dart';
 import 'dart:developer';
 
+var db;
+var collection;
+
 class MongoDB {
   static connect() async {
-    var db = await Db.create(mongoDB_URL);
-    await db.open(secure: true);
+    db = await Db.create(mongoDB_URL);
+    await db.open();
     inspect(db);
     var status = db.serverStatus();
     print(status);
-    var colection = db.collection(collectionName);
+    //print("Database connected");
+    collection = db.collection(collectionName);
   }
+
+  /*Future getDocuments() async {
+    try {
+      final users = await collection.find().toList();
+      return users;
+    } catch (e) {
+      print(e);
+      return e;
+    }
+  }*/
 }

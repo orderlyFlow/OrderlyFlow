@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
+
+import 'custom_widgets/BlueBg.dart';
+import 'side_bar.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key});
@@ -13,23 +17,19 @@ class chatPage extends StatefulWidget {
 class chatPageState extends State<chatPage> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment(0.8, 2),
-              colors: <Color>[
-                Paletter.gradiant1,
-                //Paletter.gradiant2,
-                Paletter.gradiant3,
-                Paletter.mainBg,
-              ], // Gradient
-              tileMode: TileMode.clamp,
-            ),
-          ),
-          child: Container(
-              margin: const EdgeInsets.all(25.0),
+    double ScreenWidth = MediaQuery.of(context).size.width;
+    double ScreenHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+        body: Stack(children: [
+      const BlueBg(),
+      Row(
+        children: [
+          SideBar(),
+          Container(
+              margin: EdgeInsets.fromLTRB(0.03 * ScreenWidth,
+                  0.02 * ScreenHeight, 0.02 * ScreenWidth, 0),
+              height: ScreenHeight * 0.90,
+              width: ScreenWidth * 0.88,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Paletter.mainBgLight,
@@ -40,29 +40,51 @@ class chatPageState extends State<chatPage> {
                   children: [
                     Row(children: [
                       Container(
-                        margin: const EdgeInsets.fromLTRB(22, 22, 0, 2),
+                        margin: EdgeInsets.fromLTRB(
+                            0.03 * ScreenWidth,
+                            0.07 * ScreenHeight,
+                            0.18 * ScreenWidth,
+                            0.03 * ScreenHeight),
                         child: const Text(
                           'Chats',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: 'conthrax',
+                              color: Colors.black,
                               fontSize: 38),
                         ),
                       ),
-                      SizedBox(width: 268),
                       Container(
-                        margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        margin:
+                            EdgeInsets.fromLTRB(0, ScreenHeight * 0.032, 0, 0),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          width: 65,
-                          height: 65,
+                          width: ScreenWidth * 0.07,
+                          height: ScreenHeight * 0.07,
                           alignment: Alignment.center,
                         ),
                       )
                     ]),
-                    Container(child: SearchInput()),
-                  ]))),
-    );
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: ScreenWidth * 0.026,
+                          top: ScreenHeight * 0.02,
+                          bottom: ScreenHeight * 0.05),
+                      height: ScreenHeight * 0.064,
+                      width: ScreenWidth * 0.34,
+                      decoration: BoxDecoration(
+                        color: Paletter.mainBgLight,
+                        border: Border.all(
+                          color: Paletter.mainBgLight,
+                        ),
+                      ),
+                      child: SearchInput(),
+                    ),
+                    Container()
+                  ]))
+        ],
+      )
+    ]));
   }
 }

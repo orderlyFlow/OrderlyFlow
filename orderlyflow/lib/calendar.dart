@@ -1,9 +1,12 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/palette.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
+import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/side_bar.dart';
+import 'package:orderlyflow/calendar widgets/dates.dart';
+
+import 'custom_widgets/BlueBg.dart';
 
 class calendar extends StatefulWidget {
   const calendar({super.key});
@@ -99,74 +102,24 @@ class _calendarState extends State<calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Paletter.gradiant3, borderRadius: BorderRadius.circular(15)),
-      width: 600,
-      height: 400,
-      child: Column(
-        children: [
-          TableCalendar(
-            calendarStyle: CalendarStyle(
-              todayTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              selectedTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              defaultTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              outsideDaysVisible: false,
-              weekendTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              holidayTextStyle: TextStyle(
-                fontFamily: 'iceland',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-            ),
-            daysOfWeekStyle: DaysOfWeekStyle(
-              weekdayStyle: TextStyle(
-                fontFamily: 'neuropol',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-              weekendStyle: TextStyle(
-                fontFamily: 'neuropol',
-                color: Paletter.blackText,
-                fontSize: 20,
-              ),
-            ),
-            headerStyle: HeaderStyle(
-              headerMargin: EdgeInsets.only(bottom: 20),
-              titleCentered: true,
-              formatButtonVisible: false,
-              titleTextStyle: TextStyle(
-                fontFamily: 'neuropol',
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            focusedDay: today,
-            firstDay: DateTime.utc(2000, 1, 1),
-            lastDay: DateTime.utc(2030, 1, 1),
-            selectedDayPredicate: (day) => isSameDay(day, today),
-            onDaySelected: (today, event) {
-              _DisplayDialog(context, today, events);
-            },
-          )
-        ],
-      ),
+    late double ScreenWidth = MediaQuery.of(context).size.width;
+    late double ScreenHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: Stack(children: [
+        const BlueBg(),
+        Row(
+          children: [
+            SideBar(),
+            Container(
+                padding: EdgeInsets.fromLTRB(
+                    0.01 * ScreenWidth,
+                    0.02 * ScreenHeight,
+                    0.01 * ScreenWidth,
+                    0.02 * ScreenHeight),
+                child: Column(children: [calendarDate()]))
+          ],
+        )
+      ]),
     );
   }
 }
