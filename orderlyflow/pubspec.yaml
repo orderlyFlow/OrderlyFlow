@@ -30,11 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  flutter_spinkit: ^5.1.0
   cupertino_icons: ^1.0.2
+  loading_animation_widget: ^1.2.0+4
+  mongo_dart: ^0.8.2
+  crypto: ^3.0.0
+  page_transition: ^2.0.9
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:
@@ -60,17 +62,14 @@ flutter:
 
   assets:
       - assets/images/
+
   fonts:
       - family: conthrax
         fonts:
           - asset: assets/fonts/conthrax.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
       - family: iceland
         fonts:
           - asset: assets/fonts/Iceland.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
       - family: neuropol
         fonts:
-          - asset: assets/fonts/neuropol.otf
+          - asset: assets/fonts/neuropol.ttf
