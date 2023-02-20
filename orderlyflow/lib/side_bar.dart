@@ -113,7 +113,7 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const calendar(),
-                          child: mainPage(),
+                          child: calendar(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
@@ -136,30 +136,7 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const myTasks(),
-                          child: mainPage(),
-                          type: PageTransitionType.theme,
-                          duration: const Duration(seconds: 2)));
-                },
-              )),
-              SizedBox(
-                height: ScreenHeight * 0.035,
-              ),
-              Center(
-                  child: InkWell(
-                onHover: (isHovered) =>
-                    setState(() => _isHoveredAnnoucement = isHovered),
-                child: Image.asset(
-                    _isHoveredAnnoucement
-                        ? 'assets/images/announcementHover.png'
-                        : 'assets/images/announcement.png',
-                    height: ScreenHeight * 0.07,
-                    width: ScreenWidth * 0.08),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          childCurrent: const theAnnoucement(),
-                          child: mainPage(),
+                          child: myTasks(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
@@ -183,13 +160,13 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const requests(),
-                          child: mainPage(),
+                          child: requests(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
               )),
               SizedBox(
-                height: ScreenHeight * 0.1,
+                height: ScreenHeight * 0.2,
               ),
               Center(
                   child: InkWell(

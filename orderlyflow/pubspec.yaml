@@ -36,6 +36,10 @@ dependencies:
   crypto: ^3.0.0
   page_transition: ^2.0.9
   auto_size_text: ^3.0.0
+  glassmorphism: ^3.0.0
+  table_calendar: ^3.0.9
+  intl: ^0.18.0
+  indexed: ^0.0.8
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +65,7 @@ flutter:
 
   assets:
       - assets/images/
+      - assets/images/OF.gif
 
   fonts:
       - family: conthrax
