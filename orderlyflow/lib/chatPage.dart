@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 
@@ -18,7 +19,8 @@ class chatPageState extends State<chatPage> {
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
-    return Stack(children: [
+    return Scaffold(
+        body: Stack(children: [
       const BlueBg(),
       Row(
         children: [
@@ -79,9 +81,10 @@ class chatPageState extends State<chatPage> {
                       ),
                       child: SearchInput(),
                     ),
+                    Container()
                   ]))
         ],
       )
-    ]);
+    ]));
   }
 }
