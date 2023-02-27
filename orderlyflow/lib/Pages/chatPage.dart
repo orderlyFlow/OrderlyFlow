@@ -18,21 +18,6 @@ class chatPage extends StatefulWidget {
   State<chatPage> createState() => chatPageState();
 }
 
-Future getInfo() async {
-  var db = await Mongo.Db.create(mongoDB_URL);
-  await db.open();
-
-  print('Connected to database');
-
-  //Mongo.DbCollection coll = db.collection('Personnel');
-  var information = await db
-      .collection('Personnel')
-      .findOne(Mongo.where.eq('_id', 100000).toString());
-  await db.close();
-  List<String> r = [information!['code'], information['name']];
-  return r;
-}
-
 class chatPageState extends State<chatPage> {
   @override
   Widget build(BuildContext context) {
@@ -102,21 +87,22 @@ class chatPageState extends State<chatPage> {
                     ),
                     Container(
                       child: FutureBuilder(
-                          future: getInfo(),
+                          future: MongoDB.getInfo(),
                           builder: (buildContext, AsyncSnapshot snapshot) {
                             if (snapshot.hasError) {
                               return Text('${snapshot.error}');
                             } else if (!snapshot.hasData) {
                               return Container(
                                 child: Center(
-                                  child: Text("Waiting..., no data found"),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               );
                             } else {
                               return Column(children: [
                                 Text('Hello'),
-                                Text('Result: ${snapshot.data[0]}'),
-                                Text('Result: ${snapshot.data[1]}'),
+                                Text('Result: ${snapshot.data.toString()}'),
                               ]);
                             }
                           }),
