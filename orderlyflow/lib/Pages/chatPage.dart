@@ -1,10 +1,15 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
+import 'package:orderlyflow/Database/db.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 
-import 'custom_widgets/BlueBg.dart';
-import 'side_bar.dart';
+import '../Database/db.dart';
+import '../custom_widgets/BlueBg.dart';
+import '../side_bar.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key});
@@ -13,7 +18,21 @@ class chatPage extends StatefulWidget {
   State<chatPage> createState() => chatPageState();
 }
 
-// ignore: prefer_const_constructors
+Future getInfo() async {
+  var db = await Mongo.Db.create(mongoDB_URL);
+  await db.open();
+
+  print('Connected to database');
+
+  //Mongo.DbCollection coll = db.collection('Personnel');
+  var information = await db
+      .collection('Personnel')
+      .findOne(Mongo.where.eq('_id', 100000).toString());
+  await db.close();
+  List<String> r = [information!['code'], information['name']];
+  return r;
+}
+
 class chatPageState extends State<chatPage> {
   @override
   Widget build(BuildContext context) {
@@ -81,7 +100,27 @@ class chatPageState extends State<chatPage> {
                       ),
                       child: SearchInput(),
                     ),
-                    Container()
+                    Container(
+                      child: FutureBuilder(
+                          future: getInfo(),
+                          builder: (buildContext, AsyncSnapshot snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            } else if (!snapshot.hasData) {
+                              return Container(
+                                child: Center(
+                                  child: Text("Waiting..., no data found"),
+                                ),
+                              );
+                            } else {
+                              return Column(children: [
+                                Text('Hello'),
+                                Text('Result: ${snapshot.data[0]}'),
+                                Text('Result: ${snapshot.data[1]}'),
+                              ]);
+                            }
+                          }),
+                    )
                   ]))
         ],
       )

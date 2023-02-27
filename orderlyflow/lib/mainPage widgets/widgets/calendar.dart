@@ -15,7 +15,6 @@ class calendarMain extends StatefulWidget {
 }
 
 class _calendarMainState extends State<calendarMain> {
-
   DateTime today = DateTime.now();
   List events = [];
   late double ScreenWidth = MediaQuery.of(context).size.width;
@@ -124,8 +123,8 @@ class _calendarMainState extends State<calendarMain> {
 
   @override
   Widget build(BuildContext context) {
-  late double ScreenWidth = MediaQuery.of(context).size.width;
-  late double ScreenHeight = MediaQuery.of(context).size.height;
+    late double ScreenWidth = MediaQuery.of(context).size.width;
+    late double ScreenHeight = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
           color: Paletter.containerLight,
