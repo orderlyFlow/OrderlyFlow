@@ -91,7 +91,12 @@ class chatPageState extends State<chatPage> {
                           builder: (buildContext, AsyncSnapshot snapshot) {
                             if (snapshot.hasError) {
                               return Text('${snapshot.error}');
-                            } else if (!snapshot.hasData) {
+                            } else if (snapshot.hasData) {
+                              return Column(children: [
+                                Text('Hello'),
+                                Text('Result: ${snapshot.data.toString()}'),
+                              ]);
+                            } else {
                               return Container(
                                 child: Center(
                                   child: CircularProgressIndicator(
@@ -99,11 +104,6 @@ class chatPageState extends State<chatPage> {
                                   ),
                                 ),
                               );
-                            } else {
-                              return Column(children: [
-                                Text('Hello'),
-                                Text('Result: ${snapshot.data.toString()}'),
-                              ]);
                             }
                           }),
                     )
