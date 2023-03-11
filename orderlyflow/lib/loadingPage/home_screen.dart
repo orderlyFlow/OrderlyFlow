@@ -14,8 +14,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
+  // ignore: non_constant_identifier_names
+
   Widget build(BuildContext context) {
+    double ScreenWidth = MediaQuery.of(context).size.width;
+    double ScreenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Paletter.mainBgLight,
       body: Column(children: [
@@ -34,11 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: const [
             SizedBox(
               height: 70.0,
             ),
-            const Text(
+            Text(
               "O",
               style: TextStyle(
                 fontSize: 55,
@@ -51,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // height: 25.0,
             //  ),
             // ignore: prefer_const_constructors
-            const Text(
+            Text(
               "derly  Flow",
               // ignore: prefer_const_constructors
               style: TextStyle(
@@ -77,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // ignore: prefer_const_constructors
                     color: Paletter.mainBg,
                     size: 300,
+                    //duration: const Duration(milliseconds: 250),
                   )),
               const Text(
                 "loading .....",
@@ -91,13 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           height: 70.0,
         ),
-        // ignore: prefer_const_constructors
-
-        // ignore: prefer_const_constructors
-        // SizedBox(
-        // height: 25.0,
-        //  ),
-        // ignore: prefer_const_constructor
       ]),
     );
   }

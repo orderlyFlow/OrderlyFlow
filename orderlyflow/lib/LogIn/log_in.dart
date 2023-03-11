@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
+//import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
 import '../palette.dart';
 import 'package:orderlyflow/main_page.dart';
-
 
 class LogIn extends StatelessWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -74,16 +74,18 @@ class _LoginPageState extends State<LoginPage> {
                                     hintStyle:
                                         TextStyle(color: Paletter.logInText),
                                     enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(40.0),
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
                                         // ignore: prefer_const_constructors
                                         borderSide: BorderSide(
                                             color: Color.fromRGBO(
                                                 199, 215, 225, 0.56))),
                                     filled: true,
-                                    fillColor:
-                                        const Color.fromRGBO(199, 215, 225, 0.56),
+                                    fillColor: const Color.fromRGBO(
+                                        199, 215, 225, 0.56),
                                     focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(40.0),
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
                                         borderSide: const BorderSide(
                                             color: Color.fromRGBO(
                                                 199, 215, 225, 0.56)))),
@@ -112,15 +114,17 @@ class _LoginPageState extends State<LoginPage> {
                                     hintStyle: const TextStyle(
                                         color: Paletter.logInText),
                                     enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(40.0),
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
                                         borderSide: const BorderSide(
                                             color: Color.fromRGBO(
                                                 199, 215, 225, 0.56))),
                                     filled: true,
-                                    fillColor:
-                                        const Color.fromRGBO(199, 215, 225, 0.56),
+                                    fillColor: const Color.fromRGBO(
+                                        199, 215, 225, 0.56),
                                     focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(40.0),
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
                                         borderSide: const BorderSide(
                                             color: Color.fromRGBO(
                                                 199, 215, 225, 0.56)))),
@@ -149,15 +153,17 @@ class _LoginPageState extends State<LoginPage> {
                                     hintStyle: const TextStyle(
                                         color: Paletter.logInText),
                                     enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(40.0),
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
                                         borderSide: const BorderSide(
                                             color: Color.fromRGBO(
                                                 199, 215, 225, 0.56))),
                                     filled: true,
-                                    fillColor:
-                                        const Color.fromRGBO(199, 215, 225, 0.56),
+                                    fillColor: const Color.fromRGBO(
+                                        199, 215, 225, 0.56),
                                     focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(40.0),
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
                                         borderSide: const BorderSide(
                                             color: Color.fromRGBO(
                                                 199, 215, 225, 0.56)))),
@@ -192,14 +198,17 @@ class _LoginPageState extends State<LoginPage> {
                                 return null;
                               }),
                               shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(RoundedRectangleBorder(
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ))),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              Navigator.push(context, 
-                              MaterialPageRoute(builder: (context)=> mainPage()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => mainPage()));
                             }
                           },
                           child: const Text(
