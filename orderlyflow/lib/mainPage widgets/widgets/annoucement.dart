@@ -41,8 +41,10 @@ class _announcementState extends State<announcement> {
   }
 
   Widget build(BuildContext context) {
+    double ScreenWidth = MediaQuery.of(context).size.width;
+    double ScreenHeight = MediaQuery.of(context).size.height;
     return Container(
-      width: 505,
+      width: ScreenWidth * 0.40,
       height: 320,
       decoration: BoxDecoration(
           color: Paletter.containerDark,

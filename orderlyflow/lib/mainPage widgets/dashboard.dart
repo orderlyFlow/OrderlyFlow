@@ -9,6 +9,8 @@ import 'package:orderlyflow/mainPage widgets/widgets/inbox.dart';
 import 'package:orderlyflow/mainPage widgets/widgets/tasks.dart';
 import 'package:orderlyflow/palette.dart';
 
+import '../side_bar.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -47,6 +49,7 @@ class _DashboardState extends State<Dashboard> {
           children: [
             Column(
               children: [
+                //SideBar(),
                 calendarMain(),
                 SizedBox(
                   height: ScreenHeight * 0.02,

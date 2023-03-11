@@ -27,7 +27,7 @@ class _tasksState extends State<tasks> {
     late double ScreenWidth = MediaQuery.of(context).size.width;
     late double ScreenHeight = MediaQuery.of(context).size.height;
     return Container(
-      width: ScreenWidth * 0.397,
+      width: ScreenWidth * 0.327,
       height: ScreenHeight * 0.44,
       decoration: BoxDecoration(
           color: Paletter.containerLight,

@@ -37,44 +37,38 @@ class _notesState extends State<notes> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                height: ScreenHeight * 0.5,
-                child: Indexer(children: [
-                  Indexed(
-                    index: 2,
-                    child: TextFormField(
-                      controller: notesController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      style: TextStyle(
+              child: SingleChildScrollView(
+            child: SizedBox(
+              height: ScreenHeight * 0.5,
+              child: Indexer(children: [
+                Indexed(
+                  index: 2,
+                  child: TextFormField(
+                    controller: notesController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    style: TextStyle(
                         fontFamily: "iceland",
                         fontSize: 16,
                         color: Paletter.blackText,
                         letterSpacing: 2.0,
                         wordSpacing: 2.0,
-                        height: 1.5
-                    ),
+                        height: 1.5),
                     decoration: InputDecoration(
-                      hintText: 'This is where you enter any notes you deem necessary for your work, it could be used for writing important points seen from the comment, or what you consider helpful for your tasks, it could be suggestion acquired during meetings and you don\'t what to write on paper or worry of losing it',
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        letterSpacing: 2.0
+                      hintText:
+                          'This is where you enter any notes you deem necessary for your work, it could be used for writing important points seen from the comment, or what you consider helpful for your tasks, it could be suggestion acquired during meetings and you don\'t what to write on paper or worry of losing it',
+                      hintStyle: TextStyle(fontSize: 16, letterSpacing: 2.0),
                     ),
-                 
-                    ),
-     
-                      onChanged: (text){
-                        int numLines = (text.length / 25).ceil();
-                        if(numLines > lineNbr){
-                          setState(() {
-                            lineNbr = numLines;
-                          });
-                        }
-                      },
-                     
-                    ),
+                    onChanged: (text) {
+                      int numLines = (text.length / 25).ceil();
+                      if (numLines > lineNbr) {
+                        setState(() {
+                          lineNbr = numLines;
+                        });
+                      }
+                    },
                   ),
+                ),
                 Indexed(
                   index: 1,
                   child: Container(
@@ -84,7 +78,9 @@ class _notesState extends State<notes> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 18,),
+                          SizedBox(
+                            height: 18,
+                          ),
                           for (int i = 0; i < lineNbr; i++)
                             Container(
                               height: 25,
@@ -99,7 +95,6 @@ class _notesState extends State<notes> {
                     ),
                   ),
                 ),
-             
               ]),
             ),
           ))

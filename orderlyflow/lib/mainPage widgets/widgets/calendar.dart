@@ -31,7 +31,7 @@ class _calendarMainState extends State<calendarMain> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: GlassmorphicContainer(
-                width: ScreenWidth * 0.5,
+                width: ScreenWidth * 0.40,
                 height: ScreenWidth * 0.2,
                 blur: 10,
                 borderRadius: 15,

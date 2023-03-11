@@ -40,6 +40,7 @@ dependencies:
   table_calendar: ^3.0.9
   intl: ^0.18.0
   indexed: ^0.0.8
+  argon_buttons_flutter: ^1.1.0
   get: ^4.6.5
 
 dev_dependencies:
