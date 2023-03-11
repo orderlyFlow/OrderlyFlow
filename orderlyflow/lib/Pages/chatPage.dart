@@ -1,10 +1,15 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
+import 'package:orderlyflow/Database/db.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 
-import 'custom_widgets/BlueBg.dart';
-import 'side_bar.dart';
+import '../Database/db.dart';
+import '../custom_widgets/BlueBg.dart';
+import '../side_bar.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key});
@@ -13,7 +18,6 @@ class chatPage extends StatefulWidget {
   State<chatPage> createState() => chatPageState();
 }
 
-// ignore: prefer_const_constructors
 class chatPageState extends State<chatPage> {
   @override
   Widget build(BuildContext context) {
@@ -81,7 +85,28 @@ class chatPageState extends State<chatPage> {
                       ),
                       child: SearchInput(),
                     ),
-                    Container()
+                    Container(
+                      child: FutureBuilder(
+                          future: MongoDB.getInfo(),
+                          builder: (buildContext, AsyncSnapshot snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            } else if (snapshot.hasData) {
+                              return Column(children: [
+                                Text('Hello'),
+                                Text('Result: ${snapshot.data.toString()}'),
+                              ]);
+                            } else {
+                              return Container(
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            }
+                          }),
+                    )
                   ]))
         ],
       )

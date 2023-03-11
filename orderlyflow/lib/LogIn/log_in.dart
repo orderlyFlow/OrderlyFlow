@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
 //import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:page_transition/page_transition.dart';
+import '../Database/textControllers.dart';
 import '../palette.dart';
 import 'package:orderlyflow/main_page.dart';
 
@@ -27,6 +30,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final StoreController textControllers = Get.put(StoreController());
 // to validate the form
   late String password;
   late String user;
@@ -59,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                             children: [
                               TextFormField(
+                                controller: StoreController.ID_controller.value,
                                 // ignore: prefer_const_constructors
                                 style: TextStyle(
                                     color: Paletter.blackText,
@@ -101,6 +106,8 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 16.0,
                               ),
                               TextFormField(
+                                controller:
+                                    StoreController.Pass_controller.value,
                                 obscureText: true,
                                 style: const TextStyle(
                                     color: Paletter.blackText,
@@ -140,6 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 16.0,
                               ),
                               TextFormField(
+                                controller:
+                                    StoreController.OTP_controller.value,
                                 obscureText: true,
                                 style: const TextStyle(
                                     color: Paletter.blackText,
@@ -234,7 +243,22 @@ class _LoginPageState extends State<LoginPage> {
                               return null;
                             }),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (StoreController.ID_found.value == true &&
+                                StoreController.Pass_found.value ==
+                                    true) //&& StoreController.OTP_found.value == true)
+                            {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      childCurrent: mainPage(),
+                                      child: mainPage(),
+                                      type: PageTransitionType.theme,
+                                      duration: const Duration(seconds: 2)));
+                            } else {
+                              Text("error");
+                            }
+                          },
                           child: Text(
                             'forgot password?',
                             style: TextStyle(

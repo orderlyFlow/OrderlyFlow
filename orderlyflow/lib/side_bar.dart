@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/announcement.dart';
 import 'package:orderlyflow/calendar.dart';
-import 'package:orderlyflow/chatPage.dart';
+import 'package:orderlyflow/Pages/chatPage.dart';
 import 'package:orderlyflow/main_page.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/requests.dart';
@@ -153,7 +153,7 @@ class _SideBarState extends State<SideBar> {
                       ? 'assets/images/requestsHover.png'
                       : 'assets/images/requests.png',
                   height: ScreenHeight * 0.07,
-                  width: ScreenWidth * 0.08,
+                  width: ScreenWidth * 0.084,
                 ),
                 onTap: () {
                   Navigator.push(

@@ -11,16 +11,13 @@ class mainPage extends StatelessWidget {
       drawer: SideBar(),
       backgroundColor: Paletter.mainBgLight,
       body: SafeArea(
-        child: Row(            
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //Side Access Bar
             Expanded(child: SideBar()),
             // Main Body part
-            Expanded(
-              flex: 13,
-              child: Dashboard()
-              ),
+            Expanded(flex: 13, child: Dashboard()),
           ],
         ),
       ),
