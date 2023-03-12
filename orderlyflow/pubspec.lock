@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: bson
-      sha256: "884c53a58564f4d0ed4a5ebe659ca9743603fe13c22908a5facbee2e21424c23"
+      sha256: b660352c1912b8c2578c6b0278834dfbe408475726aa6c7acdcff69827dc4e98
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "4.0.0"
   buffer:
     dependency: transitive
     description:
@@ -126,6 +126,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_sms:
+    dependency: "direct main"
+    description:
+      name: flutter_sms
+      sha256: "2fe5f584f02596343557eeca56348f9b82413fefe83a423fab880cdbdf54d8d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.3"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -136,6 +144,11 @@ packages:
     version: "5.1.0"
   flutter_test:
     dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -255,18 +268,18 @@ packages:
     dependency: "direct main"
     description:
       name: mongo_dart
-      sha256: b7af1e1a0a0e7c026dfd9602251bf00247e8d9edf730a8bfdbf10c659021fb6d
+      sha256: "81ceb0db689b4d367bbe24904740ba3cc61354adacf6a5ff51f2141b3e3a6dca"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.2"
+    version: "0.9.1"
   mongo_dart_query:
     dependency: transitive
     description:
       name: mongo_dart_query
-      sha256: b8374cf4bb3bd9d7885d7af2d946a6020a2871651917f65f459c46d8f791c09b
+      sha256: ccb2875f84a33afe72025ba447956cf4dbad5c7776e5e7cb00f39a1b5234291b
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "4.0.0"
   packages_extensions:
     dependency: transitive
     description:
@@ -299,6 +312,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
   pointycastle:
     dependency: transitive
     description:
@@ -360,6 +381,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sms:
+    dependency: "direct main"
+    description:
+      name: sms
+      sha256: "2cb0c0591f970d2705e276b64cef716f64403b4126a1bc9d5f18fd5ba91bd6d6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4"
   source_span:
     dependency: transitive
     description:
@@ -432,6 +461,70 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
+  url_launcher:
+    dependency: transitive
+    description:
+      name: url_launcher
+      sha256: "75f2846facd11168d007529d6cd8fcb2b750186bea046af9711f10b907e1587e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.10"
+  url_launcher_android:
+    dependency: transitive
+    description:
+      name: url_launcher_android
+      sha256: "845530e5e05db5500c1a4c1446785d60cbd8f9bd45e21e7dd643a3273bb4bbd1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.25"
+  url_launcher_ios:
+    dependency: transitive
+    description:
+      name: url_launcher_ios
+      sha256: "7ab1e5b646623d6a2537aa59d5d039f90eebef75a7c25e105f6f75de1f7750c3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.2"
+  url_launcher_linux:
+    dependency: transitive
+    description:
+      name: url_launcher_linux
+      sha256: "206fb8334a700ef7754d6a9ed119e7349bc830448098f21a69bf1b4ed038cabc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.4"
+  url_launcher_macos:
+    dependency: transitive
+    description:
+      name: url_launcher_macos
+      sha256: "0ef2b4f97942a16523e51256b799e9aa1843da6c60c55eefbfa9dbc2dcb8331a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.4"
+  url_launcher_platform_interface:
+    dependency: transitive
+    description:
+      name: url_launcher_platform_interface
+      sha256: "6c9ca697a5ae218ce56cece69d46128169a58aa8653c1b01d26fcd4aad8c4370"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  url_launcher_web:
+    dependency: transitive
+    description:
+      name: url_launcher_web
+      sha256: "81fe91b6c4f84f222d186a9d23c73157dc4c8e1c71489c4d08be1ad3b228f1aa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.16"
+  url_launcher_windows:
+    dependency: transitive
+    description:
+      name: url_launcher_windows
+      sha256: a83ba3607a507758669cfafb03f9de09bf6e6280c14d9b9cb18f013e406dcacd
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.5"
   uuid:
     dependency: transitive
     description:
@@ -458,4 +551,4 @@ packages:
     version: "0.4.5"
 sdks:
   dart: ">=2.19.0 <3.0.0"
-  flutter: ">=2.0.0"
+  flutter: ">=3.3.0"

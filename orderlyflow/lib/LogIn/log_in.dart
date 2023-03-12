@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
+//import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Database/textControllers.dart';
 import '../palette.dart';
@@ -211,13 +213,25 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(30.0),
                               ))),
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
+                            /*if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();*/
+                            MongoDB.getPassword();
+                            MongoDB.getID();
+                            if (StoreController.ID_found.value == true &&
+                                StoreController.Pass_found.value ==
+                                    true) //&& StoreController.OTP_found.value == true)
+                            {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) => mainPage()));
+                                  PageTransition(
+                                      childCurrent: mainPage(),
+                                      child: mainPage(),
+                                      type: PageTransitionType.theme,
+                                      duration: const Duration(seconds: 2)));
+                            } else {
+                              Text("error");
                             }
+                            //}
                           },
                           child: const Text(
                             'Log In',
@@ -242,22 +256,7 @@ class _LoginPageState extends State<LoginPage> {
                               return null;
                             }),
                           ),
-                          onPressed: () {
-                            if (StoreController.ID_found.value == true &&
-                                StoreController.Pass_found.value ==
-                                    true) //&& StoreController.OTP_found.value == true)
-                            {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      childCurrent: mainPage(),
-                                      child: mainPage(),
-                                      type: PageTransitionType.theme,
-                                      duration: const Duration(seconds: 2)));
-                            } else {
-                              Text("error");
-                            }
-                          },
+                          onPressed: () {},
                           child: Text(
                             'forgot password?',
                             style: TextStyle(

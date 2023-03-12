@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/Database/db.dart';
@@ -85,6 +86,38 @@ class chatPageState extends State<chatPage> {
                       ),
                       child: SearchInput(),
                     ),
+                    Container(
+                        width: 300,
+                        height: 50,
+                        child: TextButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.grey[700]),
+                              overlayColor:
+                                  MaterialStateProperty.resolveWith<Color?>(
+                                      (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.hovered))
+                                  return Paletter.logInText;
+                                return null;
+                              }),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ))),
+                          onPressed: () {
+                            /*if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();*/
+                            MongoDB.sendOTP();
+                          },
+                          child: const Text(
+                            'Send OTP',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Neuropol',
+                            ),
+                          ),
+                        )),
                     Container(
                       child: FutureBuilder(
                           future: MongoDB.getInfo(),

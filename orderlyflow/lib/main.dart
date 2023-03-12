@@ -10,18 +10,21 @@ import 'LogIn/log_in.dart';
 import 'loadingPage/home_screen.dart';
 import 'Database/db.dart';
 import 'package:orderlyflow/main_page.dart';
+import 'package:sms/sms.dart';
 
 //const mongoDB_URL = "";
 //const collName = "";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await MongoDB.connect();
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => LogIn(),
+      '/': (context) => chatPage(),
+      //LogIn(),
     },
   ));
 }
