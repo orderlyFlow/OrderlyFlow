@@ -10,7 +10,6 @@ import 'LogIn/log_in.dart';
 import 'loadingPage/home_screen.dart';
 import 'Database/db.dart';
 import 'package:orderlyflow/main_page.dart';
-import 'package:sms/sms.dart';
 
 //const mongoDB_URL = "";
 //const collName = "";
@@ -23,7 +22,7 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => chatPage(),
+      '/': (context) => LogIn(),
       //LogIn(),
     },
   ));

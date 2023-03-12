@@ -12,7 +12,7 @@ import 'constant.dart';
 import 'db.dart';
 import 'dart:developer';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:sms/sms.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 
 var db;
@@ -33,8 +33,8 @@ class MongoDB {
     final coll = db1.collection(personsCol);
     await db1.open();
 
-    var IDCont = int.parse(StoreController.Pass_controller.value.text.trim());
-    final information = await coll.findOne(Mongo.where.eq("_id", IDCont))
+    var IDCont = int.parse(StoreController.ID_controller.value.text.trim());
+    final information = await coll.findOne(Mongo.where.eq("id", IDCont))
         as Map<String, dynamic>;
     return information;
 
@@ -46,17 +46,13 @@ class MongoDB {
     final coll = db1.collection(personsCol);
     await db1.open();
 
-    var IDCont = int.parse(StoreController.Pass_controller.value.text.trim());
+    var IDCont = int.parse(StoreController.ID_controller.value.text.trim());
+    print("user input");
+    print(IDCont);
     final id_info = await coll.findOne(Mongo.where.eq("id", IDCont))
         as Map<String, dynamic>;
-    /*final id_info = await coll.findOne(Mongo.where.eq("title", "Employee"))
-        as Map<String, dynamic>;*/
-    print(id_info);
-    print(StoreController.ID_found.value);
     if (id_info != null) {
       StoreController.ID_found.value = true;
-      print("ID:");
-      print(StoreController.ID_found.value);
       return id_info;
     } else {
       return StoreController.ID_controller.update((val) {
@@ -74,8 +70,11 @@ class MongoDB {
     var PassCont = int.parse(StoreController.Pass_controller.value.text.trim());
     final password = await coll.findOne(Mongo.where.eq("password", PassCont))
         as Map<String, dynamic>;
+
     if (password != null) {
       StoreController.Pass_found.value = true;
+      print("PASS;");
+      print(StoreController.Pass_found.value);
       return password;
     } else {
       return StoreController.ID_controller.update((val) {
@@ -91,7 +90,7 @@ class MongoDB {
     final coll = db1.collection(personsCol);
     await db1.open();
 
-    var OTPCont = int.parse(StoreController.Pass_controller.value.text.trim());
+    var OTPCont = int.parse(StoreController.OTP_controller.value.text.trim());
     final otp_info = await coll.findOne(Mongo.where.eq("otp", OTPCont))
         as Map<String, dynamic>;
     if (otp_info != null) {
@@ -106,7 +105,7 @@ class MongoDB {
     }
   }
 
-  static Future<String> sendSMS(int otp, int nbr) async {
+  /*static Future<String> sendingSMS(int otp, int nbr) async {
     //final db = await Mongo.Db.create(mongoDB_URL);
     //final coll = db.collection(personsCol);
     //await db.open();
@@ -117,9 +116,16 @@ class MongoDB {
     int otpSend = random.nextInt(999999);
     String result = await sendSMS(otpSend, phoneNumber);
     return result;
-  }
+  }*/
 
-  static Future<void> sendOTP() async {
+  static void _sendSMS(String message, List<String> recipents) async {
+    String _result = await sendSMS(message: message, recipients: recipents)
+        .catchError((onError) {
+      print(onError);
+    });
+    print(_result);
+  }
+  /*static Future<void> sendOTP() async {
     final db = await Mongo.Db.create(mongoDB_URL);
     final coll = db.collection(personsCol);
     await db.open();
@@ -128,11 +134,19 @@ class MongoDB {
             .eq("_id", StoreController.ID_controller.value.text.trim()))
         as Map<int, dynamic>;
     //final phoneNumber = targetID['phone_number'] as String;
-    const phoneNumber = "96171119085";
+    const phoneNumber = '96171119085';
     var random = new Random();
     int otpSend = random.nextInt(999999);
 
     SmsSender sender = new SmsSender();
     sender.sendSms(new SmsMessage(phoneNumber, 'Your OTP is: $otpSend'));
-  }
+  }*/
+  /*static void sendingSMS() async {
+    var url = Uri.parse("sms:96171119085");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }*/
 }

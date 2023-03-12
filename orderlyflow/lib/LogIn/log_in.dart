@@ -217,6 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                               _formKey.currentState!.save();*/
                             MongoDB.getPassword();
                             MongoDB.getID();
+                            MongoDB.getOTP();
                             if (StoreController.ID_found.value == true &&
                                 StoreController.Pass_found.value ==
                                     true) //&& StoreController.OTP_found.value == true)

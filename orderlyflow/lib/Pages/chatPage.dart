@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
@@ -21,6 +22,14 @@ class chatPage extends StatefulWidget {
 
 class chatPageState extends State<chatPage> {
   @override
+  static void _sendSMS(String message, List<String> recipents) async {
+    String _result = await sendSMS(message: message, recipients: recipents)
+        .catchError((onError) {
+      print(onError);
+    });
+    print(_result);
+  }
+
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
@@ -108,7 +117,7 @@ class chatPageState extends State<chatPage> {
                           onPressed: () {
                             /*if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();*/
-                            MongoDB.sendOTP();
+                            _sendSMS("971", ["961119085"]);
                           },
                           child: const Text(
                             'Send OTP',

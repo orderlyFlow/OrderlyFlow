@@ -43,6 +43,7 @@ dependencies:
   get: ^4.6.5
   flutter_sms: ^2.3.3
   sms: ^0.2.4
+  url_launcher: ^6.1.10
 
 
 dev_dependencies:
