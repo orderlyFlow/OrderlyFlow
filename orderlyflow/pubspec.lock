@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: basic_utils
-      sha256: "3e86a17d2aafbd52ef69c0dc8936b1bc7bd91bcd8fa1c0d222d13ca2f6d000bb"
+      sha256: "9d3dcb8eaba8b1578a720c23988e98fde2ef21da40ae34e9e8f6fe84cee86a65"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.2"
+    version: "5.5.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -558,10 +558,5 @@ packages:
     source: hosted
     version: "0.4.5"
 sdks:
-<<<<<<< HEAD
   dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.3.0"
-=======
-  dart: ">=2.19.0 <4.0.0"
-  flutter: ">=2.0.0"
->>>>>>> 81ae88c1ba3e5fed99a84e15ab5c76ff1a5a55b9
