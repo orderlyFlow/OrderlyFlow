@@ -3,14 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:orderlyflow/mainPage widgets/widgets/annoucement.dart';
+import 'package:orderlyflow/mainPage%20widgets/widgets/welcome.dart';
 import 'package:orderlyflow/mainPage widgets/widgets/calendar.dart';
 import 'package:orderlyflow/mainPage widgets/widgets/inbox.dart';
 import 'package:orderlyflow/mainPage widgets/widgets/tasks.dart';
 import 'package:orderlyflow/palette.dart';
 
 import '../Database/db.dart';
-import '../side_bar.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -20,7 +19,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  late final List<AnnouncementData> announcements;
   late String name;
 
   @override
@@ -50,7 +48,6 @@ class _DashboardState extends State<Dashboard> {
           children: [
             Column(
               children: [
-                //SideBar(),
                 calendarMain(),
                 SizedBox(
                   height: ScreenHeight * 0.02,
@@ -63,17 +60,6 @@ class _DashboardState extends State<Dashboard> {
             ),
             Column(
               children: [
-                Container(
-                  width: ScreenWidth * 0.397,
-                  height: ScreenHeight * 0.5,
-                  decoration: BoxDecoration(
-                      color: Paletter.containerDark,
-                      borderRadius: BorderRadius.circular(15)),
-                ),
-                // announcement(announcements: announcements,),
-                SizedBox(
-                  height: ScreenHeight * 0.02,
-                ),
                 FutureBuilder(
                     future: MongoDB.getInfo(),
                     builder: (buildContext, AsyncSnapshot snapshot) {
@@ -81,7 +67,7 @@ class _DashboardState extends State<Dashboard> {
                         return Text('${snapshot.error}');
                       } else if (snapshot.hasData) {
                         String UserName = snapshot.data['name'];
-                        return tasks(name: UserName);
+                        return welcome(name: UserName);
                       } else {
                         return Container(
                           child: Center(
@@ -92,6 +78,11 @@ class _DashboardState extends State<Dashboard> {
                         );
                       }
                     }),
+                // announcement(announcements: announcements,),
+                SizedBox(
+                  height: ScreenHeight * 0.02,
+                ),
+                tasks()
               ],
             )
           ],
