@@ -44,8 +44,28 @@ class _SideBarState extends State<SideBar> {
             color: Paletter.mainBgLight,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              SizedBox(
+                height: ScreenHeight * 0.04,
+              ),
               Center(
-                child: FutureBuilder(
+                child: InkWell(
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: ScreenHeight * 0.069,
+                    width: ScreenWidth * 0.069,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            childCurrent: const employeeData(),
+                            child: const employeeData(),
+                            type: PageTransitionType.theme,
+                            duration: const Duration(seconds: 2)));
+                  },
+                ),
+              ),
+              /*FutureBuilder(
                     future: MongoDB.getProfilePic(),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
@@ -78,8 +98,8 @@ class _SideBarState extends State<SideBar> {
                           ),
                         );
                       }
-                    }),
-                /*Center(
+                    }),*/
+              /*Center(
                 child: Container(
                   margin: EdgeInsets.fromLTRB(0, ScreenHeight * 0.055, 0, 0),
                   height: ScreenHeight * 0.055,
@@ -88,8 +108,8 @@ class _SideBarState extends State<SideBar> {
                       color: const Color.fromRGBO(0, 0, 0, 0.69),
                       borderRadius: BorderRadius.circular(80)),
                 ),
-              ),*/
               ),
+              ),*/
               SizedBox(
                 height: ScreenHeight * 0.07,
               ),
