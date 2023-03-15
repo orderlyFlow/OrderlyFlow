@@ -42,7 +42,7 @@ packages:
     source: hosted
     version: "2.1.1"
   bson:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bson
       sha256: b660352c1912b8c2578c6b0278834dfbe408475726aa6c7acdcff69827dc4e98
@@ -105,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  email_auth:
+    dependency: "direct main"
+    description:
+      name: email_auth
+      sha256: a382b6d510c2f6a5dad5e424b693168c65681fff29d36d0abec7916472aaba1b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -150,6 +158,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
+  flutter_termii:
+    dependency: "direct main"
+    description:
+      name: flutter_termii
+      sha256: "91c9c076bc9a47775b2d3a08b558e4f009b5fc3928d7c6c67810ad872d89028f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -558,10 +574,5 @@ packages:
     source: hosted
     version: "0.4.5"
 sdks:
-<<<<<<< HEAD
   dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.3.0"
-=======
-  dart: ">=2.19.0 <4.0.0"
-  flutter: ">=2.0.0"
->>>>>>> 81ae88c1ba3e5fed99a84e15ab5c76ff1a5a55b9

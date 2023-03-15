@@ -10,6 +10,7 @@ import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 
 import '../Database/db.dart';
+import '../Database/sendMail.dart';
 import '../custom_widgets/BlueBg.dart';
 import '../side_bar.dart';
 
@@ -21,6 +22,7 @@ class chatPage extends StatefulWidget {
 }
 
 class chatPageState extends State<chatPage> {
+  bool isHovered = false;
   @override
   static void _sendSMS(String message, List<String> recipents) async {
     String _result = await sendSMS(message: message, recipients: recipents)
@@ -30,6 +32,9 @@ class chatPageState extends State<chatPage> {
     print(_result);
   }
 
+  void onEntered(bool isHovered) => setState(() {
+        this.isHovered = isHovered;
+      });
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
@@ -69,6 +74,36 @@ class chatPageState extends State<chatPage> {
                               fontSize: 38),
                         ),
                       ),
+                      /*FutureBuilder(
+                          future: MongoDB.getProfilePic(),
+                          builder: (buildContext, AsyncSnapshot snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            } else if (snapshot.hasData) {
+                              return Column(
+                                children: [
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          0, ScreenHeight * 0.032, 0, 0),
+                                      child: InkWell(
+                                          child: Image(
+                                        image: snapshot.data,
+                                        width: ScreenWidth * 0.07,
+                                        height: ScreenHeight * 0.07,
+                                        alignment: Alignment.center,
+                                      ))),
+                                ],
+                              );
+                            } else {
+                              return Container(
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            }
+                          }),*/
                       Container(
                         margin:
                             EdgeInsets.fromLTRB(0, ScreenHeight * 0.032, 0, 0),
@@ -82,7 +117,7 @@ class chatPageState extends State<chatPage> {
                     ]),
                     Container(
                       margin: EdgeInsets.only(
-                          left: ScreenWidth * 0.026,
+                          left: ScreenWidth * 0.0080,
                           top: ScreenHeight * 0.02,
                           bottom: ScreenHeight * 0.05),
                       height: ScreenHeight * 0.064,
@@ -95,7 +130,7 @@ class chatPageState extends State<chatPage> {
                       ),
                       child: SearchInput(),
                     ),
-                    Container(
+                    /*Container(
                         width: 300,
                         height: 50,
                         child: TextButton(
@@ -117,7 +152,7 @@ class chatPageState extends State<chatPage> {
                           onPressed: () {
                             /*if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();*/
-                            _sendSMS("971", ["961119085"]);
+                            sendOtp();
                           },
                           child: const Text(
                             'Send OTP',
@@ -127,6 +162,7 @@ class chatPageState extends State<chatPage> {
                             ),
                           ),
                         )),
+                    */
                     Container(
                       child: FutureBuilder(
                           future: MongoDB.getInfo(),
@@ -134,10 +170,50 @@ class chatPageState extends State<chatPage> {
                             if (snapshot.hasError) {
                               return Text('${snapshot.error}');
                             } else if (snapshot.hasData) {
-                              return Column(children: [
-                                Text('Hello'),
-                                Text('Result: ${snapshot.data.toString()}'),
-                              ]);
+                              return InkWell(
+                                  child: MouseRegion(
+                                      onEnter: (event) => onEntered(true),
+                                      onExit: (event) => onEntered(false),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: (isHovered)
+                                              ? Paletter.containerLight
+                                              : Paletter.containerDark,
+                                        ),
+                                        margin: EdgeInsets.fromLTRB(
+                                            ScreenWidth * 0.0078,
+                                            ScreenHeight * 0,
+                                            ScreenWidth * 0.2,
+                                            ScreenHeight * 0.014),
+                                        width: ScreenWidth * 0.42,
+                                        height: ScreenHeight * 0.089,
+                                        child: Row(children: [
+                                          SizedBox(
+                                            width: ScreenWidth * 0.0015,
+                                          ),
+                                          Text(
+                                            '${snapshot.data['phone']}',
+                                            style: TextStyle(
+                                              color: Colors.black87,
+                                              fontFamily: 'Iceland',
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: ScreenWidth * 0.006,
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              '${snapshot.data['name']}',
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontFamily: 'Iceland',
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                          ), //placeholder for picture
+                                        ]),
+                                      )));
                             } else {
                               return Container(
                                 child: Center(

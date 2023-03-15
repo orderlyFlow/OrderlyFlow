@@ -45,6 +45,9 @@ dependencies:
   flutter_sms: ^2.3.3
   sms: ^0.2.4
   url_launcher: ^6.1.10
+  bson: ^4.0.0
+  email_auth: ^1.0.0
+  flutter_termii: ^0.2.1
 
 
 dev_dependencies:
