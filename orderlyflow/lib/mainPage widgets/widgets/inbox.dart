@@ -18,7 +18,7 @@ class _inboxState extends State<inbox> {
       decoration: BoxDecoration(
           color: Paletter.containerDark,
           borderRadius: BorderRadius.circular(15)),
-      width: ScreenWidth * 0.40,
+      width: ScreenWidth * 0.5,
       height: ScreenHeight * 0.34,
       child: Column(
         children: [
