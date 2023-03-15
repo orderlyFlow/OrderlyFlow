@@ -184,7 +184,7 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const myTasks(),
-                          child: mainPage(),
+                          child: myTasks(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },
