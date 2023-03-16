@@ -61,6 +61,28 @@ class employeeDataState extends State<employeeData> {
                                   color: Color.fromARGB(255, 255, 255, 255),
                                   fontFamily: 'neuropol'),
                             ),
+                            //child: FutureBuilder(
+                            //future: MongoDB.getInfo(),
+                            //builder:
+                            //(buildContext, AsyncSnapshot snapshot) {
+                            //if (snapshot.hasError) {
+                            //return Text('${snapshot.error}');
+                            //} else if (snapshot.hasData) {
+                            //return Column(children: [
+                            //Text('Hello'),
+                            //Text(
+                            //    'Result: ${snapshot.data.toString()}'),
+                            //]);
+                            //} else {
+                            //return Container(
+                            //child: Center(
+                            //child: CircularProgressIndicator(
+                            // color: Colors.white,
+                            // ),
+                            // ),
+                            // );
+                            // }
+                            // }),
                           ),
                         ),
                       ),

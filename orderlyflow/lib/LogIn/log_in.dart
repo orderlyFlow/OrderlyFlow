@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
-//import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Database/textControllers.dart';
 import '../palette.dart';
 import 'package:orderlyflow/main_page.dart';
+//import 'package:argon_buttons_flutter/argon_buttons_flutter.dart'
+//  show ArgonTimerButton, ButtonState;
 
 class LogIn extends StatelessWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -248,6 +249,15 @@ class _LoginPageState extends State<LoginPage> {
                                 StoreController.Pass_found.value ==
                                     true) //&& StoreController.OTP_found.value == true)
                             {
+                              // onTap:
+                              //(startLoading, stopLoading, btnState) {
+                              //if (btnState == ButtonState.Idle) {
+                              //startLoading();
+                              //} else {
+                              //stopLoading();
+                              //}
+                              //};
+
                               Navigator.push(
                                   context,
                                   PageTransition(
@@ -267,7 +277,38 @@ class _LoginPageState extends State<LoginPage> {
                           ))
                     ],
                   ),
-                )
+                ),
+                //  Container(
+                //  child: ArgonTimerButton(
+                //  initialTimer: 10, // Optional
+                //height: 50,
+                //width: MediaQuery.of(context).size.width * 0.45,
+                //minWidth: MediaQuery.of(context).size.width * 0.30,
+                //color: Color(0xFFECEBF1),
+                //borderRadius: 5.0,
+                //child: Text(
+                //"Resend OTP",
+                //style: TextStyle(
+                //  color: Colors.black,
+                //fontSize: 18,
+                //fontWeight: FontWeight.w700),
+                //),
+                //loader: (timeLeft) {
+                //return Text(
+                //"Wait | $timeLeft",
+                //style: TextStyle(
+                //  color: Colors.black,
+                // fontSize: 18,
+                //fontWeight: FontWeight.w700),
+                //);
+                //},
+                //onTap: (startTimer, btnState) {
+                //if (btnState == ButtonState.Idle) {
+                //startTimer(20);
+                //}
+                //},
+                //),
+                // )
               ],
             ),
           ),
