@@ -45,6 +45,10 @@ dependencies:
   flutter_sms: ^2.3.3
   sms: ^0.2.4
   url_launcher: ^6.1.10
+  open_file: ^3.2.1
+  permission_handler: ^10.2.0
+  path_provider: ^2.0.13
+  flutter_downloader: ^1.10.2
   bson: ^4.0.0
   email_auth: ^1.0.0
   flutter_termii: ^0.2.1
@@ -75,6 +79,7 @@ flutter:
   assets:
       - assets/images/
       - assets/images/OF.gif
+      - assets/word1.docx
 
   fonts:
       - family: conthrax
