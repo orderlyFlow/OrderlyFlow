@@ -17,6 +17,7 @@ class requests extends StatefulWidget {
 
 class _requestsState extends State<requests> {
   final String fileName = 'word1.docx';
+  final String name = "word1";
   int downloadCount = 1;
 
    Future<void> _downloadFile(BuildContext context) async {
@@ -28,7 +29,7 @@ class _requestsState extends State<requests> {
     ByteData assetData = await rootBundle.load(assetsPath);
 
    // Generate a unique filename based on the download count
-  String uniqueFileName = '$fileName-$downloadCount.docx';
+  String uniqueFileName = '$name-$downloadCount.docx';
 
   // Increment the download count
   downloadCount++;
