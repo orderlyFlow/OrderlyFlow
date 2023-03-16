@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/announcement.dart';
 import 'package:orderlyflow/calendar.dart';
@@ -5,8 +7,12 @@ import 'package:orderlyflow/Pages/chatPage.dart';
 import 'package:orderlyflow/main_page.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/requests.dart';
+import 'package:bson/bson.dart';
 import 'package:orderlyflow/tasks.dart';
+import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
+
+import 'employeeData.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
@@ -28,6 +34,7 @@ class _SideBarState extends State<SideBar> {
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
+
     return Drawer(
         width: ScreenWidth * 0.07,
         elevation: 0,
@@ -37,7 +44,62 @@ class _SideBarState extends State<SideBar> {
             color: Paletter.mainBgLight,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              SizedBox(
+                height: ScreenHeight * 0.04,
+              ),
               Center(
+                child: InkWell(
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: ScreenHeight * 0.069,
+                    width: ScreenWidth * 0.069,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            childCurrent: const employeeData(),
+                            child: const employeeData(),
+                            type: PageTransitionType.theme,
+                            duration: const Duration(seconds: 2)));
+                  },
+                ),
+              ),
+              /*FutureBuilder(
+                    future: MongoDB.getProfilePic(),
+                    builder: (buildContext, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        return Column(children: [
+                          InkWell(
+                            child: Image(
+                              image: snapshot.data,
+                              height: ScreenHeight * 0.055,
+                              width: ScreenWidth * 0.03,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      childCurrent: const employeeData(),
+                                      child: employeeData(),
+                                      type: PageTransitionType.theme,
+                                      duration: const Duration(seconds: 2)));
+                            },
+                          )
+                        ]);
+                      } else {
+                        return Container(
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                    }),*/
+              /*Center(
                 child: Container(
                   margin: EdgeInsets.fromLTRB(0, ScreenHeight * 0.055, 0, 0),
                   height: ScreenHeight * 0.055,
@@ -47,6 +109,7 @@ class _SideBarState extends State<SideBar> {
                       borderRadius: BorderRadius.circular(80)),
                 ),
               ),
+              ),*/
               SizedBox(
                 height: ScreenHeight * 0.07,
               ),

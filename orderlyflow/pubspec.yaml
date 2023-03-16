@@ -49,6 +49,9 @@ dependencies:
   permission_handler: ^10.2.0
   path_provider: ^2.0.13
   flutter_downloader: ^1.10.2
+  bson: ^4.0.0
+  email_auth: ^1.0.0
+  flutter_termii: ^0.2.1
 
 
 dev_dependencies:

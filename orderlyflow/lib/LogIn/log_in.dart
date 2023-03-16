@@ -231,19 +231,14 @@ class _LoginPageState extends State<LoginPage> {
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ))),
-                          onPressed: () async {
-                            /*if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();*/
+                          onPressed: () {
                             MongoDB.getPassword();
                             MongoDB.getID();
                             MongoDB.getOTP();
                             if (StoreController.ID_found.value == true &&
                                 StoreController.Pass_found.value ==
-                                    true) //&& StoreController.OTP_found.value == true)
-                            {
-                              // _formKey.currentState!.save();
-                              // Future<String?> fullname = _getUserFullName(StoreController.ID_found.value as String);
-
+                                    true && StoreController.OTP_found.value == true)
+                            }
                               Navigator.push(
                                   context,
                                   PageTransition(

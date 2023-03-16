@@ -9,6 +9,8 @@ import 'package:orderlyflow/mainPage widgets/widgets/inbox.dart';
 import 'package:orderlyflow/mainPage widgets/widgets/tasks.dart';
 import 'package:orderlyflow/palette.dart';
 
+import '../Database/db.dart';
+
 class Dashboard extends StatefulWidget {
 
 
@@ -50,8 +52,7 @@ class _DashboardState extends State<Dashboard> {
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
-                inbox(
-                )
+                inbox()
               ],
             ),
             SizedBox(
@@ -59,14 +60,28 @@ class _DashboardState extends State<Dashboard> {
             ),
             Column(
               children: [
-                welcome(name: "Rai"),
-                // announcement(announcements: announcements,),
+                FutureBuilder(
+                    future: MongoDB.getInfo(),
+                    builder: (buildContext, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        String UserName = snapshot.data['name'];
+                        return welcome(name: UserName);
+                      } else {
+                        return Container(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                    }),
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
-                tasks(
-
-                )
+                tasks()
               ],
             )
           ],
