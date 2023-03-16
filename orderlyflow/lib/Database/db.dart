@@ -116,7 +116,6 @@ class MongoDB {
     var PassCont = int.parse(StoreController.Pass_controller.value.text.trim());
     var IDCont = int.parse(StoreController.ID_controller.value.text.trim());
     final id_info = await coll.findOne(Mongo.where.eq("ID", IDCont));
-    //as Map<String, dynamic>;
     if (id_info != null &&
         id_info['OTP'] == OTPCont &&
         id_info['password'] == PassCont) {
