@@ -2,11 +2,14 @@
 //import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
+import '../Database/constant.dart';
 import '../Database/textControllers.dart';
 import '../palette.dart';
 import 'package:orderlyflow/main_page.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 class LogIn extends StatelessWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -36,6 +39,22 @@ class _LoginPageState extends State<LoginPage> {
   late String password;
   late String user;
   late String otp;
+
+  // Future<String?> _getUserFullName(String id) async {
+  //   final db = await Mongo.Db.create(mongoDB_URL);
+  //   await db.open();
+  //   final collection = db.collection('Personnel');
+  //   final userData = await collection
+  //       .findOne(Mongo.where.eq('ID', Mongo.ObjectId.fromHexString(id)));
+  //   await db.close();
+
+  //   if (userData == null) {
+  //     return null; // User not found
+  //   }
+
+  //   return userData['name']
+  //       as String; // Replace with the actual field name in your database
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -217,8 +236,9 @@ class _LoginPageState extends State<LoginPage> {
                             MongoDB.getID();
                             MongoDB.getOTP();
                             if (StoreController.ID_found.value == true &&
-                                StoreController.Pass_found.value == true &&
-                                StoreController.OTP_found.value == true) {
+                                StoreController.Pass_found.value ==
+                                    true && StoreController.OTP_found.value == true)
+                            }
                               Navigator.push(
                                   context,
                                   PageTransition(
@@ -227,7 +247,10 @@ class _LoginPageState extends State<LoginPage> {
                                       type: PageTransitionType.theme,
                                       duration: const Duration(seconds: 2)));
                             } else {
-                              Text("error");
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text('Incorrect ID or Password!'),
+                              ));
                             }
                             //}
                           },

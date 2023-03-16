@@ -4,7 +4,14 @@ import 'package:orderlyflow/mainPage widgets/dashboard.dart';
 import 'package:orderlyflow/side_bar.dart';
 import 'package:orderlyflow/palette.dart';
 
-class mainPage extends StatelessWidget {
+class mainPage extends StatefulWidget {
+
+
+  @override
+  State<mainPage> createState() => _mainPageState();
+}
+
+class _mainPageState extends State<mainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
