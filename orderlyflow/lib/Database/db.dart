@@ -115,17 +115,15 @@ class MongoDB {
     var OTPCont = int.parse(StoreController.OTP_controller.value.text.trim());
     var PassCont = int.parse(StoreController.Pass_controller.value.text.trim());
     var IDCont = int.parse(StoreController.ID_controller.value.text.trim());
-    final id_info = await coll.findOne(Mongo.where.eq("ID", IDCont))
-        as Map<String, dynamic>;
+    final id_info = await coll.findOne(Mongo.where.eq("ID", IDCont));
+    //as Map<String, dynamic>;
     if (id_info != null &&
         id_info['OTP'] == OTPCont &&
         id_info['password'] == PassCont) {
       StoreController.Login_found.value = true;
-      return id_info;
+      return id_info as Map<String, dynamic>;
     } else {
-      return StoreController.OTP_controller.update((val) {
-        "Please cheack your credentials";
-      }) as Map<String, dynamic>;
+      return "Please check your credentials" as Map<String, dynamic>;
     }
   }
 

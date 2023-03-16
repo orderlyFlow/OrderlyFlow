@@ -244,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                             } else {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                content: Text('Incorrect ID or Password!'),
+                                content: Text('Please check your credentials'),
                               ));
                             }
                             //}
