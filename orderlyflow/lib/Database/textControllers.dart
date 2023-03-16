@@ -9,4 +9,5 @@ class StoreController extends GetxController {
   static RxBool ID_found = false.obs;
   static RxBool Pass_found = false.obs;
   static RxBool OTP_found = false.obs;
+  static RxBool Login_found = false.obs;
 }

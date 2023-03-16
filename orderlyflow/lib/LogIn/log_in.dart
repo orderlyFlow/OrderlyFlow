@@ -213,12 +213,8 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(30.0),
                               ))),
                           onPressed: () {
-                            MongoDB.getPassword();
-                            MongoDB.getID();
-                            MongoDB.getOTP();
-                            if (StoreController.ID_found.value == true &&
-                                StoreController.Pass_found.value == true &&
-                                StoreController.OTP_found.value == true) {
+                            MongoDB.Verify_LogIn();
+                            if (StoreController.Login_found.value == true) {
                               Navigator.push(
                                   context,
                                   PageTransition(

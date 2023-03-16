@@ -74,7 +74,8 @@ class chatPageState extends State<chatPage> {
                               fontSize: 38),
                         ),
                       ),
-                      /*FutureBuilder(
+                      ///////////////////////////////////Pic fetch///////////////////////////////
+                      FutureBuilder(
                           future: MongoDB.getProfilePic(),
                           builder: (buildContext, AsyncSnapshot snapshot) {
                             if (snapshot.hasError) {
@@ -86,8 +87,8 @@ class chatPageState extends State<chatPage> {
                                       margin: EdgeInsets.fromLTRB(
                                           0, ScreenHeight * 0.032, 0, 0),
                                       child: InkWell(
-                                          child: Image(
-                                        image: snapshot.data,
+                                          child: Image.memory(
+                                        snapshot.data,
                                         width: ScreenWidth * 0.07,
                                         height: ScreenHeight * 0.07,
                                         alignment: Alignment.center,
@@ -103,8 +104,9 @@ class chatPageState extends State<chatPage> {
                                 ),
                               );
                             }
-                          }),*/
-                      Container(
+                          }),
+                      ///////////////////////Photo Placeholder///////////////////
+                      /* Container(
                         margin:
                             EdgeInsets.fromLTRB(0, ScreenHeight * 0.032, 0, 0),
                         child: Image.asset(
@@ -113,7 +115,7 @@ class chatPageState extends State<chatPage> {
                           height: ScreenHeight * 0.07,
                           alignment: Alignment.center,
                         ),
-                      )
+                      )*/
                     ]),
                     Container(
                       margin: EdgeInsets.only(
