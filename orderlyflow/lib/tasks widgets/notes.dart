@@ -32,7 +32,7 @@ class _notesState extends State<notes> {
             'Notes',
             style: TextStyle(
               fontFamily: 'conthrax',
-              fontSize: 25,
+              fontSize: ScreenHeight * 0.025,
               color: Color.fromARGB(255, 0, 0, 0),
             ),
           ),
@@ -49,15 +49,17 @@ class _notesState extends State<notes> {
                     maxLines: null,
                     style: TextStyle(
                         fontFamily: "iceland",
-                        fontSize: 16,
+                        fontSize: ScreenHeight * 0.026,
                         color: Paletter.blackText,
-                        letterSpacing: 2.0,
+                        letterSpacing: ScreenHeight * 0.0025,
                         wordSpacing: 2.0,
                         height: 1.5),
                     decoration: InputDecoration(
                       hintText:
                           'This is where you enter any notes you deem necessary for your work, it could be used for writing important points seen from the comment, or what you consider helpful for your tasks, it could be suggestion acquired during meetings and you don\'t what to write on paper or worry of losing it',
-                      hintStyle: TextStyle(fontSize: 16, letterSpacing: 2.0),
+                      hintStyle: TextStyle(
+                          fontSize: ScreenHeight * 0.016,
+                          letterSpacing: ScreenHeight * 0.005),
                     ),
                     onChanged: (text) {
                       int numLines = (text.length / 25).ceil();

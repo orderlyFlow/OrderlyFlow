@@ -57,7 +57,7 @@ class employeeDataState extends State<employeeData> {
                             child: Text(
                               "Bonnus /                                                             MONTH",
                               style: TextStyle(
-                                  fontSize: 24,
+                                  fontSize: ScreenHeight * 0.024,
                                   color: Color.fromARGB(255, 255, 255, 255),
                                   fontFamily: 'neuropol'),
                             ),

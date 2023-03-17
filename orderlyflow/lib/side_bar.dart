@@ -48,36 +48,24 @@ class _SideBarState extends State<SideBar> {
                 height: ScreenHeight * 0.04,
               ),
               Center(
-                child: InkWell(
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: ScreenHeight * 0.069,
-                    width: ScreenWidth * 0.069,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            childCurrent: const employeeData(),
-                            child: const employeeData(),
-                            type: PageTransitionType.theme,
-                            duration: const Duration(seconds: 2)));
-                  },
-                ),
-              ),
-              /*FutureBuilder(
+                child: FutureBuilder(
                     future: MongoDB.getProfilePic(),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
+                        return Container(
+                          margin: EdgeInsets.fromLTRB(
+                              0, ScreenHeight * 0.045, 0, 0),
+                          width: ScreenWidth * 0.078,
+                          height: ScreenHeight * 0.078,
+                          child: const Center(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                            ),
+                          ),
+                        );
                       } else if (snapshot.hasData) {
                         return Column(children: [
                           InkWell(
-                            child: Image(
-                              image: snapshot.data,
-                              height: ScreenHeight * 0.055,
-                              width: ScreenWidth * 0.03,
-                            ),
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -87,29 +75,37 @@ class _SideBarState extends State<SideBar> {
                                       type: PageTransitionType.theme,
                                       duration: const Duration(seconds: 2)));
                             },
+                            child: Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    0, ScreenHeight * 0.045, 0, 0),
+                                width: ScreenWidth * 0.078,
+                                height: ScreenHeight * 0.078,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: FittedBox(
+                                    fit: BoxFit
+                                        .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                                    child: CircleAvatar(
+                                      backgroundImage: snapshot.data,
+                                    ))),
                           )
                         ]);
                       } else {
                         return Container(
+                          margin: EdgeInsets.fromLTRB(
+                              0, ScreenHeight * 0.045, 0, 0),
+                          width: ScreenWidth * 0.078,
+                          height: ScreenHeight * 0.078,
                           child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.black,
                             ),
                           ),
                         );
                       }
-                    }),*/
-              /*Center(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(0, ScreenHeight * 0.055, 0, 0),
-                  height: ScreenHeight * 0.055,
-                  width: ScreenWidth * 0.03,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(0, 0, 0, 0.69),
-                      borderRadius: BorderRadius.circular(80)),
-                ),
+                    }),
               ),
-              ),*/
               SizedBox(
                 height: ScreenHeight * 0.07,
               ),
@@ -208,28 +204,32 @@ class _SideBarState extends State<SideBar> {
                 height: ScreenHeight * 0.035,
               ),
               Center(
-                  child: InkWell(
-                onHover: (isHovered) =>
-                    setState(() => _isHoveredRequests = isHovered),
-                child: Image.asset(
-                  _isHoveredRequests
-                      ? 'assets/images/requestsHover.png'
-                      : 'assets/images/requests.png',
-                  height: ScreenHeight * 0.07,
-                  width: ScreenWidth * 0.084,
+                  child: Container(
+                margin: EdgeInsets.fromLTRB(
+                    ScreenWidth * 0.01, ScreenHeight * 0.01, 0, 0),
+                child: InkWell(
+                  onHover: (isHovered) =>
+                      setState(() => _isHoveredRequests = isHovered),
+                  child: Image.asset(
+                    _isHoveredRequests
+                        ? 'assets/images/requestsHover.png'
+                        : 'assets/images/requests.png',
+                    height: ScreenHeight * 0.07,
+                    width: ScreenWidth * 0.13,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            childCurrent: const requests(),
+                            child: requests(),
+                            type: PageTransitionType.theme,
+                            duration: const Duration(seconds: 2)));
+                  },
                 ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          childCurrent: const requests(),
-                          child: requests(),
-                          type: PageTransitionType.theme,
-                          duration: const Duration(seconds: 2)));
-                },
               )),
               SizedBox(
-                height: ScreenHeight * 0.2,
+                height: ScreenHeight * 0.16,
               ),
               Center(
                   child: InkWell(

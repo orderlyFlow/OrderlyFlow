@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 
@@ -23,6 +26,7 @@ class chatPage extends StatefulWidget {
 
 class chatPageState extends State<chatPage> {
   bool isHovered = false;
+  bool isVisible = false;
   @override
   static void _sendSMS(String message, List<String> recipents) async {
     String _result = await sendSMS(message: message, recipients: recipents)
@@ -45,33 +49,34 @@ class chatPageState extends State<chatPage> {
         children: [
           SideBar(),
           Container(
-              margin: EdgeInsets.fromLTRB(0.03 * ScreenWidth,
-                  0.02 * ScreenHeight, 0.02 * ScreenWidth, 0),
-              height: ScreenHeight * 0.90,
-              width: ScreenWidth * 0.88,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Paletter.mainBgLight,
-              ),
-              child: Column(
+            margin: EdgeInsets.fromLTRB(
+                0.03 * ScreenWidth, 0.02 * ScreenHeight, 0.02 * ScreenWidth, 0),
+            height: ScreenHeight * 0.92,
+            width: ScreenWidth * 0.88,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Paletter.mainBgLight,
+            ),
+            child: Row(children: [
+              Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(children: [
                       Container(
                         margin: EdgeInsets.fromLTRB(
-                            0.03 * ScreenWidth,
+                            0.018 * ScreenWidth,
                             0.07 * ScreenHeight,
-                            0.18 * ScreenWidth,
-                            0.03 * ScreenHeight),
-                        child: const Text(
+                            0.13 * ScreenWidth,
+                            0.02 * ScreenHeight),
+                        child: Text(
                           'Chats',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: 'conthrax',
                               color: Colors.black,
-                              fontSize: 38),
+                              fontSize: 0.066 * ScreenHeight),
                         ),
                       ),
                       ///////////////////////////////////Pic fetch///////////////////////////////
@@ -79,43 +84,64 @@ class chatPageState extends State<chatPage> {
                           future: MongoDB.getProfilePic(),
                           builder: (buildContext, AsyncSnapshot snapshot) {
                             if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
+                              return Column(
+                                children: [
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          0, ScreenHeight * 0.054, 0, 0),
+                                      width: ScreenWidth * 0.08,
+                                      height: ScreenHeight * 0.08,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: FittedBox(
+                                          fit: BoxFit
+                                              .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.black,
+                                          ))),
+                                ],
+                              );
                             } else if (snapshot.hasData) {
                               return Column(
                                 children: [
                                   Container(
                                       margin: EdgeInsets.fromLTRB(
-                                          0, ScreenHeight * 0.032, 0, 0),
-                                      child: InkWell(
-                                          child: Image.memory(
-                                        snapshot.data,
-                                        width: ScreenWidth * 0.07,
-                                        height: ScreenHeight * 0.07,
-                                        alignment: Alignment.center,
-                                      ))),
+                                          0, ScreenHeight * 0.054, 0, 0),
+                                      width: ScreenWidth * 0.08,
+                                      height: ScreenHeight * 0.08,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: FittedBox(
+                                          fit: BoxFit
+                                              .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                                          child: CircleAvatar(
+                                            backgroundImage: snapshot.data,
+                                          ))),
                                 ],
                               );
                             } else {
-                              return Container(
-                                child: const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                ),
+                              return Column(
+                                children: [
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          0, ScreenHeight * 0.054, 0, 0),
+                                      width: ScreenWidth * 0.08,
+                                      height: ScreenHeight * 0.08,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: FittedBox(
+                                          fit: BoxFit
+                                              .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.black,
+                                          ))),
+                                ],
                               );
                             }
                           }),
-                      ///////////////////////Photo Placeholder///////////////////
-                      /* Container(
-                        margin:
-                            EdgeInsets.fromLTRB(0, ScreenHeight * 0.032, 0, 0),
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          width: ScreenWidth * 0.07,
-                          height: ScreenHeight * 0.07,
-                          alignment: Alignment.center,
-                        ),
-                      )*/
                     ]),
                     Container(
                       margin: EdgeInsets.only(
@@ -123,7 +149,7 @@ class chatPageState extends State<chatPage> {
                           top: ScreenHeight * 0.02,
                           bottom: ScreenHeight * 0.05),
                       height: ScreenHeight * 0.064,
-                      width: ScreenWidth * 0.34,
+                      width: ScreenWidth * 0.301,
                       decoration: BoxDecoration(
                         color: Paletter.mainBgLight,
                         border: Border.all(
@@ -131,6 +157,7 @@ class chatPageState extends State<chatPage> {
                         ),
                       ),
                       child: SearchInput(),
+                      // ),
                     ),
                     /*Container(
                         width: 300,
@@ -165,69 +192,114 @@ class chatPageState extends State<chatPage> {
                           ),
                         )),
                     */
-                    Container(
-                      child: FutureBuilder(
-                          future: MongoDB.getInfo(),
-                          builder: (buildContext, AsyncSnapshot snapshot) {
-                            if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            } else if (snapshot.hasData) {
-                              return InkWell(
-                                  child: MouseRegion(
-                                      onEnter: (event) => onEntered(true),
-                                      onExit: (event) => onEntered(false),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: (isHovered)
-                                              ? Paletter.containerLight
-                                              : Paletter.containerDark,
-                                        ),
-                                        margin: EdgeInsets.fromLTRB(
-                                            ScreenWidth * 0.0078,
-                                            ScreenHeight * 0,
-                                            ScreenWidth * 0.2,
-                                            ScreenHeight * 0.014),
-                                        width: ScreenWidth * 0.42,
-                                        height: ScreenHeight * 0.089,
-                                        child: Row(children: [
-                                          SizedBox(
-                                            width: ScreenWidth * 0.0015,
+                    Row(children: [
+                      Container(
+                        child: FutureBuilder(
+                            future: MongoDB.getInfo(),
+                            builder: (buildContext, AsyncSnapshot snapshot) {
+                              if (snapshot.hasError) {
+                                return Text('Error while fetching data');
+                              } else if (snapshot.hasData) {
+                                Uint8List photoBytes = base64Decode(
+                                    snapshot.data['profilePicture']);
+                                return InkWell(
+                                    onTap: () {
+                                      if (isVisible == true) {
+                                        isVisible = false;
+                                      } else {
+                                        isVisible = true;
+                                      }
+                                    },
+                                    child: MouseRegion(
+                                        onEnter: (event) => onEntered(true),
+                                        onExit: (event) => onEntered(false),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: (isHovered)
+                                                ? Paletter.containerLight
+                                                : Paletter.containerDark,
                                           ),
-                                          Text(
-                                            '${snapshot.data['phone']}',
-                                            style: TextStyle(
-                                              color: Colors.black87,
-                                              fontFamily: 'Iceland',
-                                              fontSize: 18,
+                                          margin: EdgeInsets.fromLTRB(
+                                              ScreenWidth * 0.0067,
+                                              ScreenHeight * 0,
+                                              ScreenWidth * 0,
+                                              ScreenHeight * 0.003),
+                                          width: ScreenWidth * 0.392,
+                                          height: ScreenHeight * 0.089,
+                                          child: Row(children: [
+                                            Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    0,
+                                                    ScreenHeight * 0.00145,
+                                                    0,
+                                                    0),
+                                                width: ScreenWidth * 0.063,
+                                                height: ScreenHeight * 0.063,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: FittedBox(
+                                                    fit: BoxFit
+                                                        .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                                                    child: CircleAvatar(
+                                                      backgroundImage:
+                                                          MemoryImage(
+                                                              photoBytes),
+                                                    ))),
+                                            SizedBox(
+                                              width: ScreenWidth * 0.006,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: ScreenWidth * 0.006,
-                                          ),
-                                          Center(
-                                            child: Text(
-                                              '${snapshot.data['name']}',
-                                              style: TextStyle(
-                                                color: Colors.black87,
-                                                fontFamily: 'Iceland',
-                                                fontSize: 22,
+                                            Center(
+                                              child: Text(
+                                                '${snapshot.data['name']}',
+                                                style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontFamily: 'Iceland',
+                                                  fontSize:
+                                                      0.028 * ScreenHeight,
+                                                ),
                                               ),
-                                            ),
-                                          ), //placeholder for picture
-                                        ]),
-                                      )));
-                            } else {
-                              return Container(
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
+                                            ), //placeholder for picture
+                                          ]),
+                                        )));
+                              } else {
+                                return Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      ScreenWidth * 0.405,
+                                      ScreenHeight * 0.16,
+                                      ScreenWidth * 0,
+                                      ScreenHeight * 0),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          }),
-                    )
-                  ]))
+                                );
+                              }
+                            }),
+                      ),
+                    ]),
+                  ]),
+              Visibility(
+                  visible: isVisible,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(ScreenWidth * 0.01,
+                        ScreenHeight * 0, ScreenWidth * 0, ScreenHeight * 0),
+                    width: ScreenWidth * 0.001,
+                    height: ScreenHeight * 0.8,
+                    color: Colors.black,
+                  )),
+              Visibility(
+                  visible: isVisible,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(ScreenWidth * 0.01,
+                        ScreenHeight * 0, ScreenWidth * 0, ScreenHeight * 0),
+                    width: ScreenWidth * 0.445,
+                    height: ScreenHeight * 0.853,
+                    color: Colors.white,
+                  )),
+            ]),
+          )
         ],
       )
     ]));
