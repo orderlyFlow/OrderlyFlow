@@ -32,29 +32,58 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final StoreController textControllers = Get.put(StoreController());
-// to validate the form
+  bool _isLoading = false;
   late String password;
   late String user;
   late String otp;
+  late AnimationController _controller;
 
-  // Future<String?> _getUserFullName(String id) async {
-  //   final db = await Mongo.Db.create(mongoDB_URL);
-  //   await db.open();
-  //   final collection = db.collection('Personnel');
-  //   final userData = await collection
-  //       .findOne(Mongo.where.eq('ID', Mongo.ObjectId.fromHexString(id)));
-  //   await db.close();
+  void _handleLogin() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await MongoDB.Verify_LogIn();
+      // Perform some action for logged in user
+    } catch (e) {
+      // Perform some action for non-logged in user
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+      if (StoreController.Login_found.isTrue) {
+        Navigator.push(
+            context,
+            PageTransition(
+                childCurrent: mainPage(),
+                child: mainPage(),
+                type: PageTransitionType.theme,
+                duration: const Duration(seconds: 2)));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Please check your credentials'),
+        ));
+      }
+    }
+  }
 
-  //   if (userData == null) {
-  //     return null; // User not found
-  //   }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
-  //   return userData['name']
-  //       as String; // Replace with the actual field name in your database
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -215,48 +244,46 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         width: 300,
                         height: 50,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey[700]),
-                              overlayColor:
-                                  MaterialStateProperty.resolveWith<Color?>(
-                                      (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.hovered))
-                                  return Paletter.logInText;
-                                return null;
-                              }),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ))),
-                          onPressed: () {
-                            MongoDB.Verify_LogIn();
-                            if (StoreController.Login_found.value == true) {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      childCurrent: mainPage(),
-                                      child: mainPage(),
-                                      type: PageTransitionType.theme,
-                                      duration: const Duration(seconds: 2)));
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text('Please check your credentials'),
-                              ));
-                            }
-                            //}
-                          },
-                          child: const Text(
-                            'Log In',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Neuropol',
-                            ),
-                          ),
-                        ),
+                        child: AnimatedBuilder(
+                            animation: _controller,
+                            builder: (context, child) {
+                              return TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.grey[700]),
+                                    overlayColor: MaterialStateProperty
+                                        .resolveWith<Color?>(
+                                            (Set<MaterialState> states) {
+                                      if (states
+                                          .contains(MaterialState.hovered))
+                                        return Paletter.logInText;
+                                      return null;
+                                    }),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ))),
+                                onPressed: _isLoading ? null : _handleLogin,
+                                child: _isLoading
+                                    ? SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.white),
+                                        ),
+                                      )
+                                    : Text(
+                                        'Log In',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Neuropol',
+                                        ),
+                                      ),
+                              );
+                            }),
                       ),
                       const SizedBox(
                         height: 16.0,

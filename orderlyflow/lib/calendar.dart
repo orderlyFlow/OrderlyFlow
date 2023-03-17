@@ -18,6 +18,8 @@ class calendar extends StatefulWidget {
 class _calendarState extends State<calendar> {
   DateTime today = DateTime.now();
   List events = [];
+  late double ScreenWidth;
+  late double ScreenHeight;
 
   void _DisplayDialog(
       BuildContext context, DateTime selectedDate, List events) {
@@ -51,7 +53,7 @@ class _calendarState extends State<calendar> {
                         DateFormat.yMMMMd("en_US").format(selectedDate),
                         style: TextStyle(
                           fontFamily: 'iceland',
-                          fontSize: 35,
+                          fontSize: ScreenHeight * 0.035,
                           fontWeight: FontWeight.bold,
                           color: Paletter.blackText.withOpacity(0.5),
                         ),
@@ -71,7 +73,7 @@ class _calendarState extends State<calendar> {
                                       '<no event>',
                                       style: TextStyle(
                                           fontFamily: 'iceland',
-                                          fontSize: 20,
+                                          fontSize: ScreenHeight * 0.020,
                                           color: Paletter.blackText
                                               .withOpacity(0.5)),
                                     ),
@@ -85,7 +87,7 @@ class _calendarState extends State<calendar> {
                                     events[index],
                                     style: TextStyle(
                                         fontFamily: 'iceland',
-                                        fontSize: 15,
+                                        fontSize: ScreenHeight * 0.015,
                                         color: Paletter.blackText
                                             .withOpacity(0.5)),
                                   ),
@@ -102,8 +104,8 @@ class _calendarState extends State<calendar> {
 
   @override
   Widget build(BuildContext context) {
-    late double ScreenWidth = MediaQuery.of(context).size.width;
-    late double ScreenHeight = MediaQuery.of(context).size.height;
+    ScreenWidth = MediaQuery.of(context).size.width;
+    ScreenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(children: [
         const BlueBg(),

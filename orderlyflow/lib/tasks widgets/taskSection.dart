@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/palette.dart';
 
+import '../Database/db.dart';
+
 class userTasks extends StatefulWidget {
   const userTasks({super.key});
 
@@ -33,7 +35,7 @@ class _userTasksState extends State<userTasks> {
                   style: TextStyle(
                     color: Paletter.blackText,
                     fontFamily: 'conthrax',
-                    fontSize: 33,
+                    fontSize: ScreenHeight * 0.033,
                   ),
                 ),
                 SizedBox(
@@ -50,27 +52,43 @@ class _userTasksState extends State<userTasks> {
                 SizedBox(
                   width: ScreenWidth * 0.02,
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: ScreenHeight * 0.01),
-                  child: Text(
-                    'Insert Name',
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'iceland',
-                        color: Colors.black),
-                  ),
-                )
+                FutureBuilder(
+                    future: MongoDB.getInfo(),
+                    builder: (buildContext, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error');
+                      } else if (snapshot.hasData) {
+                        return Container(
+                          margin: EdgeInsets.only(top: ScreenHeight * 0.01),
+                          child: Text(
+                            '${snapshot.data['name']}',
+                            style: TextStyle(
+                                fontSize: ScreenHeight * 0.024,
+                                fontFamily: 'iceland',
+                                color: Colors.black),
+                          ),
+                        );
+                      } else {
+                        return Text(
+                          'Hello',
+                          style: TextStyle(
+                              fontSize: ScreenHeight * 0.044,
+                              fontFamily: 'iceland',
+                              color: Colors.black),
+                        );
+                      }
+                    }),
               ],
             ),
             SizedBox(
-              height: ScreenHeight * 0.05,
+              height: ScreenHeight * 0.025,
             ),
             Text(
               'Tasks',
               style: TextStyle(
                   decoration: TextDecoration.underline,
                   color: Paletter.mainBg,
-                  fontSize: 24,
+                  fontSize: ScreenHeight * 0.024,
                   fontFamily: "conthrax"),
             ),
             SizedBox(

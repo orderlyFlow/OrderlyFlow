@@ -31,10 +31,9 @@ class _commentsState extends State<comments> {
               child: Text(
                 'Comments',
                 style: TextStyle(
-                  color: Paletter.blackText.withOpacity(0.6),
-                  fontFamily: "iceland",
-                  fontSize: 35
-                ),
+                    color: Paletter.blackText.withOpacity(0.6),
+                    fontFamily: "iceland",
+                    fontSize: ScreenHeight * 0.045),
               ),
             )
           ],
