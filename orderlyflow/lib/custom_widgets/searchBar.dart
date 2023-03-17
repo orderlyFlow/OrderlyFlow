@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class SearchInput extends StatefulWidget {

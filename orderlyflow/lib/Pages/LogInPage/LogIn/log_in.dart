@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
-import '../Database/constant.dart';
-import '../Database/textControllers.dart';
-import '../palette.dart';
-import 'package:orderlyflow/main_page.dart';
+import '../../../Database/constant.dart';
+import '../../../Database/textControllers.dart';
+import '../../../custom_widgets/palette.dart';
+import 'package:orderlyflow/Pages/MainPage/main_page.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 class LogIn extends StatelessWidget {

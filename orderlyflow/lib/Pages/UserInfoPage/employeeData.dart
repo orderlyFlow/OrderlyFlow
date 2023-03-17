@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
-import 'package:orderlyflow/side_bar.dart';
+import 'package:orderlyflow/custom_widgets/side_bar.dart';
 
-import 'custom_widgets/BlueBg.dart';
+import '../../custom_widgets/BlueBg.dart';
 
 class employeeData extends StatefulWidget {
   const employeeData({super.key});

@@ -3,24 +3,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:orderlyflow/mainPage%20widgets/widgets/welcome.dart';
-import 'package:orderlyflow/mainPage widgets/widgets/calendar.dart';
-import 'package:orderlyflow/mainPage widgets/widgets/inbox.dart';
-import 'package:orderlyflow/mainPage widgets/widgets/tasks.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/welcome.dart';
+import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/calendar.dart';
+import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/inbox.dart';
+import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/tasks.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 
-import '../Database/db.dart';
+import '../../../Database/db.dart';
 
 class Dashboard extends StatefulWidget {
-
-
   @override
   State<Dashboard> createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-
-
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;

@@ -9,13 +9,13 @@ import 'package:flutter_sms/flutter_sms.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/Database/db.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 
-import '../Database/db.dart';
-import '../Database/sendMail.dart';
-import '../custom_widgets/BlueBg.dart';
-import '../side_bar.dart';
+import '../../Database/db.dart';
+import '../../Database/sendMail.dart';
+import '../../custom_widgets/BlueBg.dart';
+import '../../custom_widgets/side_bar.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key});

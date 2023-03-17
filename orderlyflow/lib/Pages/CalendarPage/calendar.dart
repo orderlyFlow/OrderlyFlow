@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
-import 'package:orderlyflow/palette.dart';
-import 'package:orderlyflow/side_bar.dart';
-import 'package:orderlyflow/calendar widgets/dates.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
+import 'package:orderlyflow/custom_widgets/side_bar.dart';
+import 'package:orderlyflow/Pages/CalendarPage/calendar%20widgets/dates.dart';
 
-import 'custom_widgets/BlueBg.dart';
+import '../../custom_widgets/BlueBg.dart';
 
 class calendar extends StatefulWidget {
   const calendar({super.key});
