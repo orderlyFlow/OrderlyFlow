@@ -21,10 +21,14 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
 
 
+ 
+
+
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
     late double ScreenHeight = MediaQuery.of(context).size.height;
+
     return Material(
       color: Paletter.mainBgLight,
       child: Container(
@@ -81,7 +85,25 @@ class _DashboardState extends State<Dashboard> {
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
-                tasks()
+                 FutureBuilder(
+                    future: MongoDB.getTasks(),
+                    builder: (buildContext, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                       List<String> tasksInformation = List<String>.from(snapshot.data['tasks']);
+                        return tasks(taskInfo: tasksInformation);
+                      } else {
+                        return Container(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                    }),
+                
               ],
             )
           ],
