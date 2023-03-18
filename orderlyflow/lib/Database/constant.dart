@@ -5,3 +5,6 @@ const meetingsCol = "Meetings";
 const payrollCol = "Payroll";
 const personsCol = "Personnel";
 const tasksCol = "Tasks";
+const chathistoryCol ="ChatsHistory";
+const picturesCol = "fs.chunks";
+const documentsCol = "Documents";
