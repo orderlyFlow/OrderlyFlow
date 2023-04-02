@@ -7,6 +7,7 @@ import 'package:orderlyflow/Pages/ChatPage/chatPage.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/dashboard.dart';
 import 'package:orderlyflow/Pages/RequestPage/requests.dart';
 import 'package:orderlyflow/Pages/TaskPage/tasks.dart';
+import 'package:orderlyflow/test.dart';
 import 'Pages/LogInPage/LogIn/log_in.dart';
 import 'loadingPage/home_screen.dart';
 import 'Database/db.dart';
@@ -21,7 +22,7 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => LogIn(),
+      '/': (context) => test(),
       //LogIn(),
     },
   ));

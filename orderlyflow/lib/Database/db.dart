@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +45,14 @@ class MongoDB {
     final information = await coll.findOne(Mongo.where.eq("ID", IDCont))
         as Map<String, dynamic>;
     return information;
+
+    //await db.close();
+  }
+
+  static Future<String> getName() async {
+    var person = await getInfo();
+    var name = person['name'];
+    return name;
 
     //await db.close();
   }
@@ -136,7 +145,106 @@ class MongoDB {
     ImageProvider imageProvider = MemoryImage(photoBytes);
     return imageProvider;
   }
+
+  static Future<List<Map<String, dynamic>>> renderReceivers() async {
+    final recentChat = db.collection(chatsCol);
+    final persons = db.collection(personsCol);
+    List<List<int>> users = [];
+    List<dynamic> recList = [];
+
+    var usersList = await recentChat.find({'users': 100001}).toList();
+
+    usersList.forEach((item) {
+      if (item.containsKey('users')) {
+        users.add(List<int>.from(item['users']));
+      }
+    });
+
+    List<int> flattenedList = [];
+
+    users.forEach((subList) {
+      flattenedList.addAll(subList);
+    });
+
+    flattenedList.removeWhere((number) =>
+        number == int.parse(StoreController.ID_controller.value.text.trim()));
+    print("List of users");
+    print(flattenedList);
+    if (flattenedList.isNotEmpty) {
+      for (var receiver in flattenedList) {
+        var user = await persons.findOne(where.eq("ID", receiver));
+        // print("user");
+        //print(user);
+        if (user != null) {
+          recList.add(user);
+        }
+      }
+      //print(recList);
+      return List<Map<String, dynamic>>.from(recList);
+    } else {
+      return [];
+    }
+  }
+
+  static void getMsgs() async {
+    final msgCol = db.collection(chathistoryCol);
+    final messages = await msgCol.get();
+    for (var message in messages) {}
+  }
+
+  static Future<Map<String, dynamic>> sendMsg(
+      int reciver, String content) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(chathistoryCol);
+    await db1.open();
+    int sender = int.parse(StoreController.ID_controller.value.text.trim());
+    Map<String, dynamic> doc = {
+      "sender": sender,
+      "reciver": reciver,
+      "datetime": DateTime.now(),
+      "content": content
+    };
+    final info = coll.insertOne(doc);
+    StoreController.isSendingMessage = false.obs;
+    StoreController.Message_controller.value.clear();
+    return doc;
+  }
+
+  static Future<Map<String, dynamic>> searchFor() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+
+    //print(StoreController.searchController.value.text.toLowerCase().trim());
+    final name_info = await coll.findOne(
+            Mongo.where.eq('name', StoreController.searchController.value.text))
+        as Map<String, dynamic>;
+    print(name_info);
+    if (name_info != null) {
+      return name_info;
+    } else {
+      return "" as Map<String, dynamic>;
+    }
+  }
 }
+  /*static Future<Map<String, dynamic>> insertDoc(
+      int id, String docName, String content) async {
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(documentsCol);
+    //await db1.open();
+    final bytes = await File(content).readAsBytes();
+    final encoded = base64Encode(bytes);
+    Map<String, dynamic> doc = {
+      "docID": id,
+      "docName": docName,
+      "content": encoded
+    };
+    final info = coll.insertOne(doc);
+    print(encoded);
+    return doc;
+// hr reserved
+  }
+}*/
 
 /*EmailAuth emailAuth = new EmailAuth(sessionName: "Sample session");
 void sendOtp() async {
@@ -208,3 +316,4 @@ void sendOtp() async {
     throw 'Could not launch $mailToUri';
   }
 }*/
+
