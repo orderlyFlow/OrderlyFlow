@@ -61,6 +61,19 @@ class MongoDB {
     //await db.close();
   }
 
+  static Future<Map<String, dynamic>> getTasks() async {
+    var id = await getInfo();
+    var taskID = id["ID"];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(tasksCol);
+    await db1.open();
+
+    final information = await coll.findOne(Mongo.where.eq("_id", taskID))
+        as Map<String, dynamic>;
+
+    return information;
+  }
+
   static Future<Map<String, dynamic>> getID() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
