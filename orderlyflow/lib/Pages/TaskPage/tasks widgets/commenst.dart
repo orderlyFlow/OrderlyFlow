@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 
 class comments extends StatefulWidget {
   const comments({super.key});

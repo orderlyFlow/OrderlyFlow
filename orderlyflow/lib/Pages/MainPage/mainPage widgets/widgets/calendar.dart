@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';

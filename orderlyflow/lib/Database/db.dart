@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ import 'package:orderlyflow/Database/textControllers.dart';
 import 'constant.dart';
 import 'dart:typed_data';
 import 'package:bson/bson.dart';
+import 'package:http/http.dart' as http;
 import 'db.dart';
 import 'dart:developer';
 import 'package:flutter_sms/flutter_sms.dart';
@@ -21,6 +23,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'package:bson/bson.dart';
 import 'package:email_auth/email_auth.dart';
+import 'dart:math';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 var db;
 var collection;
@@ -44,6 +49,14 @@ class MongoDB {
     final information = await coll.findOne(Mongo.where.eq("ID", IDCont))
         as Map<String, dynamic>;
     return information;
+
+    //await db.close();
+  }
+
+  static Future<String> getName() async {
+    var person = await getInfo();
+    var name = person['name'];
+    return name;
 
     //await db.close();
   }
@@ -149,75 +162,145 @@ class MongoDB {
     ImageProvider imageProvider = MemoryImage(photoBytes);
     return imageProvider;
   }
-}
 
-/*EmailAuth emailAuth = new EmailAuth(sessionName: "Sample session");
-void sendOtp() async {
-  bool result = await emailAuth.sendOtp(
-      recipientMail: 'mira13.mc@gmail.com', otpLength: 4);
-  // recipientMail: _emailcontroller.value.text, otpLength: 4);
-}*/
-/*static Future<String> sendingSMS(int otp, int nbr) async {
-    //final db = await Mongo.Db.create(mongoDB_URL);
-    //final coll = db.collection(personsCol);
-    //await db.open();
+  static Future<List<Map<String, dynamic>>> renderReceivers() async {
+    final recentChat = db.collection(chatsCol);
+    final persons = db.collection(personsCol);
+    List<List<int>> users = [];
+    List<dynamic> recList = [];
 
-    //final phoneNumber = (await getInfo())['phone_number'] as int;
-    const phoneNumber = 96171119085;
-    var random = new Random();
-    int otpSend = random.nextInt(999999);
-    String result = await sendSMS(otpSend, phoneNumber);
-    return result;
-  }*/
+    var usersList = await recentChat.find({'users': 100001}).toList();
 
-/*static void _sendSMS(String message, List<String> recipents) async {
-    String _result = await sendSMS(message: message, recipients: recipents)
-        .catchError((onError) {
-      print(onError);
+    usersList.forEach((item) {
+      if (item.containsKey('users')) {
+        users.add(List<int>.from(item['users']));
+      }
     });
-    print(_result);
-  }*/
 
-/*static Future<void> sendOTP() async {
-    final db = await Mongo.Db.create(mongoDB_URL);
-    final coll = db.collection(personsCol);
-    await db.open();
+    List<int> flattenedList = [];
 
-    final targetID = await coll.findOne(Mongo.where
-            .eq("_id", StoreController.ID_controller.value.text.trim()))
-        as Map<int, dynamic>;
-    //final phoneNumber = targetID['phone_number'] as String;
-    const phoneNumber = '96171119085';
-    var random = new Random();
-    int otpSend = random.nextInt(999999);
+    users.forEach((subList) {
+      flattenedList.addAll(subList);
+    });
 
-    SmsSender sender = new SmsSender();
-    sender.sendSms(new SmsMessage(phoneNumber, 'Your OTP is: $otpSend'));
-  }*/
-//////////////////////////WORKS BUT CONSIDERS USER AS SENDER/////////////////////////
-/*void sendingSMS() async {
-  /*var url = Uri.parse("sms:96171119085");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
+    flattenedList.removeWhere((number) =>
+        number == int.parse(StoreController.ID_controller.value.text.trim()));
+    if (flattenedList.isNotEmpty) {
+      for (var receiver in flattenedList) {
+        var user = await persons.findOne(where.eq("ID", receiver));
+        // print("user");
+        //print(user);
+        if (user != null) {
+          recList.add(user);
+        }
+      }
+      //print(recList);
+      return List<Map<String, dynamic>>.from(recList);
     } else {
-      throw 'Could not launch $url';
-    }*/
-  final emailAddress = 'mira13.mc@gmail.com';
-  final subject = 'This is a test';
-  var random = new Random();
-  int otpSend = random.nextInt(999999);
-  final body = otpSend.toString();
+      return [];
+    }
+  }
 
-  final Uri mailToUri =
-      Uri(scheme: 'mailto', path: 'mira13.mc@gmail.com', queryParameters: {
-    'subject': "Your OTP is $otpSend",
-    'body': "Test done",
-    'from': 'overranter@gmail.com',
-  });
-  //print(mailToUri.toString());
-  if (await canLaunchUrl(mailToUri)) {
-    await launchUrl(mailToUri);
-  } else {
-    throw 'Could not launch $mailToUri';
+  static void getMsgs() async {
+    final msgCol = db.collection(chathistoryCol);
+    final messages = await msgCol.get();
+    for (var message in messages) {}
+  }
+
+  static Future<Map<String, dynamic>> sendMsg(
+      int reciver, String content) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(chathistoryCol);
+    await db1.open();
+    int sender = int.parse(StoreController.ID_controller.value.text.trim());
+    Map<String, dynamic> doc = {
+      "sender": sender,
+      "datetime": DateTime.now(),
+      "content": content,
+      "reciver": reciver,
+    };
+    final info = coll.insertOne(doc);
+    StoreController.isSendingMessage = false.obs;
+    StoreController.Message_controller.value.clear();
+    return doc;
+  }
+
+  static Future sendEmail() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+
+    var IDCont = int.parse(StoreController.ID_controller.value.text.trim());
+    final rec = await coll.findOne(Mongo.where.eq("ID", IDCont));
+    final recEmail = rec!['email'];
+
+    final random = Random();
+    final otp = random.nextInt(9999).toString().padLeft(4, '0');
+    String OTPmessage = 'Your OTP is: $otp';
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    const serviceId = 'service_tinvhpr';
+    const templateId = 'template_wit7sy5';
+    const userId = '55Nno5HEZIhwen4fN';
+    print("starting email sending");
+    try {
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'service_id': serviceId,
+            'template_id': templateId,
+            'user_id': userId,
+            'template_params': {'to_email': recEmail, 'message': OTPmessage}
+          }));
+
+      print('Email successfully sent!');
+      coll.modernUpdate(where.eq('ID', IDCont),
+          ModifierBuilder().set('OTP', {'$Int32': otp}));
+      return response.statusCode;
+    } catch (error) {
+      print('Error sending email: $error');
+      return null;
+    }
+  }
+
+  static Future<Object> searchFor() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+
+    //print(StoreController.searchController.value.text.toLowerCase().trim());
+    final name_info = await coll.find({
+      'name': {
+        '\$regex': StoreController.searchController.value.text.toString()
+      }
+    })
+        //StoreController.searchController.value.text))
+        as Map<String, dynamic>;
+    print(name_info);
+    if (name_info != null) {
+      return name_info;
+    } else {
+      return "" as Map<String, dynamic>;
+    }
+  }
+}
+  /*static Future<Map<String, dynamic>> insertDoc(
+      int id, String docName, String content) async {
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(documentsCol);
+    //await db1.open();
+    final bytes = await File(content).readAsBytes();
+    final encoded = base64Encode(bytes);
+    Map<String, dynamic> doc = {
+      "docID": id,
+      "docName": docName,
+      "content": encoded
+    };
+    final info = coll.insertOne(doc);
+    print(encoded);
+    return doc;
+// hr reserved
   }
 }*/
+
+
+

@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
-import '../Database/constant.dart';
-import '../Database/textControllers.dart';
-import '../palette.dart';
-import 'package:orderlyflow/main_page.dart';
+import '../../../Database/constant.dart';
+import '../../../Database/textControllers.dart';
+import '../../../custom_widgets/palette.dart';
+import 'package:orderlyflow/Pages/MainPage/main_page.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 class LogIn extends StatelessWidget {
@@ -299,9 +299,23 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               return null;
                             }),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            final response = await MongoDB.sendEmail();
+                            print(response);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              response == 200
+                                  ? const SnackBar(
+                                      content: Text('Message Sent!'),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 129, 215, 132))
+                                  : const SnackBar(
+                                      content: Text('Failed to send message!'),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 217, 123, 116)),
+                            );
+                          },
                           child: Text(
-                            'forgot password?',
+                            'forgot otp?',
                             style: TextStyle(
                                 color: Paletter.logInText,
                                 fontFamily: 'Neuropol'),

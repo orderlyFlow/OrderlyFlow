@@ -1,8 +1,8 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 
-import '../Database/db.dart';
+import '../../../Database/db.dart';
 
 class userTasks extends StatefulWidget {
   const userTasks({super.key});

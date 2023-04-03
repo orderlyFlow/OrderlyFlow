@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 
 class calendarDate extends StatefulWidget {
   const calendarDate({super.key});
@@ -24,9 +24,8 @@ class _calendarDateState extends State<calendarDate> {
       height: ScreenHeight * 0.4,
       width: ScreenWidth * 0.91,
       decoration: BoxDecoration(
-        color: Paletter.containerLight,
-        borderRadius: BorderRadius.circular(15)
-      ),
+          color: Paletter.containerLight,
+          borderRadius: BorderRadius.circular(15)),
       child: Padding(
         padding: EdgeInsets.fromLTRB(0.02 * ScreenWidth, 0.02 * ScreenHeight,
             0.02 * ScreenWidth, 0.02 * ScreenHeight),
@@ -36,12 +35,13 @@ class _calendarDateState extends State<calendarDate> {
             Text(
               'Development Team - Calendar',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 35,
-                fontFamily: "conthrax"
-              ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 35,
+                  fontFamily: "conthrax"),
             ),
-            SizedBox(height: ScreenHeight* 0.01,),
+            SizedBox(
+              height: ScreenHeight * 0.01,
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -55,16 +55,19 @@ class _calendarDateState extends State<calendarDate> {
                     });
                   },
                 ),
-                SizedBox(width: ScreenWidth * 0.2,),
+                SizedBox(
+                  width: ScreenWidth * 0.2,
+                ),
                 Text(
-              monthName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-                fontFamily: "conthrax"
-              ),
-            ),
-              SizedBox(width: ScreenWidth * 0.2,),
+                  monthName,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      fontFamily: "conthrax"),
+                ),
+                SizedBox(
+                  width: ScreenWidth * 0.2,
+                ),
                 IconButton(
                   icon: Icon(Icons.arrow_forward),
                   onPressed: () {
@@ -76,7 +79,9 @@ class _calendarDateState extends State<calendarDate> {
                 ),
               ],
             ),
-          SizedBox(height: ScreenHeight * 0.01,),
+            SizedBox(
+              height: ScreenHeight * 0.01,
+            ),
             Expanded(
               child: GridView.builder(
                 itemCount: daysInMonth,
@@ -91,7 +96,7 @@ class _calendarDateState extends State<calendarDate> {
                       DateTime.now().month == _selectedDate.month &&
                       DateTime.now().year == _selectedDate.year;
                   final isSelected = _selectedDate.day == day;
-      
+
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -108,7 +113,8 @@ class _calendarDateState extends State<calendarDate> {
                         child: Text(
                           '$day',
                           style: TextStyle(
-                           color: isSelected ? Colors.white : Paletter.blackText,
+                            color:
+                                isSelected ? Colors.white : Paletter.blackText,
                             fontFamily: 'Iceland',
                             fontSize: 20,
                           ),

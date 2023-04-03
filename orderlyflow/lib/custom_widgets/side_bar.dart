@@ -2,17 +2,17 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/announcement.dart';
-import 'package:orderlyflow/calendar.dart';
-import 'package:orderlyflow/Pages/chatPage.dart';
-import 'package:orderlyflow/main_page.dart';
-import 'package:orderlyflow/palette.dart';
-import 'package:orderlyflow/requests.dart';
+import 'package:orderlyflow/Pages/CalendarPage/calendar.dart';
+import 'package:orderlyflow/Pages/ChatPage/chatPage.dart';
+import 'package:orderlyflow/Pages/MainPage/main_page.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
+import 'package:orderlyflow/Pages/RequestPage/requests.dart';
 import 'package:bson/bson.dart';
-import 'package:orderlyflow/tasks.dart';
+import 'package:orderlyflow/Pages/TaskPage/tasks.dart';
 import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'employeeData.dart';
+import '../Pages/UserInfoPage/employeeData.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
