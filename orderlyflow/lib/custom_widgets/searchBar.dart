@@ -41,8 +41,7 @@ class _SearchInputState extends State<SearchInput> {
               ),
               suffixIcon: IconButton(
                 icon: Icon(Icons.clear),
-                onPressed: () => StoreController.searchController.value =
-                    "" as TextEditingController,
+                onPressed: () => StoreController.searchController.value.clear(),
               ),
               prefixIcon: IconButton(
                 icon: Icon(Icons.search),

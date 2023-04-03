@@ -166,43 +166,22 @@ class chatPageState extends State<chatPage> {
                           color: Paletter.mainBgLight,
                         ),
                       ),
-                      child: SearchInput(),
+                      child: Column(children: [
+                        SearchInput(),
+                        
+                        Container(
+                          
+                          decoration: BoxDecoration(
+                            color: Paletter.ghostWhite,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ]),
+
                       // ),
                     ),
-                    /*Container(
-                        width: 300,
-                        height: 50,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.grey[700]),
-                              overlayColor:
-                                  MaterialStateProperty.resolveWith<Color?>(
-                                      (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.hovered))
-                                  return Paletter.logInText;
-                                return null;
-                              }),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ))),
-                          onPressed: () {
-                            /*if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();*/
-                            sendOtp();
-                          },
-                          child: const Text(
-                            'Send OTP',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Neuropol',
-                            ),
-                          ),
-                        )),
-                    */
-                    Container(
+                    /////////////////////////////////////////////////////////
+                 /*   Container(
                         height: ScreenHeight * 0.57,
                         width: ScreenWidth * 0.382,
                         margin: EdgeInsets.fromLTRB(
@@ -260,7 +239,7 @@ class chatPageState extends State<chatPage> {
                                   ));
                             }
                           },
-                        )),
+                        )), */
                   ]),
               Visibility(
                   visible: isVisible,
@@ -319,11 +298,24 @@ class chatPageState extends State<chatPage> {
                                         ? CrossAxisAlignment.end
                                         : CrossAxisAlignment.start,
                                     children: [
-                                      (message['sender'] ==
-                                                  StoreController
-                                                      .Rec_ID.value ||
-                                              message['receiver'] ==
-                                                  StoreController.Rec_ID.value)
+                                      ((message['sender'] ==
+                                                      StoreController
+                                                          .Rec_ID.value &&
+                                                  message['receiver'] ==
+                                                      int.parse(StoreController
+                                                          .ID_controller
+                                                          .value
+                                                          .text
+                                                          .trim())) ||
+                                              (message['receiver'] ==
+                                                      StoreController
+                                                          .Rec_ID.value &&
+                                                  message['sender'] ==
+                                                      int.parse(StoreController
+                                                          .ID_controller
+                                                          .value
+                                                          .text
+                                                          .trim())))
                                           ? Container(
                                               margin: EdgeInsets.fromLTRB(
                                                   isSender
@@ -347,11 +339,24 @@ class chatPageState extends State<chatPage> {
                                             )
                                           : SizedBox.shrink(),
                                       SizedBox(height: 4),
-                                      (message['sender'] ==
-                                                  StoreController
-                                                      .Rec_ID.value ||
-                                              message['receiver'] ==
-                                                  StoreController.Rec_ID.value)
+                                      ((message['sender'] ==
+                                                      StoreController
+                                                          .Rec_ID.value &&
+                                                  message['receiver'] ==
+                                                      int.parse(StoreController
+                                                          .ID_controller
+                                                          .value
+                                                          .text
+                                                          .trim())) ||
+                                              (message['receiver'] ==
+                                                      StoreController
+                                                          .Rec_ID.value &&
+                                                  message['sender'] ==
+                                                      int.parse(StoreController
+                                                          .ID_controller
+                                                          .value
+                                                          .text
+                                                          .trim())))
                                           ? Container(
                                               margin: EdgeInsets.fromLTRB(
                                                   isSender
@@ -398,11 +403,24 @@ class chatPageState extends State<chatPage> {
                                             )
                                           : SizedBox.shrink(),
                                       SizedBox(height: ScreenHeight * 0.001),
-                                      (message['sender'] ==
-                                                  StoreController
-                                                      .Rec_ID.value ||
-                                              message['receiver'] ==
-                                                  StoreController.Rec_ID.value)
+                                      ((message['sender'] ==
+                                                      StoreController
+                                                          .Rec_ID.value &&
+                                                  message['receiver'] ==
+                                                      int.parse(StoreController
+                                                          .ID_controller
+                                                          .value
+                                                          .text
+                                                          .trim())) ||
+                                              (message['receiver'] ==
+                                                      StoreController
+                                                          .Rec_ID.value &&
+                                                  message['sender'] ==
+                                                      int.parse(StoreController
+                                                          .ID_controller
+                                                          .value
+                                                          .text
+                                                          .trim())))
                                           ? Text(
                                               message['datetime'].toString(),
                                               style: TextStyle(

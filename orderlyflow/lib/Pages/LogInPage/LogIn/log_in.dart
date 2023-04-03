@@ -299,9 +299,23 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               return null;
                             }),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            final response = await MongoDB.sendEmail();
+                            print(response);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              response == 200
+                                  ? const SnackBar(
+                                      content: Text('Message Sent!'),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 129, 215, 132))
+                                  : const SnackBar(
+                                      content: Text('Failed to send message!'),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 217, 123, 116)),
+                            );
+                          },
                           child: Text(
-                            'forgot password?',
+                            'forgot otp?',
                             style: TextStyle(
                                 color: Paletter.logInText,
                                 fontFamily: 'Neuropol'),
