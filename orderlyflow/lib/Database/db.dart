@@ -240,8 +240,8 @@ class MongoDB {
           }));
 
       print('Email successfully sent!');
-      coll.modernUpdate(
-          where.eq('ID', IDCont), ModifierBuilder().set('OTP', otp));
+      coll.modernUpdate(where.eq('ID', IDCont),
+          ModifierBuilder().set('OTP', {'$Int32': otp}));
       return response.statusCode;
     } catch (error) {
       print('Error sending email: $error');
@@ -255,7 +255,11 @@ class MongoDB {
     await db1.open();
 
     //print(StoreController.searchController.value.text.toLowerCase().trim());
-    final name_info = await coll.find(Mongo.where.eq('name', '/N/'))
+    final name_info = await coll.find({
+      'name': {
+        '\$regex': StoreController.searchController.value.text.toString()
+      }
+    })
         //StoreController.searchController.value.text))
         as Map<String, dynamic>;
     print(name_info);

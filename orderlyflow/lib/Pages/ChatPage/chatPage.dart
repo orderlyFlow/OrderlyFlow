@@ -155,33 +155,39 @@ class chatPageState extends State<chatPage> {
                     ]),
                     Container(
                       margin: EdgeInsets.only(
-                          left: ScreenWidth * 0.0080,
+                          left: ScreenWidth * 0,
                           top: ScreenHeight * 0.02,
                           bottom: ScreenHeight * 0.05),
-                      height: ScreenHeight * 0.064,
-                      width: ScreenWidth * 0.301,
-                      decoration: BoxDecoration(
-                        color: Paletter.mainBgLight,
-                        border: Border.all(
-                          color: Paletter.mainBgLight,
-                        ),
-                      ),
                       child: Column(children: [
-                        SearchInput(),
-                        
                         Container(
-                          
+                          margin: EdgeInsets.only(
+                              left: ScreenWidth * 0,
+                              top: ScreenHeight * 0.02,
+                              bottom: ScreenHeight * 0.05),
+                          height: ScreenHeight * 0.064,
+                          width: ScreenWidth * 0.301,
+                          decoration: BoxDecoration(
+                            color: Paletter.mainBgLight,
+                            border: Border.all(
+                              color: Paletter.mainBgLight,
+                            ),
+                          ),
+                          child: SearchInput(),
+                        ),
+                        Container(
+                          width: ScreenWidth * 0.4,
+                          height: ScreenHeight * 0.24,
                           decoration: BoxDecoration(
                             color: Paletter.ghostWhite,
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
                       ]),
-
-                      // ),
                     ),
+
+                    // ),
                     /////////////////////////////////////////////////////////
-                 /*   Container(
+                    /*   Container(
                         height: ScreenHeight * 0.57,
                         width: ScreenWidth * 0.382,
                         margin: EdgeInsets.fromLTRB(
