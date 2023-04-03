@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names, unused_import
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:orderlyflow/mainPage%20widgets/taskClass.dart';
 import 'package:orderlyflow/mainPage%20widgets/widgets/welcome.dart';
 import 'package:orderlyflow/mainPage widgets/widgets/calendar.dart';
 import 'package:orderlyflow/mainPage widgets/widgets/inbox.dart';
@@ -12,18 +11,11 @@ import 'package:orderlyflow/palette.dart';
 import '../Database/db.dart';
 
 class Dashboard extends StatefulWidget {
-
-
   @override
   State<Dashboard> createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-
-
- 
-
-
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
@@ -74,6 +66,11 @@ class _DashboardState extends State<Dashboard> {
                         return welcome(name: UserName);
                       } else {
                         return Container(
+                          width: ScreenWidth * 0.397,
+                          height: ScreenHeight * 0.5,
+                          decoration: BoxDecoration(
+                              color: Paletter.containerDark,
+                              borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: CircularProgressIndicator(
                               color: Colors.white,
@@ -85,25 +82,27 @@ class _DashboardState extends State<Dashboard> {
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
-                 FutureBuilder(
-                    future: MongoDB.getTasks(),
+                FutureBuilder(
+                    future: MongoDB.getTask(),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       } else if (snapshot.hasData) {
-                       List<String> tasksInformation = List<String>.from(snapshot.data['tasks']);
-                        return tasks(taskInfo: tasksInformation);
+                        return tasks(taskInfo: snapshot.data);
                       } else {
                         return Container(
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          ),
-                        );
+                            width: ScreenWidth * 0.397,
+                            height: ScreenHeight * 0.44,
+                            decoration: BoxDecoration(
+                                color: Paletter.containerLight,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ));
                       }
                     }),
-                
               ],
             )
           ],

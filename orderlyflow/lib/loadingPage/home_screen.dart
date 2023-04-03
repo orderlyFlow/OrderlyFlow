@@ -1,4 +1,4 @@
-//ignore_for_file: depend_on_referenced_packages
+//ignore_for_file: depend_on_referenced_packages, unused_import, library_private_types_in_public_api, duplicate_ignore, annotate_overrides, unused_local_variable, non_constant_identifier_names
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:orderlyflow/palette.dart';

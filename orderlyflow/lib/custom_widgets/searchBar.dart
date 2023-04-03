@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unused_import, use_key_in_widget_constructors, non_constant_identifier_names, prefer_const_constructors, duplicate_ignore, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:auto_size_text/auto_size_text.dart';

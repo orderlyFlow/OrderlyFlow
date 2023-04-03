@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, file_names, unused_import, library_prefixes, duplicate_import, camel_case_types, unused_element, override_on_non_overriding_member, no_leading_underscores_for_local_identifiers, body_might_complete_normally_catch_error, avoid_print, annotate_overrides, non_constant_identifier_names, avoid_unnecessary_containers
 
 import 'dart:convert';
 import 'dart:typed_data';

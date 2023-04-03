@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_const_constructors, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:orderlyflow/palette.dart';
@@ -90,7 +92,7 @@ class _notesState extends State<notes> {
                                   border: Border(
                                       bottom: BorderSide(
                                           color: Colors.black,
-                                          width: ScreenWidth * 0.001))),
+                                          width: ScreenWidth * 0.0014))),
                             )
                         ],
                       ),

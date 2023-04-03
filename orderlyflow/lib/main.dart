@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_import, duplicate_ignore, duplicate_import
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// ignore: unused_import
 import 'package:orderlyflow/calendar.dart';
 import 'package:orderlyflow/Pages/chatPage.dart';
 import 'package:orderlyflow/mainPage%20widgets/dashboard.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
     initialRoute: '/',
     routes: {
       '/': (context) => LogIn(),
+      '/task' :(p0) => myTasks()
       //LogIn(),
     },
   ));

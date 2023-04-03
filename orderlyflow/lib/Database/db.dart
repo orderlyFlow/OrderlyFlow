@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_new
+// ignore_for_file: unnecessary_new, unused_import, library_prefixes, duplicate_import, prefer_typing_uninitialized_variables, unused_local_variable, avoid_print, non_constant_identifier_names, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'dart:developer';
@@ -11,6 +11,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:orderlyflow/Database/textControllers.dart';
+import '../mainPage widgets/taskClass.dart';
 import 'constant.dart';
 import 'dart:typed_data';
 import 'package:bson/bson.dart';
@@ -21,6 +22,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'package:bson/bson.dart';
 import 'package:email_auth/email_auth.dart';
+
 
 var db;
 var collection;
@@ -48,18 +50,33 @@ class MongoDB {
     //await db.close();
   }
 
-  static Future<Map<String, dynamic>> getTasks() async {
+  static Future<List<Tasks>> getTask() async{
     var id = await getInfo();
-    var taskID = id["ID"];
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(tasksCol);
+    var getId = id["ID"];
+    final db1= await Mongo.Db.create(mongoDB_URL);
+    final col1 = db1.collection(tasksCol);
     await db1.open();
+    final getuser = await col1.find(where.eq('Employees', {
+      '\$elemMatch' : {'\$eq' : getId}
+    })).toList();
 
-    final information = await coll.findOne(Mongo.where.eq("_id", taskID))
-        as Map<String, dynamic>;
-
-    return information;
+    return getuser.map((e) => Tasks(ID: e['TaskID'],name: e['taskName'], status: e['status'])).toList();
   }
+
+
+
+  // static Future<Map<String, dynamic>> getTasks() async {
+  //   var id = await getInfo();
+  //   var taskID = id["ID"];
+  //   final db1 = await Mongo.Db.create(mongoDB_URL);
+  //   final coll = db1.collection(tasksCol);
+  //   await db1.open();
+
+  //   final information = await coll.findOne(Mongo.where.eq("_id", taskID))
+  //       as Map<String, dynamic>;
+
+  //   return information;
+  // }
 
   static Future<Map<String, dynamic>> getID() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);

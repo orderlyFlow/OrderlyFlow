@@ -1,4 +1,6 @@
 
+// ignore_for_file: camel_case_types, prefer_interpolation_to_compose_strings, use_build_context_synchronously, prefer_const_constructors, non_constant_identifier_names, unnecessary_string_interpolations, unnecessary_brace_in_string_interps
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';

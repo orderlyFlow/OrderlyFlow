@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_import, camel_case_types, non_constant_identifier_names, prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_is_empty
 import 'dart:ui';
 
 import 'package:flutter/material.dart';

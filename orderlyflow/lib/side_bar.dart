@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, unused_field, prefer_final_fields, non_constant_identifier_names, prefer_const_constructors
+
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -52,14 +54,25 @@ class _SideBarState extends State<SideBar> {
                     future: MongoDB.getProfilePic(),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
-                        return Container(
-                          margin: EdgeInsets.fromLTRB(
-                              0, ScreenHeight * 0.045, 0, 0),
-                          width: ScreenWidth * 0.078,
-                          height: ScreenHeight * 0.078,
-                          child: const Center(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
+                        return InkWell(
+                           onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      childCurrent: const employeeData(),
+                                      child: employeeData(),
+                                      type: PageTransitionType.theme,
+                                      duration: const Duration(seconds: 2)));
+                            },
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(
+                                0, ScreenHeight * 0.045, 0, 0),
+                            width: ScreenWidth * 0.078,
+                            height: ScreenHeight * 0.078,
+                            child: const Center(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.black,
+                              ),
                             ),
                           ),
                         );

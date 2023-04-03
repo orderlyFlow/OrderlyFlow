@@ -1,4 +1,6 @@
 // ignore: file_names
+// ignore_for_file: use_key_in_widget_constructors, camel_case_types, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/mainPage widgets/dashboard.dart';
 import 'package:orderlyflow/side_bar.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/palette.dart';
 
