@@ -3,17 +3,55 @@
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:orderlyflow/palette.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+
+import '../Database/constant.dart';
+
 
 class notes extends StatefulWidget {
-  const notes({super.key});
+  String content;
+  int noteId;
+  notes({super.key,  required  this.content, required this.noteId});
 
   @override
   State<notes> createState() => _notesState();
 }
 
 class _notesState extends State<notes> {
-  final TextEditingController notesController = TextEditingController();
-  int lineNbr = 20;
+  late String textIntro;
+  late TextEditingController notesController = TextEditingController();
+
+  Future<void> Save(String data) async{
+    var db = await Mongo.Db.create(mongoDB_URL);
+    await db.open();
+    var col = db.collection(notesCol);
+    await col.update(Mongo.where.eq('noteID', widget.noteId), Mongo.modify.set('content', data));
+
+  }
+
+  Future <void> delete() async{
+    var db = await Mongo.Db.create(mongoDB_URL);
+    await db.open();
+    var col = db.collection(notesCol);
+    await col.update(Mongo.where.eq('noteID', widget.noteId), Mongo.modify.set('content', ''));
+  }
+
+  void handleSave(){
+    String txt = notesController.text;
+    Save(txt);
+  }
+
+  void handleDelete(){
+    notesController.clear();
+    delete();
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    textIntro = widget.content;
+    notesController = TextEditingController(text: textIntro);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +68,47 @@ class _notesState extends State<notes> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Notes',
-            style: TextStyle(
-              fontFamily: 'conthrax',
-              fontSize: ScreenHeight * 0.025,
-              color: Color.fromARGB(255, 0, 0, 0),
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Notes',
+                style: TextStyle(
+                  fontFamily: 'conthrax',
+                  fontSize: ScreenHeight * 0.04,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ),
+              SizedBox(width: ScreenWidth * 0.15,),
+              CircleAvatar(
+                radius: ScreenHeight * 0.03,
+                backgroundColor: Paletter.mainBg,
+                child: Center(
+                  child: IconButton(
+                    onPressed: handleDelete,
+                    icon: Icon(
+                      Icons.delete,
+                      color: Paletter.containerLight,
+                    )),
+                ),
+              ),
+              SizedBox(width: ScreenWidth * 0.01,),
+              CircleAvatar(
+                radius: ScreenHeight * 0.03,
+                backgroundColor: Paletter.mainBg,
+                child: Center(
+                  child: IconButton(onPressed: handleSave,
+                   icon: Icon(
+                    Icons.save,
+                    color: Paletter.containerLight,
+                    
+                    
+                   )
+                   ),
+                ),
+              )
+            ],
           ),
           Expanded(
               child: SingleChildScrollView(
@@ -57,48 +129,15 @@ class _notesState extends State<notes> {
                         wordSpacing: 2.0,
                         height: 1.5),
                     decoration: InputDecoration(
-                      hintText:
-                          'This is where you enter any notes you deem necessary for your work, it could be used for writing important points seen from the comment, or what you consider helpful for your tasks, it could be suggestion acquired during meetings and you don\'t what to write on paper or worry of losing it',
+                      hintText: widget.content,
                       hintStyle: TextStyle(
                           fontSize: ScreenHeight * 0.016,
                           letterSpacing: ScreenHeight * 0.005),
                     ),
-                    onChanged: (text) {
-                      int numLines = (text.length / 25).ceil();
-                      if (numLines > lineNbr) {
-                        setState(() {
-                          lineNbr = numLines;
-                        });
-                      }
-                    },
+              
                   ),
                 ),
-                Indexed(
-                  index: 1,
-                  child: Container(
-                    width: ScreenWidth * double.infinity,
-                    height: ScreenHeight * double.infinity,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 18,
-                          ),
-                          for (int i = 0; i < lineNbr; i++)
-                            Container(
-                              height: 25,
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.black,
-                                          width: ScreenWidth * 0.0014))),
-                            )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              
               ]),
             ),
           ))

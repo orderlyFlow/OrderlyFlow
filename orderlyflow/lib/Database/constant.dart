@@ -7,3 +7,4 @@ const meetingsCol = "Meetings";
 const payrollCol = "Payroll";
 const personsCol = "Personnel";
 const tasksCol = "Tasks";
+const notesCol = "Notes";

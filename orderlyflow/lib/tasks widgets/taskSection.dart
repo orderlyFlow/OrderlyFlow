@@ -6,6 +6,7 @@ import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/mainPage%20widgets/taskClass.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'package:orderlyflow/tasks%20widgets/addTaskButton.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../Database/db.dart';
@@ -151,20 +152,20 @@ class _userTasksState extends State<userTasks> {
                       fontFamily: "conthrax"),
                 ),
                 // SizedBox(width: ScreenWidth * 0.02,),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, ScreenHeight * 0.045, 0, 0),
-                    width: ScreenWidth * 0.078,
-                    height: ScreenHeight * 0.078,
-                    child: const Center(
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      )
-                    ),
-                  ),
-                )
+               FutureBuilder(
+                    future: MongoDB.getInfo(),
+                    builder: (buildContext, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        int userID = snapshot.data['ID'];
+                        return addTaskButton(ID: userID);
+                      } else {
+                        return CircularProgressIndicator(
+                          color: Colors.white,
+                        );
+                      }
+                    }),
               ],
             ),
             SizedBox(

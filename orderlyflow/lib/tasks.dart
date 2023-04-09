@@ -36,13 +36,13 @@ class _myTasksState extends State<myTasks> {
     // );
 
     Navigator.pushReplacement(
-    context, 
-    PageRouteBuilder(
+      context,
+      PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => myTasks(),
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
-    ),
-);
+      ),
+    );
   }
 
   @override
@@ -54,7 +54,6 @@ class _myTasksState extends State<myTasks> {
         enablePullDown: true,
         enablePullUp: false,
         controller: _refreshController,
-        
         onRefresh: _onRefresh,
         child: Stack(children: [
           const BlueBg(),
@@ -125,7 +124,30 @@ class _myTasksState extends State<myTasks> {
                           SizedBox(
                             height: ScreenHeight * 0.02,
                           ),
-                          notes()
+                          FutureBuilder(
+                              future: MongoDB.getNotes(),
+                              builder: (buildContext, AsyncSnapshot snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                } else if (snapshot.hasData) {
+                                  int id = snapshot.data['noteID'];
+                                  String notesText = snapshot.data['content'];
+                                  return notes(content: notesText, noteId: id);
+                                } else {
+                                  return Container(
+                                      height: ScreenHeight * 0.599,
+                                      width: ScreenWidth * 0.4,
+                                      decoration: BoxDecoration(
+                                          color: Paletter.containerDark,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ));
+                                }
+                              }),
                         ],
                       )
                     ]),
