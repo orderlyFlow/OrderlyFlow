@@ -30,6 +30,7 @@ class _SearchInputState extends State<SearchInput> {
               fontSize: 0.027 * ScreenHeight,
             ),
             controller: StoreController.searchController.value,
+            onChanged: (value) {},
             cursorColor: Paletter.mainBg,
             decoration: InputDecoration(
               fillColor: Colors.grey[350],

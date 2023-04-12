@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/custom_widgets/side_bar.dart';
 import 'package:orderlyflow/Pages/CalendarPage/calendar%20widgets/dates.dart';
+import 'package:dotted_line/dotted_line.dart';
 
+import '../../Database/db.dart';
 import '../../custom_widgets/BlueBg.dart';
 
 class calendar extends StatefulWidget {
@@ -112,13 +114,102 @@ class _calendarState extends State<calendar> {
         Row(
           children: [
             SideBar(),
-            Container(
-                padding: EdgeInsets.fromLTRB(
-                    0.01 * ScreenWidth,
-                    0.02 * ScreenHeight,
-                    0.01 * ScreenWidth,
-                    0.02 * ScreenHeight),
-                child: Column(children: [calendarDate()]))
+            Column(
+              children: [
+                Container(
+                    padding: EdgeInsets.fromLTRB(
+                        0.01 * ScreenWidth,
+                        0.02 * ScreenHeight,
+                        0.01 * ScreenWidth,
+                        0.02 * ScreenHeight),
+                    child: Column(children: [calendarDate()])),
+                /*            Container(
+                  width: ScreenWidth * 0.9102,
+                  height: ScreenHeight * 0.54,
+                  decoration: BoxDecoration(
+                      color: Paletter.mainBgLight,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: FutureBuilder(
+                      future: MongoDB.getInfo(), //////////////////////
+                      builder: (buildContext, AsyncSnapshot snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        } else if (snapshot.hasData) {
+                          return ListView.builder(
+                            itemCount: meetings.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final meeting = meetings[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Time on left
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: Text(
+                                        meeting.time,
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ),
+                                    // Meeting name and dotted line
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(8.0),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  meeting.name,
+                                                  style:
+                                                      TextStyle(fontSize: 16.0),
+                                                ),
+                                                SizedBox(height: 4.0),
+                                                Text(
+                                                  meeting.description,
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 8.0),
+                                          // Dotted line
+                                          DottedLine(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return Container(
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Paletter.gradiant3,
+                              ),
+                            ),
+                          );
+                        }
+                      }),
+                )                  */
+              ],
+            )
           ],
         )
       ]),

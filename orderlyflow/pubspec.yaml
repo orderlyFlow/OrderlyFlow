@@ -54,6 +54,7 @@ dependencies:
   flutter_termii: ^0.2.1
   mailer: ^6.0.0
   http: ^0.13.5
+  dotted_line: ^3.1.0
 
 
 dev_dependencies:
