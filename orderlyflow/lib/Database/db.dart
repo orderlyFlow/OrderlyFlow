@@ -53,14 +53,14 @@ class MongoDB {
     //await db.close();
   }
 
-  static Future<Map<String, dynamic>> getPersonByID() async {
+  static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
     await db1.open();
-    final othersInformation =
-        await coll.findOne(Mongo.where.eq("ID", StoreController.Rec_ID.value))
-            as Map<String, dynamic>;
+    final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
+        as Map<String, dynamic>;
     if (othersInformation != null) {
+      print(StoreController.Rec_ID.value);
       return othersInformation;
     } else {
       return null as Map<String, dynamic>;
@@ -214,16 +214,14 @@ class MongoDB {
 
   static Future<List<Map<String, dynamic>>> sendMsg(
       int rec, String content) async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(chathistoryCol);
-    await db1.open();
+    final coll = db.collection(chathistoryCol);
     int sender = int.parse(StoreController.ID_controller.value.text.trim());
 
     Map<String, dynamic> doc = {
       "sender": sender,
       "datetime": DateTime.now(),
       "content": content,
-      "reciver": rec,
+      "receiver": rec,
     };
     List<Map<String, dynamic>> list = [];
     final info = coll.insertOne(doc);

@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
@@ -31,10 +32,10 @@ class chatPageState extends State<chatPage> {
   var db;
   Future? _future;
 
-  Future<dynamic> sendData() async {
-    final data1 = await MongoDB.getPersonByID();
+  Future<dynamic> sendData(int Rec_ID) async {
+    final data1 = await MongoDB.getPersonByID(Rec_ID);
     final data2 = await MongoDB.getInfo();
-    if (data1 != null || data2 != null) {
+    if (data1 != null && data2 != null) {
       return [data1, data2];
     }
   }
@@ -55,7 +56,7 @@ class chatPageState extends State<chatPage> {
         Stream.fromIterable([messages]);
     yield* messageStream;
   }*/
-  StreamController<List<Map<String, dynamic>>> _streamController =
+  late StreamController<List<Map<String, dynamic>>> _streamController =
       StreamController<List<Map<String, dynamic>>>();
   Stream<List<Map<String, dynamic>>> getMessageStream() async* {
     db = await Mongo.Db.create(mongoDB_URL);
@@ -67,7 +68,7 @@ class chatPageState extends State<chatPage> {
         .toList();
     var newMessage = MongoDB.sendMsg(StoreController.Rec_ID.value,
         StoreController.Message_controller.value.text);
-    if (StoreController.isSendingMessage == true) {
+    if (StoreController.isSendingMessage.isTrue) {
       messages.add(newMessage);
     }
     _streamController.add(messages);
@@ -82,11 +83,12 @@ class chatPageState extends State<chatPage> {
   @override
   void initState() {
     super.initState();
+    isHovered = false;
   }
 
-  void onEntered(bool isHovered) => setState(() {
+  /*void onEntered(bool isHovered) => setState(() {
         this.isHovered = isHovered;
-      });
+      });*/
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
@@ -229,46 +231,48 @@ class chatPageState extends State<chatPage> {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return MouseRegion(
-                                            onEnter: (event) => onEntered(true),
-                                            onExit: (event) => onEntered(false),
                                             child: Container(
-                                                color: (isHovered)
-                                                    ? Paletter.containerLight
-                                                    : Paletter.containerDark,
+                                                color: Paletter.containerDark,
                                                 margin: EdgeInsets.fromLTRB(0,
                                                     0, 0, ScreenHeight * 0.02),
-                                                child: ListTile(
-                                                  hoverColor:
-                                                      Paletter.containerLight,
-                                                  onTap: () {
-                                                    StoreController
-                                                            .Rec_ID.value =
-                                                        snapshot.data![index]
-                                                            ['ID'];
-                                                    isVisible = !isVisible;
-                                                    _future = sendData();
-                                                    //if (isVisible == false) {
-                                                    //disposeOfStream();
-                                                    //}
-                                                  },
-                                                  visualDensity: VisualDensity(
-                                                      vertical: 1),
-                                                  leading: CircleAvatar(
-                                                    backgroundImage: MemoryImage(
-                                                        base64Decode(snapshot
-                                                                .data![index][
-                                                            'profilePicture'])),
-                                                  ),
-                                                  title: Text(
-                                                      snapshot.data![index]
-                                                          ['name'],
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              'conthrax',
-                                                          fontSize:
-                                                              ScreenHeight *
-                                                                  0.0162)),
-                                                )));
+                                                child: Material(
+                                                    color:
+                                                        Paletter.containerDark,
+                                                    child: ListTile(
+                                                      enabled: true,
+                                                      hoverColor: Paletter
+                                                          .containerLight,
+                                                      onTap: () {
+                                                        int id = StoreController
+                                                                .Rec_ID.value =
+                                                            snapshot.data![
+                                                                index]['ID'];
+                                                        isVisible = !isVisible;
+                                                        _future = sendData(id);
+                                                        //if (isVisible == false) {
+                                                        //disposeOfStream();
+                                                        //}
+                                                      },
+                                                      visualDensity:
+                                                          VisualDensity(
+                                                              vertical: 1),
+                                                      leading: CircleAvatar(
+                                                        backgroundImage: MemoryImage(
+                                                            base64Decode(snapshot
+                                                                        .data![
+                                                                    index][
+                                                                'profilePicture'])),
+                                                      ),
+                                                      title: Text(
+                                                          snapshot.data![index]
+                                                              ['name'],
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'conthrax',
+                                                              fontSize:
+                                                                  ScreenHeight *
+                                                                      0.0162)),
+                                                    ))));
                                       });
                                 } else if (snapshot.hasError) {
                                   return Text(snapshot.error.toString());
@@ -463,8 +467,8 @@ class chatPageState extends State<chatPage> {
                                                   );
                                                 } else {
                                                   if (snapshot.hasError) {
-                                                    return Text(snapshot.error
-                                                        .toString());
+                                                    return Text(
+                                                        "snapshot.error");
                                                   } else {
                                                     return Container(
                                                       margin: EdgeInsets.fromLTRB(
@@ -615,23 +619,39 @@ class chatPageState extends State<chatPage> {
                                     Icons.attach_file_rounded,
                                     color: Paletter.containerDark,
                                   )),
-                              suffixIcon: IconButton(
-                                  icon: Icon(
-                                    Icons.send_rounded,
-                                    color: Paletter.containerDark,
+                              suffixIcon: Row(
+                                children: [
+                                  SizedBox(
+                                    width: ScreenWidth * 0.393,
                                   ),
-                                  onPressed: () async {
-                                    setState(() {
-                                      StoreController.isSendingMessage =
-                                          true.obs;
-                                    });
-                                    final msg = await MongoDB.sendMsg(
-                                        StoreController.Rec_ID.value,
-                                        StoreController
-                                            .Message_controller.value.text);
-                                    _streamController
-                                        .add(msg as List<Map<String, dynamic>>);
-                                  })),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.send_rounded,
+                                        color: Paletter.containerDark,
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          StoreController
+                                              .isSendingMessage.value = true;
+                                        });
+                                        final msg = await MongoDB.sendMsg(
+                                            StoreController.Rec_ID.value,
+                                            StoreController
+                                                .Message_controller.value.text);
+                                        _streamController.add(msg);
+                                      }),
+                                  SizedBox(
+                                    width: ScreenWidth * 0.0002,
+                                  ),
+                                  Visibility(
+                                      visible: StoreController
+                                          .isSendingMessage.isTrue,
+                                      child: SpinKitHourGlass(
+                                        color: Paletter.containerDark,
+                                        size: ScreenWidth * 0.019,
+                                      ))
+                                ],
+                              )),
                         ),
                       ),
                     ])),
