@@ -54,10 +54,18 @@ class MongoDB {
     //await db.close();
   }
 
-  static Future<String> getName() async {
-    var person = await getInfo();
-    var name = person['name'];
-    return name;
+  static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+    final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
+        as Map<String, dynamic>;
+    if (othersInformation != null) {
+      print(StoreController.Rec_ID.value);
+      return othersInformation;
+    } else {
+      return null as Map<String, dynamic>;
+    }
 
     //await db.close();
   }
@@ -202,41 +210,39 @@ static Future<Map<String, dynamic>> getNotes() async {
     if (flattenedList.isNotEmpty) {
       for (var receiver in flattenedList) {
         var user = await persons.findOne(where.eq("ID", receiver));
-        // print("user");
-        //print(user);
         if (user != null) {
           recList.add(user);
         }
       }
-      //print(recList);
       return List<Map<String, dynamic>>.from(recList);
     } else {
       return [];
     }
   }
 
-  static void getMsgs() async {
+  /*static void getMsgs() async {
     final msgCol = db.collection(chathistoryCol);
     final messages = await msgCol.get();
     for (var message in messages) {}
-  }
+  }*/
 
-  static Future<Map<String, dynamic>> sendMsg(
-      int reciver, String content) async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(chathistoryCol);
-    await db1.open();
+  static Future<List<Map<String, dynamic>>> sendMsg(
+      int rec, String content) async {
+    final coll = db.collection(chathistoryCol);
     int sender = int.parse(StoreController.ID_controller.value.text.trim());
+
     Map<String, dynamic> doc = {
       "sender": sender,
       "datetime": DateTime.now(),
       "content": content,
-      "reciver": reciver,
+      "receiver": rec,
     };
+    List<Map<String, dynamic>> list = [];
     final info = coll.insertOne(doc);
+    list.add(doc);
     StoreController.isSendingMessage = false.obs;
     StoreController.Message_controller.value.clear();
-    return doc;
+    return list;
   }
 
   static Future sendEmail() async {
@@ -255,7 +261,7 @@ static Future<Map<String, dynamic>> getNotes() async {
     const serviceId = 'service_tinvhpr';
     const templateId = 'template_wit7sy5';
     const userId = '55Nno5HEZIhwen4fN';
-    print("starting email sending");
+    //print("starting email sending");
     try {
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
@@ -267,8 +273,9 @@ static Future<Map<String, dynamic>> getNotes() async {
           }));
 
       print('Email successfully sent!');
-      coll.modernUpdate(where.eq('ID', IDCont),
-          ModifierBuilder().set('OTP', {'$Int32': otp}));
+      int intOTP = int.parse(otp);
+      coll.modernUpdate(
+          where.eq('ID', IDCont), ModifierBuilder().set('OTP', intOTP));
       return response.statusCode;
     } catch (error) {
       print('Error sending email: $error');
@@ -276,25 +283,33 @@ static Future<Map<String, dynamic>> getNotes() async {
     }
   }
 
-  static Future<Object> searchFor() async {
+  static Future<List<Map<String, dynamic>>> searchFor() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
     await db1.open();
 
-    //print(StoreController.searchController.value.text.toLowerCase().trim());
     final name_info = await coll.find({
       'name': {
-        '\$regex': StoreController.searchController.value.text.toString()
+        '\$regex': StoreController.searchController.value.text.trim(),
+        '\$options': 'i'
       }
-    })
-        //StoreController.searchController.value.text))
-        as Map<String, dynamic>;
-    print(name_info);
+    }).toList();
+    //print(name_info);
     if (name_info != null) {
       return name_info;
     } else {
-      return "" as Map<String, dynamic>;
+      return "" as List<Map<String, dynamic>>;
     }
+  }
+
+  static Future<dynamic> getSalary() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(payrollCol);
+    await db1.open();
+    int user = int.parse(StoreController.ID_controller.value.text.trim());
+    final sal_info =
+        await coll.findOne(Mongo.where.eq("ID", user)) as Map<String, dynamic>;
+    return sal_info;
   }
 }
   /*static Future<Map<String, dynamic>> insertDoc(
