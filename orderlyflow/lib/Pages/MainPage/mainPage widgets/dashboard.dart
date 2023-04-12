@@ -66,6 +66,11 @@ class _DashboardState extends State<Dashboard> {
                         return welcome(name: UserName);
                       } else {
                         return Container(
+                          width: ScreenWidth * 0.397,
+                          height: ScreenHeight * 0.5,
+                          decoration: BoxDecoration(
+                              color: Paletter.containerDark,
+                              borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: CircularProgressIndicator(
                               color: Colors.white,
@@ -77,7 +82,27 @@ class _DashboardState extends State<Dashboard> {
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
-                tasks()
+                 FutureBuilder(
+                    future: MongoDB.getTask(),
+                    builder: (buildContext, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        return tasks(taskInfo: snapshot.data);
+                      } else {
+                        return Container(
+                            width: ScreenWidth * 0.397,
+                            height: ScreenHeight * 0.44,
+                            decoration: BoxDecoration(
+                                color: Paletter.containerLight,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ));
+                      }
+                    }),
               ],
             )
           ],
