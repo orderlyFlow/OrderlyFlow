@@ -12,6 +12,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:orderlyflow/Database/textControllers.dart';
+import 'package:orderlyflow/Pages/MainPage/tasks.dart';
 import 'constant.dart';
 import 'dart:typed_data';
 import 'package:bson/bson.dart';
@@ -69,18 +70,31 @@ class MongoDB {
     //await db.close();
   }
 
-  static Future<Map<String, dynamic>> getTasks() async {
+
+  static Future<List<Tasks>> getTask() async{
     var id = await getInfo();
-    var taskID = id["ID"];
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(tasksCol);
+    var getId = id["ID"];
+    final db1= await Mongo.Db.create(mongoDB_URL);
+    final col1 = db1.collection(tasksCol);
     await db1.open();
+    final getuser = await col1.find(where.eq('Employees', {
+      '\$elemMatch' : {'\$eq' : getId}
+    })).toList();
 
-    final information = await coll.findOne(Mongo.where.eq("_id", taskID))
-        as Map<String, dynamic>;
-
-    return information;
+    return getuser.map((e) => Tasks(ID: e['TaskID'],name: e['taskName'], status: e['status'])).toList();
   }
+
+static Future<Map<String, dynamic>> getNotes() async {
+  var id = await getInfo();
+  var notesId = id['ID'];
+  final db1 = await Mongo.Db.create(mongoDB_URL);
+  final coll = db1.collection(notesCol);
+  await db1.open();
+
+  final info = await coll.findOne(Mongo.where.eq("employeeID", notesId)) as Map<String,dynamic>;
+
+  return info;
+}
 
   static Future<Map<String, dynamic>> getID() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
