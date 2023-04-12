@@ -60,7 +60,6 @@ class MongoDB {
     final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
         as Map<String, dynamic>;
     if (othersInformation != null) {
-      print(StoreController.Rec_ID.value);
       return othersInformation;
     } else {
       return null as Map<String, dynamic>;

@@ -7,6 +7,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
@@ -29,7 +31,8 @@ class chatPage extends StatefulWidget {
 class chatPageState extends State<chatPage> {
   bool isHovered = false;
   bool isVisible = false;
-  var db;
+  final StoreController textControllers = Get.put(StoreController());
+  //var db;
   Future? _future;
 
   Future<dynamic> sendData(int Rec_ID) async {
@@ -89,10 +92,10 @@ class chatPageState extends State<chatPage> {
   /*void onEntered(bool isHovered) => setState(() {
         this.isHovered = isHovered;
       });*/
+  @override
   Widget build(BuildContext context) {
-    double ScreenWidth = MediaQuery.of(context).size.width;
-    double ScreenHeight = MediaQuery.of(context).size.height;
-
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         body: Stack(children: [
       const BlueBg(),
@@ -101,9 +104,9 @@ class chatPageState extends State<chatPage> {
           SideBar(),
           Container(
             margin: EdgeInsets.fromLTRB(
-                0.03 * ScreenWidth, 0.02 * ScreenHeight, 0.02 * ScreenWidth, 0),
-            height: ScreenHeight * 0.92,
-            width: ScreenWidth * 0.88,
+                0.03 * screenWidth, 0.02 * screenHeight, 0.02 * screenWidth, 0),
+            height: screenHeight * 0.92,
+            width: screenWidth * 0.88,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Paletter.mainBgLight,
@@ -116,10 +119,10 @@ class chatPageState extends State<chatPage> {
                     Row(children: [
                       Container(
                         margin: EdgeInsets.fromLTRB(
-                            0.018 * ScreenWidth,
-                            0.07 * ScreenHeight,
-                            0.13 * ScreenWidth,
-                            0.02 * ScreenHeight),
+                            0.018 * screenWidth,
+                            0.07 * screenHeight,
+                            0.13 * screenWidth,
+                            0.02 * screenHeight),
                         child: Text(
                           'Chats',
                           textAlign: TextAlign.left,
@@ -127,7 +130,7 @@ class chatPageState extends State<chatPage> {
                               fontWeight: FontWeight.bold,
                               fontFamily: 'conthrax',
                               color: Colors.black,
-                              fontSize: 0.066 * ScreenHeight),
+                              fontSize: 0.066 * screenHeight),
                         ),
                       ),
                       FutureBuilder(
@@ -138,9 +141,9 @@ class chatPageState extends State<chatPage> {
                                 children: [
                                   Container(
                                       margin: EdgeInsets.fromLTRB(
-                                          0, ScreenHeight * 0.054, 0, 0),
-                                      width: ScreenWidth * 0.08,
-                                      height: ScreenHeight * 0.08,
+                                          0, screenHeight * 0.054, 0, 0),
+                                      width: screenWidth * 0.08,
+                                      height: screenHeight * 0.08,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                       ),
@@ -157,9 +160,9 @@ class chatPageState extends State<chatPage> {
                                 children: [
                                   Container(
                                       margin: EdgeInsets.fromLTRB(
-                                          0, ScreenHeight * 0.054, 0, 0),
-                                      width: ScreenWidth * 0.08,
-                                      height: ScreenHeight * 0.08,
+                                          0, screenHeight * 0.054, 0, 0),
+                                      width: screenWidth * 0.08,
+                                      height: screenHeight * 0.08,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                       ),
@@ -176,9 +179,9 @@ class chatPageState extends State<chatPage> {
                                 children: [
                                   Container(
                                       margin: EdgeInsets.fromLTRB(
-                                          0, ScreenHeight * 0.054, 0, 0),
-                                      width: ScreenWidth * 0.08,
-                                      height: ScreenHeight * 0.08,
+                                          0, screenHeight * 0.054, 0, 0),
+                                      width: screenWidth * 0.08,
+                                      height: screenHeight * 0.08,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                       ),
@@ -195,17 +198,17 @@ class chatPageState extends State<chatPage> {
                     ]),
                     Container(
                       margin: EdgeInsets.only(
-                          left: ScreenWidth * 0.012,
-                          top: ScreenHeight * 0.01,
-                          bottom: ScreenHeight * 0.05),
+                          left: screenWidth * 0.012,
+                          top: screenHeight * 0.01,
+                          bottom: screenHeight * 0.05),
                       child: Stack(children: [
                         Container(
                           margin: EdgeInsets.only(
-                              left: ScreenWidth * 0,
-                              top: ScreenHeight * 0.02,
-                              bottom: ScreenHeight * 0.05),
-                          height: ScreenHeight * 0.064,
-                          width: ScreenWidth * 0.301,
+                              left: screenWidth * 0,
+                              top: screenHeight * 0.02,
+                              bottom: screenHeight * 0.05),
+                          height: screenHeight * 0.064,
+                          width: screenWidth * 0.301,
                           decoration: BoxDecoration(
                             color: Paletter.mainBgLight,
                             border: Border.all(
@@ -215,13 +218,13 @@ class chatPageState extends State<chatPage> {
                           child: SearchInput(),
                         ),
                         Container(
-                            height: ScreenHeight * 0.57,
-                            width: ScreenWidth * 0.382,
+                            height: screenHeight * 0.57,
+                            width: screenWidth * 0.382,
                             margin: EdgeInsets.fromLTRB(
-                                ScreenWidth * 0.00280,
-                                ScreenHeight * 0.103,
-                                ScreenWidth * 0,
-                                ScreenHeight * 0.003),
+                                screenWidth * 0.00280,
+                                screenHeight * 0.103,
+                                screenWidth * 0,
+                                screenHeight * 0.003),
                             child: FutureBuilder<List<Map<String, dynamic>>>(
                               future: MongoDB.renderReceivers(),
                               builder: (context, snapshot) {
@@ -234,7 +237,7 @@ class chatPageState extends State<chatPage> {
                                             child: Container(
                                                 color: Paletter.containerDark,
                                                 margin: EdgeInsets.fromLTRB(0,
-                                                    0, 0, ScreenHeight * 0.02),
+                                                    0, 0, screenHeight * 0.02),
                                                 child: Material(
                                                     color:
                                                         Paletter.containerDark,
@@ -247,7 +250,10 @@ class chatPageState extends State<chatPage> {
                                                                 .Rec_ID.value =
                                                             snapshot.data![
                                                                 index]['ID'];
-                                                        isVisible = !isVisible;
+                                                        setState(() {
+                                                          isVisible =
+                                                              !isVisible;
+                                                        });
                                                         _future = sendData(id);
                                                         //if (isVisible == false) {
                                                         //disposeOfStream();
@@ -270,7 +276,7 @@ class chatPageState extends State<chatPage> {
                                                               fontFamily:
                                                                   'conthrax',
                                                               fontSize:
-                                                                  ScreenHeight *
+                                                                  screenHeight *
                                                                       0.0162)),
                                                     ))));
                                       });
@@ -278,8 +284,8 @@ class chatPageState extends State<chatPage> {
                                   return Text(snapshot.error.toString());
                                 } else {
                                   return Center(
-                                      heightFactor: ScreenHeight * 0.002,
-                                      widthFactor: ScreenWidth * 0.002,
+                                      heightFactor: screenHeight * 0.002,
+                                      widthFactor: screenWidth * 0.002,
                                       child: CircularProgressIndicator(
                                         color: Paletter.gradiant1,
                                       ));
@@ -293,11 +299,11 @@ class chatPageState extends State<chatPage> {
                               //left: 50,
                               child: Container(
                                   margin: EdgeInsets.only(
-                                      left: ScreenWidth * 0.009,
-                                      top: ScreenHeight * 0.085,
-                                      bottom: ScreenHeight * 0.05),
-                                  width: ScreenWidth * 0.285,
-                                  height: ScreenHeight * 0.14,
+                                      left: screenWidth * 0.009,
+                                      top: screenHeight * 0.085,
+                                      bottom: screenHeight * 0.05),
+                                  width: screenWidth * 0.285,
+                                  height: screenHeight * 0.14,
                                   decoration: BoxDecoration(
                                     color: Paletter.containerLight,
                                   ),
@@ -322,7 +328,7 @@ class chatPageState extends State<chatPage> {
                                                                 0,
                                                                 0,
                                                                 0,
-                                                                ScreenHeight *
+                                                                screenHeight *
                                                                     0.02),*/
                                                             child: ListTile(
                                                               onTap: () {
@@ -349,7 +355,7 @@ class chatPageState extends State<chatPage> {
                                                                       fontFamily:
                                                                           'conthrax',
                                                                       fontSize:
-                                                                          ScreenHeight *
+                                                                          screenHeight *
                                                                               0.0162)),
                                                             )));
                                                   });
@@ -371,27 +377,27 @@ class chatPageState extends State<chatPage> {
               Visibility(
                   visible: isVisible,
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(ScreenWidth * 0.01,
-                        ScreenHeight * 0, ScreenWidth * 0, ScreenHeight * 0),
-                    width: ScreenWidth * 0.001,
-                    height: ScreenHeight * 0.8,
+                    margin: EdgeInsets.fromLTRB(screenWidth * 0.01,
+                        screenHeight * 0, screenWidth * 0, screenHeight * 0),
+                    width: screenWidth * 0.001,
+                    height: screenHeight * 0.8,
                     color: Colors.black,
                   )),
               Visibility(
                 visible: isVisible,
                 child: Container(
                     margin: EdgeInsets.fromLTRB(
-                        ScreenWidth * 0.01,
-                        ScreenHeight * 0.078,
-                        ScreenWidth * 0,
-                        ScreenHeight * 0),
-                    width: ScreenWidth * 0.445,
-                    height: ScreenHeight * 0.853,
+                        screenWidth * 0.01,
+                        screenHeight * 0.078,
+                        screenWidth * 0,
+                        screenHeight * 0),
+                    width: screenWidth * 0.445,
+                    height: screenHeight * 0.853,
                     color: Paletter.mainBgLight,
                     child: Column(children: [
                       Container(
-                        height: ScreenHeight * 0.753,
-                        width: ScreenWidth * 0.445,
+                        height: screenHeight * 0.753,
+                        width: screenWidth * 0.445,
                         child: StreamBuilder<List<Map<String, dynamic>>>(
                           stream: getMessageStream(),
                           builder: (context, snapshot) {
@@ -425,7 +431,7 @@ class chatPageState extends State<chatPage> {
                                         ? CrossAxisAlignment.end
                                         : CrossAxisAlignment.start,
                                     children: [
-                                      ((message['sender'] ==
+                                      /* ((message['sender'] ==
                                                       StoreController
                                                           .Rec_ID.value &&
                                                   message['receiver'] ==
@@ -461,7 +467,7 @@ class chatPageState extends State<chatPage> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize:
-                                                          ScreenHeight * 0.018,
+                                                          screenHeight * 0.018,
                                                       fontFamily: 'iceland',
                                                     ),
                                                   );
@@ -473,14 +479,14 @@ class chatPageState extends State<chatPage> {
                                                     return Container(
                                                       margin: EdgeInsets.fromLTRB(
                                                           isSender
-                                                              ? ScreenWidth * 0
-                                                              : ScreenWidth *
+                                                              ? screenWidth * 0
+                                                              : screenWidth *
                                                                   0.01,
-                                                          ScreenHeight * 0.0001,
+                                                          screenHeight * 0.0001,
                                                           isSender
-                                                              ? ScreenWidth *
+                                                              ? screenWidth *
                                                                   0.01
-                                                              : ScreenWidth * 0,
+                                                              : screenWidth * 0,
                                                           0),
                                                       child: Text(
                                                         isSender
@@ -490,7 +496,7 @@ class chatPageState extends State<chatPage> {
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize:
-                                                              ScreenHeight *
+                                                              screenHeight *
                                                                   0.018,
                                                           fontFamily: 'iceland',
                                                         ),
@@ -499,7 +505,7 @@ class chatPageState extends State<chatPage> {
                                                   }
                                                 }
                                               })
-                                          : SizedBox.shrink(),
+                                          : SizedBox.shrink(),*/
                                       SizedBox(height: 4),
                                       ((message['sender'] ==
                                                       StoreController
@@ -522,18 +528,18 @@ class chatPageState extends State<chatPage> {
                                           ? Container(
                                               margin: EdgeInsets.fromLTRB(
                                                   isSender
-                                                      ? ScreenWidth * 0
-                                                      : ScreenWidth * 0.01,
-                                                  ScreenHeight * 0.0001,
+                                                      ? screenWidth * 0
+                                                      : screenWidth * 0.01,
+                                                  screenHeight * 0.0001,
                                                   isSender
-                                                      ? ScreenWidth * 0.01
-                                                      : ScreenWidth * 0,
+                                                      ? screenWidth * 0.01
+                                                      : screenWidth * 0,
                                                   0),
                                               padding: EdgeInsets.fromLTRB(
-                                                  ScreenWidth * 0.0083,
-                                                  ScreenHeight * 0.0143,
-                                                  ScreenWidth * 0.0083,
-                                                  ScreenHeight * 0.0143),
+                                                  screenWidth * 0.0083,
+                                                  screenHeight * 0.0143,
+                                                  screenWidth * 0.0083,
+                                                  screenHeight * 0.0143),
                                               decoration: BoxDecoration(
                                                 color: isSender
                                                     ? Paletter.gradiant1
@@ -559,12 +565,12 @@ class chatPageState extends State<chatPage> {
                                                       ? Colors.white
                                                       : Colors.black87,
                                                   fontSize:
-                                                      ScreenHeight * 0.0167,
+                                                      screenHeight * 0.0167,
                                                 ),
                                               ),
                                             )
                                           : SizedBox.shrink(),
-                                      SizedBox(height: ScreenHeight * 0.001),
+                                      SizedBox(height: screenHeight * 0.001),
                                       ((message['sender'] ==
                                                       StoreController
                                                           .Rec_ID.value &&
@@ -587,7 +593,7 @@ class chatPageState extends State<chatPage> {
                                               message['datetime'].toString(),
                                               style: TextStyle(
                                                 color: Colors.blueGrey[700],
-                                                fontSize: ScreenHeight * 0.0143,
+                                                fontSize: screenHeight * 0.0143,
                                               ),
                                             )
                                           : SizedBox.shrink(),
@@ -601,16 +607,26 @@ class chatPageState extends State<chatPage> {
                       ),
                       Align(
                         alignment: FractionalOffset.bottomCenter,
-                        child: TextFormField(
-                          controller: StoreController.Message_controller.value,
-                          decoration: InputDecoration(
+                        child: Form(
+                          child: TextFormField(
+                            enabled: true,
+                            readOnly: false,
+                            obscureText: false,
+                            controller:
+                                StoreController.Message_controller.value,
+                            decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: 5.0, horizontal: 8.0),
+                                  vertical: screenHeight * 0.01,
+                                  horizontal: screenWidth * 0.08),
                               hintText: 'Enter text here',
+                              hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'Iceland',
+                                  fontSize: 0.027 * screenHeight),
                               helperStyle: TextStyle(
                                   color: Colors.grey,
                                   fontFamily: 'Iceland',
-                                  fontSize: 0.027 * ScreenHeight),
+                                  fontSize: 0.027 * screenHeight),
                               fillColor: Colors.grey[350],
                               filled: true,
                               prefixIcon: IconButton(
@@ -619,41 +635,34 @@ class chatPageState extends State<chatPage> {
                                     Icons.attach_file_rounded,
                                     color: Paletter.containerDark,
                                   )),
-                              suffixIcon: Row(
-                                children: [
-                                  SizedBox(
-                                    width: ScreenWidth * 0.393,
-                                  ),
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.send_rounded,
-                                        color: Paletter.containerDark,
-                                      ),
-                                      onPressed: () async {
-                                        setState(() {
-                                          StoreController
-                                              .isSendingMessage.value = true;
-                                        });
-                                        final msg = await MongoDB.sendMsg(
-                                            StoreController.Rec_ID.value,
-                                            StoreController
-                                                .Message_controller.value.text);
-                                        _streamController.add(msg);
-                                      }),
-                                  SizedBox(
-                                    width: ScreenWidth * 0.0002,
-                                  ),
-                                  Visibility(
-                                      visible: StoreController
-                                          .isSendingMessage.isTrue,
-                                      child: SpinKitHourGlass(
-                                        color: Paletter.containerDark,
-                                        size: ScreenWidth * 0.019,
-                                      ))
-                                ],
-                              )),
+                              suffixIcon:
+                                  (StoreController.isSendingMessage.value)
+                                      ? SpinKitHourGlass(
+                                          color: Paletter.containerDark,
+                                          size: screenWidth * 0.0019,
+                                        )
+                                      : IconButton(
+                                          icon: Icon(
+                                            Icons.send_rounded,
+                                            color: Paletter.containerDark,
+                                          ),
+                                          onPressed: () async {
+                                            setState(() {
+                                              StoreController.isSendingMessage
+                                                  .value = true;
+                                            });
+                                            final msg = await MongoDB.sendMsg(
+                                              StoreController.Rec_ID.value,
+                                              StoreController.Message_controller
+                                                  .value.text,
+                                            );
+                                            _streamController.add(msg);
+                                          },
+                                        ),
+                            ),
+                          ),
                         ),
-                      ),
+                      )
                     ])),
               ),
             ]),
