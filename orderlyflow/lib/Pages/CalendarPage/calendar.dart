@@ -135,6 +135,7 @@ class _calendarState extends State<calendar> {
                         if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         } else if (snapshot.hasData) {
+                          meetings = snapshot.data;
                           return ListView.builder(
                             itemCount: meetings.length,
                             itemBuilder: (BuildContext context, int index) {
