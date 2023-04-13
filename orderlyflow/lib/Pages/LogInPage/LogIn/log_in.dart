@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
 //import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:orderlyflow/Database/db.dart';
@@ -36,10 +37,44 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final StoreController textControllers = Get.put(StoreController());
   bool _isLoading = false;
+  bool isSendigOTP = false;
   late String password;
   late String user;
   late String otp;
   late AnimationController _controller;
+  double otp_size = 14;
+  var response = 0;
+
+  void handleSending() async {
+    setState(() {
+      isSendigOTP = true;
+    });
+    try {
+      if (StoreController.ID_controller.value.text.isNotEmpty) {
+        response = await MongoDB.sendEmail();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Ooops ... Enter id',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Neuropol',
+                fontSize: otp_size,
+              ),
+            ),
+            backgroundColor: Color.fromARGB(255, 101, 174,
+                233), // Set the background color of the snackbar here
+          ),
+        );
+      }
+    } catch (e) {
+    } finally {
+      setState(() {
+        isSendigOTP = false;
+      });
+    }
+  }
 
   void _handleLogin() async {
     setState(() {
@@ -87,6 +122,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    otp_size = screenHeight * 0.023;
     return Scaffold(
       backgroundColor: Paletter.logInBg,
       body: SingleChildScrollView(
@@ -300,26 +338,40 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             }),
                           ),
                           onPressed: () async {
-                            final response = await MongoDB.sendEmail();
-                            print(response);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              response == 200
-                                  ? const SnackBar(
+                            handleSending();
+                            if (response == 200) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
                                       content: Text('Message Sent!'),
                                       backgroundColor:
-                                          Color.fromARGB(255, 129, 215, 132))
-                                  : const SnackBar(
-                                      content: Text('Failed to send message!'),
-                                      backgroundColor:
-                                          Color.fromARGB(255, 217, 123, 116)),
-                            );
+                                          Color.fromARGB(255, 129, 215, 132)));
+                            } else {
+                              if (response != 200 && response != 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text('Failed to send message!'),
+                                        backgroundColor: Color.fromARGB(
+                                            255, 217, 123, 116)));
+                              }
+                            }
                           },
-                          child: Text(
-                            'forgot otp?',
-                            style: TextStyle(
-                                color: Paletter.logInText,
-                                fontFamily: 'Neuropol'),
-                          ))
+                          child: isSendigOTP
+                              ? Container(
+                                  width: screenWidth,
+                                  height: screenHeight * 0.043,
+                                  color: Paletter.logInBg,
+                                  child: SpinKitChasingDots(
+                                    color: Paletter.gradiant3,
+                                    size: screenHeight * 0.033,
+                                  ))
+                              : Text(
+                                  'forgot otp?',
+                                  style: TextStyle(
+                                      color: Paletter.logInText,
+                                      fontFamily: 'Neuropol',
+                                      fontSize: screenHeight * 0.023),
+                                ))
                     ],
                   ),
                 )

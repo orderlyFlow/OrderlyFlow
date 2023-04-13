@@ -399,39 +399,40 @@ class chatPageState extends State<chatPage> {
                         height: screenHeight * 0.753,
                         width: screenWidth * 0.445,
                         child: StreamBuilder<List<Map<String, dynamic>>>(
-                          stream: getMessageStream(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData ||
-                                snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                              return Center(
-                                  child: CircularProgressIndicator(
-                                color: Paletter.gradiant1,
-                              ));
-                            }
-
-                            final messages = snapshot.data!.toList();
-                            return ListView.builder(
-                              itemCount: messages.length,
-                              itemBuilder: (context, index) {
-                                final message = messages[index];
-                                final isSender = message['sender'] ==
-                                    int.parse(StoreController
-                                        .ID_controller.value.text
-                                        .trim());
-                                final textAlign =
-                                    isSender ? TextAlign.right : TextAlign.left;
-                                return Container(
-                                  margin: const EdgeInsets.all(8),
-                                  child: Column(
-                                    mainAxisAlignment: isSender
-                                        ? MainAxisAlignment.end
-                                        : MainAxisAlignment.start,
-                                    crossAxisAlignment: isSender
-                                        ? CrossAxisAlignment.end
-                                        : CrossAxisAlignment.start,
-                                    children: [
-                                      /* ((message['sender'] ==
+                            stream: getMessageStream(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData ||
+                                  snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                  color: Paletter.gradiant1,
+                                ));
+                              } else {
+                                if (snapshot.hasData) {
+                                  final messages = snapshot.data!.toList();
+                                  return ListView.builder(
+                                    itemCount: messages.length,
+                                    itemBuilder: (context, index) {
+                                      final message = messages[index];
+                                      final isSender = message['sender'] ==
+                                          int.parse(StoreController
+                                              .ID_controller.value.text
+                                              .trim());
+                                      final textAlign = isSender
+                                          ? TextAlign.right
+                                          : TextAlign.left;
+                                      return Container(
+                                        margin: const EdgeInsets.all(8),
+                                        child: Column(
+                                          mainAxisAlignment: isSender
+                                              ? MainAxisAlignment.end
+                                              : MainAxisAlignment.start,
+                                          crossAxisAlignment: isSender
+                                              ? CrossAxisAlignment.end
+                                              : CrossAxisAlignment.start,
+                                          children: [
+                                            /* ((message['sender'] ==
                                                       StoreController
                                                           .Rec_ID.value &&
                                                   message['receiver'] ==
@@ -506,104 +507,138 @@ class chatPageState extends State<chatPage> {
                                                 }
                                               })
                                           : SizedBox.shrink(),*/
-                                      SizedBox(height: 4),
-                                      ((message['sender'] ==
-                                                      StoreController
-                                                          .Rec_ID.value &&
-                                                  message['receiver'] ==
-                                                      int.parse(StoreController
-                                                          .ID_controller
-                                                          .value
-                                                          .text
-                                                          .trim())) ||
-                                              (message['receiver'] ==
-                                                      StoreController
-                                                          .Rec_ID.value &&
-                                                  message['sender'] ==
-                                                      int.parse(StoreController
-                                                          .ID_controller
-                                                          .value
-                                                          .text
-                                                          .trim())))
-                                          ? Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  isSender
-                                                      ? screenWidth * 0
-                                                      : screenWidth * 0.01,
-                                                  screenHeight * 0.0001,
-                                                  isSender
-                                                      ? screenWidth * 0.01
-                                                      : screenWidth * 0,
-                                                  0),
-                                              padding: EdgeInsets.fromLTRB(
-                                                  screenWidth * 0.0083,
-                                                  screenHeight * 0.0143,
-                                                  screenWidth * 0.0083,
-                                                  screenHeight * 0.0143),
-                                              decoration: BoxDecoration(
-                                                color: isSender
-                                                    ? Paletter.gradiant1
-                                                    : Colors.grey[300],
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(12.0),
-                                                  topRight:
-                                                      Radius.circular(12.0),
-                                                  bottomLeft: isSender
-                                                      ? Radius.circular(12.0)
-                                                      : Radius.zero,
-                                                  bottomRight: isSender
-                                                      ? Radius.zero
-                                                      : Radius.circular(12.0),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                message['content'],
-                                                textAlign: textAlign,
-                                                style: TextStyle(
-                                                  color: isSender
-                                                      ? Colors.white
-                                                      : Colors.black87,
-                                                  fontSize:
-                                                      screenHeight * 0.0167,
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox.shrink(),
-                                      SizedBox(height: screenHeight * 0.001),
-                                      ((message['sender'] ==
-                                                      StoreController
-                                                          .Rec_ID.value &&
-                                                  message['receiver'] ==
-                                                      int.parse(StoreController
-                                                          .ID_controller
-                                                          .value
-                                                          .text
-                                                          .trim())) ||
-                                              (message['receiver'] ==
-                                                      StoreController
-                                                          .Rec_ID.value &&
-                                                  message['sender'] ==
-                                                      int.parse(StoreController
-                                                          .ID_controller
-                                                          .value
-                                                          .text
-                                                          .trim())))
-                                          ? Text(
-                                              message['datetime'].toString(),
-                                              style: TextStyle(
-                                                color: Colors.blueGrey[700],
-                                                fontSize: screenHeight * 0.0143,
-                                              ),
-                                            )
-                                          : SizedBox.shrink(),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
+                                            SizedBox(height: 4),
+                                            ((message['sender'] ==
+                                                            StoreController
+                                                                .Rec_ID.value &&
+                                                        message['receiver'] ==
+                                                            int.parse(
+                                                                StoreController
+                                                                    .ID_controller
+                                                                    .value
+                                                                    .text
+                                                                    .trim())) ||
+                                                    (message['receiver'] ==
+                                                            StoreController
+                                                                .Rec_ID.value &&
+                                                        message['sender'] ==
+                                                            int.parse(
+                                                                StoreController
+                                                                    .ID_controller
+                                                                    .value
+                                                                    .text
+                                                                    .trim())))
+                                                ? Container(
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        isSender
+                                                            ? screenWidth * 0
+                                                            : screenWidth *
+                                                                0.01,
+                                                        screenHeight * 0.0001,
+                                                        isSender
+                                                            ? screenWidth * 0.01
+                                                            : screenWidth * 0,
+                                                        0),
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            screenWidth *
+                                                                0.0083,
+                                                            screenHeight *
+                                                                0.0143,
+                                                            screenWidth *
+                                                                0.0083,
+                                                            screenHeight *
+                                                                0.0143),
+                                                    decoration: BoxDecoration(
+                                                      color: isSender
+                                                          ? Paletter.gradiant1
+                                                          : Colors.grey[300],
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                12.0),
+                                                        topRight:
+                                                            Radius.circular(
+                                                                12.0),
+                                                        bottomLeft: isSender
+                                                            ? Radius.circular(
+                                                                12.0)
+                                                            : Radius.zero,
+                                                        bottomRight: isSender
+                                                            ? Radius.zero
+                                                            : Radius.circular(
+                                                                12.0),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      message['content'],
+                                                      textAlign: textAlign,
+                                                      style: TextStyle(
+                                                        color: isSender
+                                                            ? Colors.white
+                                                            : Colors.black87,
+                                                        fontSize: screenHeight *
+                                                            0.0167,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : SizedBox.shrink(),
+                                            SizedBox(
+                                                height: screenHeight * 0.001),
+                                            ((message['sender'] ==
+                                                            StoreController
+                                                                .Rec_ID.value &&
+                                                        message['receiver'] ==
+                                                            int.parse(
+                                                                StoreController
+                                                                    .ID_controller
+                                                                    .value
+                                                                    .text
+                                                                    .trim())) ||
+                                                    (message['receiver'] ==
+                                                            StoreController
+                                                                .Rec_ID.value &&
+                                                        message['sender'] ==
+                                                            int.parse(
+                                                                StoreController
+                                                                    .ID_controller
+                                                                    .value
+                                                                    .text
+                                                                    .trim())))
+                                                ? Text(
+                                                    message['datetime']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      color:
+                                                          Colors.blueGrey[700],
+                                                      fontSize:
+                                                          screenHeight * 0.0143,
+                                                    ),
+                                                  )
+                                                : SizedBox.shrink(),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return Container(
+                                      height: screenHeight * 0.05,
+                                      width: screenWidth * 0.1,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red[400],
+                                      ),
+                                      child: Text(
+                                        "Oh snap! \n " +
+                                            snapshot.error.toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'neuropol',
+                                            fontSize: screenHeight * 0.12),
+                                      ));
+                                }
+                              }
+                            }),
                       ),
                       Align(
                         alignment: FractionalOffset.bottomCenter,

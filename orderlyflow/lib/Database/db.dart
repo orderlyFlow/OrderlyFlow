@@ -69,31 +69,36 @@ class MongoDB {
     //await db.close();
   }
 
-
-  static Future<List<Tasks>> getTask() async{
+  static Future<List<Tasks>> getTask() async {
     var id = await getInfo();
     var getId = id["ID"];
-    final db1= await Mongo.Db.create(mongoDB_URL);
+    final db1 = await Mongo.Db.create(mongoDB_URL);
     final col1 = db1.collection(tasksCol);
     await db1.open();
-    final getuser = await col1.find(where.eq('Employees', {
-      '\$elemMatch' : {'\$eq' : getId}
-    })).toList();
+    final getuser = await col1
+        .find(where.eq('Employees', {
+          '\$elemMatch': {'\$eq': getId}
+        }))
+        .toList();
 
-    return getuser.map((e) => Tasks(ID: e['TaskID'],name: e['taskName'], status: e['status'])).toList();
+    return getuser
+        .map((e) =>
+            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
+        .toList();
   }
 
-static Future<Map<String, dynamic>> getNotes() async {
-  var id = await getInfo();
-  var notesId = id['ID'];
-  final db1 = await Mongo.Db.create(mongoDB_URL);
-  final coll = db1.collection(notesCol);
-  await db1.open();
+  static Future<Map<String, dynamic>> getNotes() async {
+    var id = await getInfo();
+    var notesId = id['ID'];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(notesCol);
+    await db1.open();
 
-  final info = await coll.findOne(Mongo.where.eq("employeeID", notesId)) as Map<String,dynamic>;
+    final info = await coll.findOne(Mongo.where.eq("employeeID", notesId))
+        as Map<String, dynamic>;
 
-  return info;
-}
+    return info;
+  }
 
   static Future<Map<String, dynamic>> getID() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -283,9 +288,9 @@ static Future<Map<String, dynamic>> getNotes() async {
   }
 
   static Future<List<Map<String, dynamic>>> searchFor() async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(personsCol);
-    await db1.open();
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(personsCol);
+    //await db1.open();
 
     final name_info = await coll.find({
       'name': {
@@ -293,10 +298,14 @@ static Future<Map<String, dynamic>> getNotes() async {
         '\$options': 'i'
       }
     }).toList();
-    //print(name_info);
+    for (var name in name_info) {
+      print(name['ID'].toString());
+    }
     if (name_info != null) {
+      print('found');
       return name_info;
     } else {
+      print('not found');
       return "" as List<Map<String, dynamic>>;
     }
   }
