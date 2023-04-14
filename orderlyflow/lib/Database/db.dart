@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:mongo_dart/mongo_dart.dart';
@@ -195,7 +196,9 @@ class MongoDB {
     List<List<int>> users = [];
     List<dynamic> recList = [];
 
-    var usersList = await recentChat.find({'users': 100001}).toList();
+    var usersList = await recentChat.find({
+      'users': int.parse(StoreController.ID_controller.value.text.trim())
+    }).toList();
 
     usersList.forEach((item) {
       if (item.containsKey('users')) {
@@ -218,17 +221,12 @@ class MongoDB {
           recList.add(user);
         }
       }
+
       return List<Map<String, dynamic>>.from(recList);
     } else {
       return [];
     }
   }
-
-  /*static void getMsgs() async {
-    final msgCol = db.collection(chathistoryCol);
-    final messages = await msgCol.get();
-    for (var message in messages) {}
-  }*/
 
   static Future<List<Map<String, dynamic>>> sendMsg(
       int rec, String content) async {
@@ -265,7 +263,6 @@ class MongoDB {
     const serviceId = 'service_tinvhpr';
     const templateId = 'template_wit7sy5';
     const userId = '55Nno5HEZIhwen4fN';
-    //print("starting email sending");
     try {
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
@@ -298,9 +295,6 @@ class MongoDB {
         '\$options': 'i'
       }
     }).toList();
-    for (var name in name_info) {
-      print(name['ID'].toString());
-    }
     if (name_info != null) {
       print('found');
       return name_info;

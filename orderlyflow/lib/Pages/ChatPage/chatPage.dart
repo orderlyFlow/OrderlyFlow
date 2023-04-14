@@ -31,9 +31,10 @@ class chatPage extends StatefulWidget {
 class chatPageState extends State<chatPage> {
   bool isHovered = false;
   bool isVisible = false;
-  final StoreController textControllers = Get.put(StoreController());
+  List<Map<String, dynamic>> receiversList = [];
   //var db;
   Future? _future;
+  var searchedUser;
 
   Future<dynamic> sendData(int Rec_ID) async {
     final data1 = await MongoDB.getPersonByID(Rec_ID);
@@ -74,7 +75,7 @@ class chatPageState extends State<chatPage> {
     if (StoreController.isSendingMessage.isTrue) {
       messages.add(newMessage);
     }
-    _streamController.add(messages);
+    // _streamController.add(messages);
 
     yield* _streamController.stream;
   }
@@ -229,8 +230,9 @@ class chatPageState extends State<chatPage> {
                               future: MongoDB.renderReceivers(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  receiversList = snapshot.data!;
                                   return ListView.builder(
-                                      itemCount: snapshot.data!.length,
+                                      itemCount: receiversList.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return MouseRegion(
@@ -248,8 +250,8 @@ class chatPageState extends State<chatPage> {
                                                       onTap: () {
                                                         int id = StoreController
                                                                 .Rec_ID.value =
-                                                            snapshot.data![
-                                                                index]['ID'];
+                                                            receiversList[index]
+                                                                ['ID'];
                                                         setState(() {
                                                           isVisible =
                                                               !isVisible;
@@ -264,13 +266,13 @@ class chatPageState extends State<chatPage> {
                                                               vertical: 1),
                                                       leading: CircleAvatar(
                                                         backgroundImage: MemoryImage(
-                                                            base64Decode(snapshot
-                                                                        .data![
-                                                                    index][
-                                                                'profilePicture'])),
+                                                            base64Decode(
+                                                                receiversList[
+                                                                        index][
+                                                                    'profilePicture'])),
                                                       ),
                                                       title: Text(
-                                                          snapshot.data![index]
+                                                          receiversList[index]
                                                               ['name'],
                                                           style: TextStyle(
                                                               fontFamily:
@@ -305,15 +307,17 @@ class chatPageState extends State<chatPage> {
                                   width: screenWidth * 0.285,
                                   height: screenHeight * 0.14,
                                   decoration: BoxDecoration(
-                                    color: Paletter.containerLight,
+                                    color: Colors.white60,
                                   ),
                                   child:
                                       FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: MongoDB.searchFor(),
+                                          future: StoreController.searchInput,
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
-                                              StoreController
-                                                  .isSearching.value = true;
+                                              setState(() {
+                                                StoreController
+                                                    .isSearching.value = true;
+                                              });
                                               return ListView.builder(
                                                   itemCount:
                                                       snapshot.data!.length,
@@ -323,13 +327,6 @@ class chatPageState extends State<chatPage> {
                                                     return MouseRegion(
                                                         child: Container(
                                                             color: Colors.white,
-                                                            /*margin:
-                                                            EdgeInsets.fromLTRB(
-                                                                0,
-                                                                0,
-                                                                0,
-                                                                screenHeight *
-                                                                    0.02),*/
                                                             child: ListTile(
                                                               onTap: () {
                                                                 StoreController
@@ -337,15 +334,18 @@ class chatPageState extends State<chatPage> {
                                                                     .value = snapshot
                                                                         .data![
                                                                     index]['ID'];
-                                                                StoreController
-                                                                        .isSearching
-                                                                        .value =
-                                                                    !StoreController
-                                                                        .isSearching
-                                                                        .value;
-                                                                StoreController
-                                                                    .isSearching
-                                                                    .value = false;
+                                                                if (StoreController
+                                                                        .Searched_ID
+                                                                        .value !=
+                                                                    0) {
+                                                                  searchedUser =
+                                                                      MongoDB
+                                                                          .searchFor();
+                                                                  receiversList.add(
+                                                                      searchedUser as Map<
+                                                                          String,
+                                                                          dynamic>);
+                                                                }
                                                               },
                                                               title: Text(
                                                                   snapshot.data![
@@ -354,15 +354,30 @@ class chatPageState extends State<chatPage> {
                                                                   style: TextStyle(
                                                                       fontFamily:
                                                                           'conthrax',
+                                                                      color: Colors
+                                                                          .black87,
                                                                       fontSize:
                                                                           screenHeight *
                                                                               0.0162)),
                                                             )));
                                                   });
-                                            } else if (snapshot.hasData) {
+                                            } else if (!snapshot.hasData ||
+                                                ConnectionState ==
+                                                    ConnectionState.waiting) {
+                                              setState(() {
+                                                StoreController
+                                                    .isSearching.value = true;
+                                              });
                                               return Center(
-                                                  child: Text("Rendering..."));
+                                                  child:
+                                                      SpinKitPouringHourGlassRefined(
+                                                color: Paletter.gradiant3,
+                                              ));
                                             } else {
+                                              setState(() {
+                                                StoreController
+                                                    .isSearching.value = true;
+                                              });
                                               return Text(
                                                   snapshot.error.toString());
                                             }

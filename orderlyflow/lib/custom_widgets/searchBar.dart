@@ -30,7 +30,6 @@ class _SearchInputState extends State<SearchInput> {
               fontSize: 0.027 * ScreenHeight,
             ),
             controller: StoreController.searchController.value,
-            onChanged: (value) {},
             cursorColor: Paletter.mainBg,
             decoration: InputDecoration(
               fillColor: Colors.grey[350],
@@ -42,13 +41,23 @@ class _SearchInputState extends State<SearchInput> {
               ),
               suffixIcon: IconButton(
                 icon: Icon(Icons.clear),
-                onPressed: () => StoreController.searchController.value.clear(),
+                onPressed: () {
+                  setState(() {
+                    StoreController.isSearching.value = false;
+                  });
+                  StoreController.searchController.value.clear();
+                },
               ),
               prefixIcon: IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  var p = MongoDB.searchFor();
-                  print(p);
+                  if (StoreController.searchController.value.text.trim() !=
+                      "") {
+                    setState(() {
+                      StoreController.isSearching.value = true;
+                    });
+                    StoreController.searchInput = MongoDB.searchFor();
+                  }
                 },
               ),
               border: OutlineInputBorder(
