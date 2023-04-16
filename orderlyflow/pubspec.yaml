@@ -56,6 +56,8 @@ dependencies:
   http: ^0.13.5
   dotted_line: ^3.1.0
   pull_to_refresh: ^2.0.0
+  rxdart: ^0.27.7
+  skeleton_loader: ^2.0.0+4
 
 
 
