@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -51,13 +52,12 @@ class _SearchInputState extends State<SearchInput> {
               prefixIcon: IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  if (StoreController.searchController.value.text.trim() !=
-                      "") {
-                    setState(() {
-                      StoreController.isSearching.value = true;
-                    });
-                    StoreController.searchInput = MongoDB.searchFor();
+                  StoreController.isSearching = true.obs;
+                  if (StoreController.searchController != null &&
+                      StoreController.searchController.value.text.isNotEmpty) {
+                    StoreController.searchedEmployee = MongoDB.searchFor();
                   }
+                  //print(StoreController.isSearching.value);
                 },
               ),
               border: OutlineInputBorder(

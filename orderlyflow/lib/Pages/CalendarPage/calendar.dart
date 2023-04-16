@@ -123,19 +123,19 @@ class _calendarState extends State<calendar> {
                         0.01 * ScreenWidth,
                         0.02 * ScreenHeight),
                     child: Column(children: [calendarDate()])),
-                /*            Container(
+                Container(
                   width: ScreenWidth * 0.9102,
                   height: ScreenHeight * 0.54,
                   decoration: BoxDecoration(
                       color: Paletter.mainBgLight,
                       borderRadius: BorderRadius.circular(10)),
                   child: FutureBuilder(
-                      future: MongoDB.getInfo(), //////////////////////
+                      future: MongoDB.getEvent(), //////////////////////
                       builder: (buildContext, AsyncSnapshot snapshot) {
                         if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         } else if (snapshot.hasData) {
-                          meetings = snapshot.data;
+                          var meetings = snapshot.data;
                           return ListView.builder(
                             itemCount: meetings.length,
                             itemBuilder: (BuildContext context, int index) {
@@ -208,7 +208,7 @@ class _calendarState extends State<calendar> {
                           );
                         }
                       }),
-                )                  */
+                )
               ],
             )
           ],

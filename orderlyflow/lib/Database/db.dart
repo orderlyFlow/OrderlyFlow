@@ -296,22 +296,39 @@ class MongoDB {
       }
     }).toList();
     if (name_info != null) {
-      print('found');
+      //print(name_info.toString());
       return name_info;
     } else {
-      print('not found');
+      //print('not found');
       return "" as List<Map<String, dynamic>>;
     }
   }
 
   static Future<dynamic> getSalary() async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(payrollCol);
-    await db1.open();
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(payrollCol);
+    //await db1.open();
     int user = int.parse(StoreController.ID_controller.value.text.trim());
     final sal_info =
         await coll.findOne(Mongo.where.eq("ID", user)) as Map<String, dynamic>;
     return sal_info;
+  }
+
+  static Future<dynamic> getEvent() async {
+    final coll = db.collection(eventsCol);
+    List<List<int>> users = [];
+    List<dynamic> recList = [];
+
+    var eventsList = await coll.find({
+      'participants': int.parse(StoreController.ID_controller.value.text.trim())
+    }).toList();
+
+    if (eventsList != null) {
+      return eventsList;
+    } else {
+      return null;
+    }
+    ;
   }
 }
   /*static Future<Map<String, dynamic>> insertDoc(
