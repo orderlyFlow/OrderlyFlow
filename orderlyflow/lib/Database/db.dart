@@ -314,10 +314,10 @@ class MongoDB {
     return sal_info;
   }
 
-  static Future<dynamic> getEvent() async {
+  static Future<List<Map<String, dynamic>>> getEvent() async {
     final coll = db.collection(eventsCol);
-    List<List<int>> users = [];
-    List<dynamic> recList = [];
+    //List<List<int>> users = [];
+    //List<dynamic> recList = [];
 
     var eventsList = await coll.find({
       'participants': int.parse(StoreController.ID_controller.value.text.trim())
@@ -326,9 +326,21 @@ class MongoDB {
     if (eventsList != null) {
       return eventsList;
     } else {
-      return null;
+      return [];
     }
-    ;
+  }
+
+  static Future<List> getEventsOnSelectedDate(DateTime selectedDate) async {
+    final eventsCollection = db.collection(eventsCol);
+
+    final events = await eventsCollection.find({
+      'date': {
+        '\$gte': selectedDate.toUtc(),
+        '\$lt': selectedDate.add(Duration(days: 1)).toUtc(),
+      }
+    }).toList();
+
+    return events;
   }
 }
   /*static Future<Map<String, dynamic>> insertDoc(
