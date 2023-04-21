@@ -61,7 +61,7 @@ class _userTasksState extends State<userTasks> {
             Row(
               children: [
                 FutureBuilder(
-                    future: MongoDB.getInfo(),
+                    future: MongoDB.getTeamName()  ,
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('Error');
@@ -69,7 +69,7 @@ class _userTasksState extends State<userTasks> {
                         return Container(
                           margin: EdgeInsets.only(top: ScreenHeight * 0.01),
                           child: Text(
-                            '${snapshot.data['team']}',
+                            '${snapshot.data['name']}',
                             style: TextStyle(
                                 fontSize: ScreenHeight * 0.04,
                                 fontFamily: 'conthrax',
@@ -149,15 +149,17 @@ class _userTasksState extends State<userTasks> {
                       fontSize: ScreenHeight * 0.03,
                       fontFamily: "conthrax"),
                 ),
-                // SizedBox(width: ScreenWidth * 0.02,),
+                SizedBox(width: ScreenWidth * 0.3,),
                FutureBuilder(
-                    future: MongoDB.getInfo(),
+                    future: Future.wait([MongoDB.getIds(), MongoDB.getInfo(), MongoDB.fetchNamesForIds()]),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       } else if (snapshot.hasData) {
-                        int userID = snapshot.data['ID'];
-                        return addTaskButton(ID: userID);
+                        int userID = snapshot.data[1]['ID'];
+                        List<int> ids = snapshot.data[0] as List<int>;
+                        List<String> names = snapshot.data[2] as List<String>;
+                        return addTaskButton(ID: userID, ids: ids, names: names,);
                       } else {
                         return CircularProgressIndicator(
                           color: Colors.white,

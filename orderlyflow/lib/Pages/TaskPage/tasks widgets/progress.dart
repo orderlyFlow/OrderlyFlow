@@ -114,7 +114,7 @@ class _userProgressState extends State<userProgress> {
                               child: Text(
                                 '${snapshot.data['name']}',
                                 style: TextStyle(
-                                    fontSize: ScreenHeight * 0.05,
+                                    fontSize: ScreenHeight * 0.03,
                                     fontFamily: 'conthrax',
                                     color: Paletter.blackText),
                               ),
@@ -142,7 +142,7 @@ class _userProgressState extends State<userProgress> {
                               child: Text(
                                 '${snapshot.data['jobDescription']}',
                                 style: TextStyle(
-                                    fontSize: ScreenHeight * 0.024,
+                                    fontSize: ScreenHeight * 0.02,
                                     fontFamily: 'iceland',
                                     color: Paletter.blackText),
                               ),
