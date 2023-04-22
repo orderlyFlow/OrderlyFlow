@@ -74,18 +74,16 @@ class chatPageState extends State<chatPage> {
         .collection('ChatsHistory')
         .find(Mongo.where.eq("sender", id).or(Mongo.where.eq("receiver", id)))
         .toList();
-    //print(messages);
-    try {
-      if (StoreController.isSendingMessage.isTrue && newMessage != null) {
-        messages.add(newMessage);
-        _streamController.add(messages);
-      }
-      Stream<List<Map<String, dynamic>>> messageStream =
-          Stream.fromIterable([messages]);
 
-      yield* messageStream;
-    } catch (e) {
-      _streamController.addError(e);
+    yield* messages;
+
+    await for (List<Map<String, dynamic>> newMessages
+        in _streamController.stream) {
+      // Add new messages to the existing list
+      messages.addAll(newMessages);
+
+      // Yield the updated list of messages
+      yield* messages;
     }
   }
 
@@ -758,9 +756,14 @@ class chatPageState extends State<chatPage> {
                                             );
                                             StoreController
                                                 .isSendingMessage.value = true;
+                                            if (StoreController
+                                                    .isSendingMessage.isTrue &&
+                                                newMessage != null) {
+                                              _streamController
+                                                  .add([newMessage]);
+                                            }
                                           });
                                         }
-                                        //_streamController.add(newMessage);
                                       },
                                     ),
                             ),
