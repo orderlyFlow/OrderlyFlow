@@ -296,7 +296,9 @@ class MongoDB {
       }
     }).toList();
     if (name_info != null) {
-      //print(name_info.toString());
+      for (var names in name_info) {
+        print(names['name']);
+      }
       return name_info;
     } else {
       //print('not found');
