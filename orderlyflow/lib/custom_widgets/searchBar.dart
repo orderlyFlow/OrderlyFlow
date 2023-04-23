@@ -14,6 +14,7 @@ class SearchInput extends StatefulWidget {
 
 // ignore: prefer_const_constructors
 class _SearchInputState extends State<SearchInput> {
+  void callSearch() async {}
   @override
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
@@ -43,21 +44,17 @@ class _SearchInputState extends State<SearchInput> {
               suffixIcon: IconButton(
                 icon: Icon(Icons.clear),
                 onPressed: () {
-                  setState(() {
-                    StoreController.isSearching.value = false;
-                  });
+                  StoreController.isSearching.value = false;
                   StoreController.searchController.value.clear();
                 },
               ),
               prefixIcon: IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () {
-                  StoreController.isSearching = true.obs;
                   if (StoreController.searchController != null &&
                       StoreController.searchController.value.text.isNotEmpty) {
-                    StoreController.searchedEmployee = MongoDB.searchFor();
+                    StoreController.isSearching.value = true;
                   }
-                  //print(StoreController.isSearching.value);
                 },
               ),
               border: OutlineInputBorder(

@@ -73,15 +73,17 @@ class chatPageState extends State<chatPage> {
         .collection('ChatsHistory')
         .find(Mongo.where.eq("sender", id).or(Mongo.where.eq("receiver", id)))
         .toList();
-    //print(messages);
-    try {
-      if (StoreController.isSendingMessage.isTrue && newMessage != null) {
-        messages.add(newMessage);
-        _streamController.add(messages);
-      }
-      Stream<List<Map<String, dynamic>>> messageStream =
-          Stream.fromIterable([messages]);
 
+    Stream<List<Map<String, dynamic>>> messageStream =
+        Stream.fromIterable([messages]);
+    try {
+      messageStream.listen((messages) {
+        if (StoreController.isSendingMessage.isTrue && newMessage != null) {
+          messages.add(newMessage);
+          _streamController.add(messages);
+          StoreController.isSendingMessage.value = false;
+        }
+      });
       yield* messageStream;
     } catch (e) {
       _streamController.addError(e);
@@ -97,6 +99,15 @@ class chatPageState extends State<chatPage> {
     super.initState();
     isHovered = false;
     receiversList = MongoDB.renderReceivers();
+  }
+
+  void searchHandler() {
+    if (StoreController.isSearching == true) {
+      StoreController.searchedEmployee = MongoDB.searchFor();
+    } else {
+      StoreController.searchedEmployee =
+          ConnectionState.waiting as Future<List<Map<String, dynamic>>>?;
+    }
   }
 
   /*void onEntered(bool isHovered) => setState(() {
@@ -338,94 +349,95 @@ class chatPageState extends State<chatPage> {
                                 }
                               },
                             )),
-                        Visibility(
-                            visible:
-                                isSearch, //StoreController.isSearching.value,
-                            child: Positioned(
-                              top: 1,
-                              //left: 50,
-                              child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: screenWidth * 0.009,
-                                      top: screenHeight * 0.085,
-                                      bottom: screenHeight * 0.05),
-                                  width: screenWidth * 0.285,
-                                  height: screenHeight * 0.14,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white60,
-                                  ),
-                                  child: FutureBuilder<
-                                          List<Map<String, dynamic>>>(
-                                      future: StoreController.searchedEmployee,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return ListView.builder(
-                                              itemCount: snapshot.data!.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return MouseRegion(
-                                                    child: Container(
-                                                        color: Colors.white,
-                                                        child: ListTile(
-                                                          onTap: () {
-                                                            StoreController
-                                                                    .Searched_ID
-                                                                    .value =
+                        Obx(
+                          () => Visibility(
+                              visible: StoreController.isSearching.value,
+                              child: Positioned(
+                                top: 1,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: screenWidth * 0.009,
+                                        top: screenHeight * 0.085,
+                                        bottom: screenHeight * 0.05),
+                                    width: screenWidth * 0.285,
+                                    height: screenHeight * 0.14,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white60,
+                                    ),
+                                    child: FutureBuilder<
+                                            List<Map<String, dynamic>>>(
+                                        future: MongoDB.searchFor(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return ListView.builder(
+                                                itemCount:
+                                                    snapshot.data!.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return MouseRegion(
+                                                      child: Container(
+                                                          color: Colors.white,
+                                                          child: ListTile(
+                                                            onTap: () {
+                                                              StoreController
+                                                                  .Searched_ID
+                                                                  .value = snapshot
+                                                                      .data![
+                                                                  index]['ID'];
+                                                              print(StoreController
+                                                                  .Searched_ID
+                                                                  .value);
+                                                              searchedUser =
+                                                                  snapshot.data![
+                                                                      index];
+                                                              if (StoreController
+                                                                      .Searched_ID
+                                                                      .value !=
+                                                                  0) {
+                                                                setState(() {
+                                                                  StoreController
+                                                                      .input
+                                                                      .add(
+                                                                          searchedUser);
+                                                                  StoreController
+                                                                      .isSearching
+                                                                      .value = false;
+                                                                });
+                                                              }
+                                                            },
+                                                            title: Text(
                                                                 snapshot.data![
                                                                         index]
-                                                                    ['ID'];
-                                                            searchedUser =
-                                                                snapshot.data![
-                                                                    index];
-                                                            if (StoreController
-                                                                        .Searched_ID !=
-                                                                    0 &&
-                                                                searchedUser !=
-                                                                    null) {
-                                                              setState(() {
-                                                                StoreController
-                                                                    .input
-                                                                    .add(
-                                                                        searchedUser);
-                                                              });
-                                                            }
-                                                            //print(searchedUser
-                                                            //  .toString());
-                                                          },
-                                                          title: Text(
-                                                              snapshot.data![
-                                                                      index]
-                                                                  ['name'],
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      'conthrax',
-                                                                  color: Colors
-                                                                      .black87,
-                                                                  fontSize:
-                                                                      screenHeight *
-                                                                          0.0162)),
-                                                        )));
-                                              });
-                                        } else if (!snapshot.hasData ||
-                                            ConnectionState ==
-                                                ConnectionState.waiting) {
-                                          return Center(
-                                              child:
-                                                  SpinKitPouringHourGlassRefined(
-                                            color: Paletter.gradiant3,
-                                          ));
-                                        } else {
-                                          return Text(
-                                              snapshot.error.toString());
-                                        }
-                                      })),
-                            )),
+                                                                    ['name'],
+                                                                style: TextStyle(
+                                                                    fontFamily:
+                                                                        'conthrax',
+                                                                    color: Colors
+                                                                        .black87,
+                                                                    fontSize:
+                                                                        screenHeight *
+                                                                            0.0162)),
+                                                          )));
+                                                });
+                                          } else if (!snapshot.hasData ||
+                                              ConnectionState ==
+                                                  ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    SpinKitPouringHourGlassRefined(
+                                              color: Paletter.gradiant3,
+                                            ));
+                                          } else {
+                                            return Text(
+                                                snapshot.error.toString());
+                                          }
+                                        })),
+                              )),
+                          //////////////////////////////////////////////////////////////////////
+                        )
                       ]),
                     ),
-
-                    // ),
-                    /////////////////////////////////////////////////////////
                   ]),
               Visibility(
                   visible: isVisible,
@@ -747,9 +759,14 @@ class chatPageState extends State<chatPage> {
                                             );
                                             StoreController
                                                 .isSendingMessage.value = true;
+                                            /* if (StoreController
+                                                    .isSendingMessage.isTrue &&
+                                                newMessage != null) {
+                                              _streamController
+                                                  .add([newMessage]);
+                                            }*/
                                           });
                                         }
-                                        //_streamController.add(newMessage);
                                       },
                                     ),
                             ),
