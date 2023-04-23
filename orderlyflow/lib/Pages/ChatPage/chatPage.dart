@@ -65,7 +65,6 @@ class chatPageState extends State<chatPage> {
   }*/
   late StreamController<List<Map<String, dynamic>>> _streamController =
       StreamController<List<Map<String, dynamic>>>();
-
   Stream<List<Map<String, dynamic>>> getMessageStream() async* {
     db = await Mongo.Db.create(mongoDB_URL);
     int id = int.parse(StoreController.ID_controller.value.text.trim());
@@ -75,15 +74,19 @@ class chatPageState extends State<chatPage> {
         .find(Mongo.where.eq("sender", id).or(Mongo.where.eq("receiver", id)))
         .toList();
 
-    yield* messages;
-
-    await for (List<Map<String, dynamic>> newMessages
-        in _streamController.stream) {
-      // Add new messages to the existing list
-      messages.addAll(newMessages);
-
-      // Yield the updated list of messages
-      yield* messages;
+    Stream<List<Map<String, dynamic>>> messageStream =
+        Stream.fromIterable([messages]);
+    try {
+      messageStream.listen((messages) {
+        if (StoreController.isSendingMessage.isTrue && newMessage != null) {
+          messages.add(newMessage);
+          _streamController.add(messages);
+          StoreController.isSendingMessage.value = false;
+        }
+      });
+      yield* messageStream;
+    } catch (e) {
+      _streamController.addError(e);
     }
   }
 
@@ -756,12 +759,12 @@ class chatPageState extends State<chatPage> {
                                             );
                                             StoreController
                                                 .isSendingMessage.value = true;
-                                            if (StoreController
+                                            /* if (StoreController
                                                     .isSendingMessage.isTrue &&
                                                 newMessage != null) {
                                               _streamController
                                                   .add([newMessage]);
-                                            }
+                                            }*/
                                           });
                                         }
                                       },
