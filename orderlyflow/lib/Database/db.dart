@@ -247,6 +247,18 @@ class MongoDB {
     return list;
   }
 
+  static void addSearchedUserToDB() {
+    final coll = db.collection(chatsCol);
+    int sender = int.parse(StoreController.ID_controller.value.text.trim());
+    int searchedU = StoreController.Searched_ID.value;
+    Map<String, dynamic> doc = {
+      "users": [sender, searchedU],
+      "type": "private",
+      "Lastupdated": DateTime.now(),
+    };
+    coll.insertOne(doc);
+  }
+
   static Future sendEmail() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
@@ -296,9 +308,6 @@ class MongoDB {
       }
     }).toList();
     if (name_info != null) {
-      for (var names in name_info) {
-        print(names['name']);
-      }
       return name_info;
     } else {
       //print('not found');

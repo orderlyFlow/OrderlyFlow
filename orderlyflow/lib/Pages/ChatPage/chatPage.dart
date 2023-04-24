@@ -400,6 +400,8 @@ class chatPageState extends State<chatPage> {
                                                                       .input
                                                                       .add(
                                                                           searchedUser);
+                                                                  MongoDB
+                                                                      .addSearchedUserToDB();
                                                                   StoreController
                                                                       .isSearching
                                                                       .value = false;
@@ -735,40 +737,34 @@ class chatPageState extends State<chatPage> {
                                     Icons.attach_file_rounded,
                                     color: Paletter.containerDark,
                                   )),
-                              suffixIcon: (StoreController
-                                      .isSendingMessage.value)
-                                  ? SpinKitHourGlass(
-                                      color: Paletter.containerDark,
-                                      size: screenWidth * 0.0019,
-                                    )
-                                  : IconButton(
-                                      icon: Icon(
-                                        Icons.send_rounded,
-                                        color: Paletter.containerDark,
-                                      ),
-                                      onPressed: () {
-                                        if (StoreController.Rec_ID.value != 0 &&
-                                            StoreController.Message_controller
-                                                    .value.text !=
-                                                "") {
-                                          setState(() {
-                                            newMessage = MongoDB.sendMsg(
-                                              StoreController.Rec_ID.value,
-                                              StoreController.Message_controller
-                                                  .value.text,
-                                            );
-                                            StoreController
-                                                .isSendingMessage.value = true;
-                                            /* if (StoreController
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.send_rounded,
+                                  color: Paletter.containerDark,
+                                ),
+                                onPressed: () {
+                                  if (StoreController.Rec_ID.value != 0 &&
+                                      StoreController
+                                              .Message_controller.value.text !=
+                                          "") {
+                                    setState(() {
+                                      newMessage = MongoDB.sendMsg(
+                                        StoreController.Rec_ID.value,
+                                        StoreController
+                                            .Message_controller.value.text,
+                                      );
+                                      StoreController.isSendingMessage.value =
+                                          true;
+                                      /* if (StoreController
                                                     .isSendingMessage.isTrue &&
                                                 newMessage != null) {
                                               _streamController
                                                   .add([newMessage]);
                                             }*/
-                                          });
-                                        }
-                                      },
-                                    ),
+                                    });
+                                  }
+                                },
+                              ),
                             ),
                           ),
                         ),
