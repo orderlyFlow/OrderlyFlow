@@ -141,6 +141,11 @@ class _calendarState extends State<calendar> {
                       lastDay: DateTime(2025),
                       focusedDay: DateTime.now(),
                       calendarStyle: CalendarStyle(
+                        cellMargin: EdgeInsets.fromLTRB(
+                            screenWidth * 0.0001,
+                            screenHeight * 0.0001,
+                            screenWidth * 0.0001,
+                            screenHeight * 0.0001),
                         todayTextStyle: TextStyle(
                           fontFamily: 'iceland',
                           color: Paletter.blackText,
@@ -177,17 +182,17 @@ class _calendarState extends State<calendar> {
                         weekendStyle: TextStyle(
                           fontFamily: 'neuropol',
                           color: Paletter.blackText,
-                          fontSize: screenHeight * 0.15,
+                          fontSize: screenHeight * 0.3,
                         ),
                       ),
                       headerStyle: HeaderStyle(
                         headerMargin:
-                            EdgeInsets.only(bottom: screenHeight * 0.002),
+                            EdgeInsets.only(bottom: screenHeight * 0.0013),
                         titleCentered: true,
                         formatButtonVisible: false,
                         titleTextStyle: TextStyle(
                           fontFamily: 'neuropol',
-                          fontSize: screenHeight * 0.04,
+                          fontSize: screenHeight * 0.034,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -196,7 +201,9 @@ class _calendarState extends State<calendar> {
                         setState(() {
                           today = today;
                         });
-                        print(today.toString());
+                        //int day = today.day;
+                        MongoDB.getEventsOnSelectedDate(today);
+                        //print(day.toString());
                       },
                     ),
                   ),
