@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:orderlyflow/palette.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+
+import '../Database/db.dart';
+import '../Database/textControllers.dart';
 
 class SearchInput extends StatefulWidget {
   @override
@@ -9,48 +14,54 @@ class SearchInput extends StatefulWidget {
 
 // ignore: prefer_const_constructors
 class _SearchInputState extends State<SearchInput> {
+  void callSearch() async {}
   @override
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Row(children: [
-              Flexible(
-                flex: 1,
-                child: TextField(
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontFamily: 'Iceland',
-                    fontSize: 0.027 * ScreenHeight,
-                  ),
-                  cursorColor: Paletter.mainBg,
-                  decoration: InputDecoration(
-                      fillColor: Colors.grey[350],
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none),
-                      hintText: 'Search',
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 0.027 * ScreenHeight,
-                          fontFamily: 'Iceland'),
-                      prefixIcon: Container(
-                        width: ScreenWidth / 50 * 0.00001,
-                        height: ScreenHeight / 50 * 0.00001,
-                        child: Image.asset('assets/images/search.png',
-                            alignment: Alignment.center, fit: BoxFit.scaleDown),
-                      )),
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(0),
+        child: Container(
+          color: Paletter.mainBgLight,
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          child: TextField(
+            style: TextStyle(
+              color: Colors.black87,
+              fontFamily: 'Iceland',
+              fontSize: 0.027 * ScreenHeight,
+            ),
+            controller: StoreController.searchController.value,
+            cursorColor: Paletter.mainBg,
+            decoration: InputDecoration(
+              fillColor: Colors.grey[350],
+              hintText: 'Search...',
+              helperStyle: TextStyle(
+                color: Colors.grey,
+                fontFamily: 'Iceland',
+                fontSize: 0.027 * ScreenHeight,
               ),
-            ])
-          ],
+              suffixIcon: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  StoreController.isSearching.value = false;
+                  StoreController.searchController.value.clear();
+                },
+              ),
+              prefixIcon: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  if (StoreController.searchController != null &&
+                      StoreController.searchController.value.text.isNotEmpty) {
+                    StoreController.isSearching.value = true;
+                  }
+                },
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+            ),
+          ),
         ),
       ),
     );

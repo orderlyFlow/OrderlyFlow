@@ -1,24 +1,30 @@
-// ignore_for_file: unnecessary_new
+
 
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:orderlyflow/Database/textControllers.dart';
+import 'package:orderlyflow/Pages/MainPage/tasks.dart';
 import 'constant.dart';
 import 'dart:typed_data';
 import 'package:bson/bson.dart';
+import 'package:http/http.dart' as http;
 import 'db.dart';
 import 'dart:developer';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
+import 'package:bson/bson.dart';
+import 'package:email_auth/email_auth.dart';
 import 'package:bson/bson.dart';
 import 'package:email_auth/email_auth.dart';
 import 'dart:io';
@@ -30,10 +36,8 @@ import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 var db;
 var collection;
-
 
 class MongoDB {
   static connect() async {
@@ -45,7 +49,8 @@ class MongoDB {
     print(status);
   }
 
-  static Future<Map<String, dynamic>> getInfo() async {
+
+static Future<Map<String, dynamic>> getInfo() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
     await db1.open();
@@ -243,7 +248,55 @@ static Future<Map<String, dynamic>> sendMsg(
   }
 }
 
+static Future<List<Map<String, dynamic>>> renderReceivers() async {
+    final recentChat = db.collection(chatsCol);
+    final persons = db.collection(personsCol);
+    List<List<int>> users = [];
+    List<dynamic> recList = [];
 
+    var usersList = await recentChat.find({
+      'users': int.parse(StoreController.ID_controller.value.text.trim())
+    }).toList();
+
+    usersList.forEach((item) {
+      if (item.containsKey('users')) {
+        users.add(List<int>.from(item['users']));
+      }
+    });
+
+    List<int> flattenedList = [];
+
+    users.forEach((subList) {
+      flattenedList.addAll(subList);
+    });
+
+    flattenedList.removeWhere((number) =>
+        number == int.parse(StoreController.ID_controller.value.text.trim()));
+    if (flattenedList.isNotEmpty) {
+      for (var receiver in flattenedList) {
+        var user = await persons.findOne(where.eq("ID", receiver));
+        if (user != null) {
+          recList.add(user);
+        }
+      }
+
+      return List<Map<String, dynamic>>.from(recList);
+    } else {
+      return [];
+    }
+  }
+static Future<Map<String, dynamic>> getNotes() async {
+    var id = await getInfo();
+    var notesId = id['ID'];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(notesCol);
+    await db1.open();
+
+    final info = await coll.findOne(Mongo.where.eq("employeeID", notesId))
+        as Map<String, dynamic>;
+
+    return info;
+  }
 static Future<Map<String,dynamic>> logDocumentRequest(String docName )async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int counter = prefs.getInt('counter') ?? 0;
@@ -429,77 +482,159 @@ final document = {
   }
 
    
+
+
+  
+
+  static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+    final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
+        as Map<String, dynamic>;
+    if (othersInformation != null) {
+      return othersInformation;
+    } else {
+      return null as Map<String, dynamic>;
+    }
+
+    //await db.close();
+  }
+
+  static Future<List<Tasks>> getTask() async {
+    var id = await getInfo();
+    var getId = id["ID"];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final col1 = db1.collection(tasksCol);
+    await db1.open();
+    final getuser = await col1
+        .find(where.eq('Employees', {
+          '\$elemMatch': {'\$eq': getId}
+        }))
+        .toList();
+
+    return getuser
+        .map((e) =>
+            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
+        .toList();
+  }
+
+
+
+ 
+    
+  
+
+  
+  static void addSearchedUserToDB() {
+    final coll = db.collection(chatsCol);
+    int sender = int.parse(StoreController.ID_controller.value.text.trim());
+    int searchedU = StoreController.Searched_ID.value;
+    Map<String, dynamic> doc = {
+      "users": [sender, searchedU],
+      "type": "private",
+      "Lastupdated": DateTime.now(),
+    };
+    coll.insertOne(doc);
+  }
+
+  static Future sendEmail() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+
+    var IDCont = int.parse(StoreController.ID_controller.value.text.trim());
+    final rec = await coll.findOne(Mongo.where.eq("ID", IDCont));
+    final recEmail = rec!['email'];
+
+    final random = Random();
+    final otp = random.nextInt(9999).toString().padLeft(4, '0');
+    String OTPmessage = 'Your OTP is: $otp';
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    const serviceId = 'service_tinvhpr';
+    const templateId = 'template_wit7sy5';
+    const userId = '55Nno5HEZIhwen4fN';
+    try {
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'service_id': serviceId,
+            'template_id': templateId,
+            'user_id': userId,
+            'template_params': {'to_email': recEmail, 'message': OTPmessage}
+          }));
+
+      print('Email successfully sent!');
+      int intOTP = int.parse(otp);
+      coll.modernUpdate(
+          where.eq('ID', IDCont), ModifierBuilder().set('OTP', intOTP));
+      return response.statusCode;
+    } catch (error) {
+      print('Error sending email: $error');
+      return null;
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchFor() async {
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(personsCol);
+    //await db1.open();
+
+    final name_info = await coll.find({
+      'name': {
+        '\$regex': StoreController.searchController.value.text.trim(),
+        '\$options': 'i'
+      }
+    }).toList();
+    if (name_info != null) {
+      return name_info;
+    } else {
+      //print('not found');
+      return "" as List<Map<String, dynamic>>;
+    }
+  }
+
+  static Future<dynamic> getSalary() async {
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(payrollCol);
+    //await db1.open();
+    int user = int.parse(StoreController.ID_controller.value.text.trim());
+    final sal_info =
+        await coll.findOne(Mongo.where.eq("ID", user)) as Map<String, dynamic>;
+    return sal_info;
+  }
+
+  static Future<List<Map<String, dynamic>>> getEvent() async {
+    final coll = db.collection(eventsCol);
+    //List<List<int>> users = [];
+    //List<dynamic> recList = [];
+
+    var eventsList = await coll.find({
+      'participants': int.parse(StoreController.ID_controller.value.text.trim())
+    }).toList();
+
+    if (eventsList != null) {
+      return eventsList;
+    } else {
+      return [];
+    }
+  }
+
+  static Future<List> getEventsOnSelectedDate(DateTime selectedDate) async {
+    final eventsCollection = db.collection(eventsCol);
+
+    final events = await eventsCollection.find({
+      'date': {
+        '\$gte': selectedDate.toUtc(),
+        '\$lt': selectedDate.add(Duration(days: 1)).toUtc(),
+      }
+    }).toList();
+
+    return events;
+  }
 }
 
 
 
-/*EmailAuth emailAuth = new EmailAuth(sessionName: "Sample session");
-void sendOtp() async {
-  bool result = await emailAuth.sendOtp(
-      recipientMail: 'mira13.mc@gmail.com', otpLength: 4);
-  // recipientMail: _emailcontroller.value.text, otpLength: 4);
-}*/
-/*static Future<String> sendingSMS(int otp, int nbr) async {
-    //final db = await Mongo.Db.create(mongoDB_URL);
-    //final coll = db.collection(personsCol);
-    //await db.open();
 
-    //final phoneNumber = (await getInfo())['phone_number'] as int;
-    const phoneNumber = 96171119085;
-    var random = new Random();
-    int otpSend = random.nextInt(999999);
-    String result = await sendSMS(otpSend, phoneNumber);
-    return result;
-  }*/
 
-/*static void _sendSMS(String message, List<String> recipents) async {
-    String _result = await sendSMS(message: message, recipients: recipents)
-        .catchError((onError) {
-      print(onError);
-    });
-    print(_result);
-  }*/
-
-/*static Future<void> sendOTP() async {
-    final db = await Mongo.Db.create(mongoDB_URL);
-    final coll = db.collection(personsCol);
-    await db.open();
-
-    final targetID = await coll.findOne(Mongo.where
-            .eq("_id", StoreController.ID_controller.value.text.trim()))
-        as Map<int, dynamic>;
-    //final phoneNumber = targetID['phone_number'] as String;
-    const phoneNumber = '96171119085';
-    var random = new Random();
-    int otpSend = random.nextInt(999999);
-
-    SmsSender sender = new SmsSender();
-    sender.sendSms(new SmsMessage(phoneNumber, 'Your OTP is: $otpSend'));
-  }*/
-//////////////////////////WORKS BUT CONSIDERS USER AS SENDER/////////////////////////
-/*void sendingSMS() async {
-  /*var url = Uri.parse("sms:96171119085");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }*/
-  final emailAddress = 'mira13.mc@gmail.com';
-  final subject = 'This is a test';
-  var random = new Random();
-  int otpSend = random.nextInt(999999);
-  final body = otpSend.toString();
-
-  final Uri mailToUri =
-      Uri(scheme: 'mailto', path: 'mira13.mc@gmail.com', queryParameters: {
-    'subject': "Your OTP is $otpSend",
-    'body': "Test done",
-    'from': 'overranter@gmail.com',
-  });
-  //print(mailToUri.toString());
-  if (await canLaunchUrl(mailToUri)) {
-    await launchUrl(mailToUri);
-  } else {
-    throw 'Could not launch $mailToUri';
-  }
-}*/

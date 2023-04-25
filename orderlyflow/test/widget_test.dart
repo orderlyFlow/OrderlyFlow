@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:orderlyflow/LogIn/log_in.dart';
+import 'package:orderlyflow/Pages/LogInPage/LogIn/log_in.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
