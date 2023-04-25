@@ -8,3 +8,5 @@ const tasksCol = "Tasks";
 const chathistoryCol ="ChatsHistory";
 const picturesCol = "fs.chunks";
 const documentsCol = "Documents";
+const documentRequestCol = "DocumentsRequests";
+const teamsCol = "Teams";

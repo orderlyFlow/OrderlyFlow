@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:orderlyflow/Database/db.dart';
 import 'package:orderlyflow/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 import 'package:orderlyflow/side_bar.dart';
@@ -118,9 +119,10 @@ class employeeDataState extends State<employeeData> {
                                 right: 30.0,
                                 bottom: 20.0),
                             child: Text(
-                              "Progress of the                                                          WEEK",
+                              "Progress of the / WEEK",
                               style: ThemeStyles.containerText,
                             ),
+                            
                           )),
                       Container(
                           margin: EdgeInsets.fromLTRB(
@@ -135,15 +137,38 @@ class employeeDataState extends State<employeeData> {
                             color: Color.fromARGB(255, 237, 187, 153),
                             borderRadius: BorderRadius.circular(30),
                           ),
+                          
                           child: Container(
                             margin: EdgeInsets.only(
                                 left: 30.0,
                                 top: 20.0,
                                 right: 30.0,
                                 bottom: 20.0),
-                            child: Text(
-                              "Salary /                                                             MONTH",
-                              style: ThemeStyles.containerText,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Salary /                                                             MONTH",
+                                  style: ThemeStyles.containerText,
+                                ),
+                                FutureBuilder(
+                                  future: MongoDB.getsalary(100001),
+                                 builder: (buildContext, AsyncSnapshot snapshot){
+                                  if (snapshot.hasError){
+                                    return Text("error loading data");
+                                  }
+                                  else if (snapshot.hasData){
+                                    return Text(MongoDB.getsalary(100001) as String);
+                                  }
+                                  else{
+                                    return  CircleAvatar(
+                                            backgroundColor: Colors.black,
+                                            );
+                                  }
+
+                                 }
+                                  
+                                  )
+                              ],
                             ),
                           )),
                       Container(
