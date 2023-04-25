@@ -52,6 +52,9 @@ dependencies:
   bson: ^4.0.0
   email_auth: ^1.0.0
   flutter_termii: ^0.2.1
+  file_saver: ^0.2.1
+  downloads_path_provider_28: ^0.1.2
+  shared_preferences : ^2.1.0
   mailer: ^6.0.0
   http: ^0.13.5
   dotted_line: ^3.1.0
