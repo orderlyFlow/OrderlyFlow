@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_new
+
 
 import 'dart:convert';
 import 'dart:developer';
@@ -25,9 +25,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'package:bson/bson.dart';
 import 'package:email_auth/email_auth.dart';
-import 'dart:math';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
+import 'package:bson/bson.dart';
+import 'package:email_auth/email_auth.dart';
+import 'dart:io';
+import 'package:file_saver/file_saver.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var db;
 var collection;
@@ -42,7 +49,8 @@ class MongoDB {
     print(status);
   }
 
-  static Future<Map<String, dynamic>> getInfo() async {
+
+static Future<Map<String, dynamic>> getInfo() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
     await db1.open();
@@ -55,50 +63,17 @@ class MongoDB {
     //await db.close();
   }
 
-  static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(personsCol);
-    await db1.open();
-    final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
-        as Map<String, dynamic>;
-    if (othersInformation != null) {
-      return othersInformation;
-    } else {
-      return null as Map<String, dynamic>;
-    }
-
-    //await db.close();
-  }
-
-  static Future<List<Tasks>> getTask() async {
+  static Future<Map<String, dynamic>> getTasks() async {
     var id = await getInfo();
-    var getId = id["ID"];
+    var taskID = id["ID"];
     final db1 = await Mongo.Db.create(mongoDB_URL);
-    final col1 = db1.collection(tasksCol);
-    await db1.open();
-    final getuser = await col1
-        .find(where.eq('Employees', {
-          '\$elemMatch': {'\$eq': getId}
-        }))
-        .toList();
-
-    return getuser
-        .map((e) =>
-            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
-        .toList();
-  }
-
-  static Future<Map<String, dynamic>> getNotes() async {
-    var id = await getInfo();
-    var notesId = id['ID'];
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(notesCol);
+    final coll = db1.collection(tasksCol);
     await db1.open();
 
-    final info = await coll.findOne(Mongo.where.eq("employeeID", notesId))
+    final information = await coll.findOne(Mongo.where.eq("_id", taskID))
         as Map<String, dynamic>;
 
-    return info;
+    return information;
   }
 
   static Future<Map<String, dynamic>> getID() async {
@@ -194,7 +169,90 @@ class MongoDB {
     return imageProvider;
   }
 
-  static Future<List<Map<String, dynamic>>> renderReceivers() async {
+static Future<Map<String, dynamic>> sendMsg(
+      int reciver, String content) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(chathistoryCol);
+    await db1.open();
+    int sender = int.parse(StoreController.ID_controller.value.text.trim());
+    Map<String, dynamic> doc = {
+      "sender": sender,
+      "reciver": reciver,
+      "datetime": DateTime.now(),
+      "content": content
+    };
+    final info = coll.insertOne(doc);
+    print(doc);
+    return doc;
+// working
+  }
+
+  static Future<void> insertImage(id, image) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+    final bytes = await File(image).readAsBytes();
+    final encoded = base64Encode(bytes) as String;
+    //print(encoded);
+    coll.updateOne(
+        Mongo.where.eq("ID", id), Mongo.modify.set("profilePicture", encoded));
+        print("succsess");
+  }
+
+  static Future<Map<String, dynamic>> insertDoc(
+      int id, String docName, String content) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(documentsCol);
+    await db1.open();
+    final bytes = await File(content).readAsBytes();
+    final encoded = base64Encode(bytes);
+    Map<String, dynamic> doc = {
+      "docID": id,
+      "docName": docName,
+      "content": encoded
+    };
+    final info = coll.insertOne(doc);
+    print(encoded);
+    return doc;
+// working
+// hr reserved
+  }
+
+
+
+   static Future <dynamic> requestDocument(String docName)async{
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(documentsCol);
+    await db1.open();
+    Map<String, dynamic> document = await collection.findOne(where.eq("docName", docName)) as Map<String, dynamic> ;
+     dynamic content = document["content"];
+     downloadDocument(content);
+     logDocumentRequest(docName);
+     print("success");
+     return content;
+
+  }
+
+ static Future<void> downloadDocument(String base64String) async {
+  try {
+    
+    List<int> bytes = base64.decode(base64String);
+
+    final directory = await getApplicationDocumentsDirectory();
+    final path = '${directory.path}/document.docx';
+
+  
+    final file = File(path);
+    await file.writeAsBytes(bytes);
+
+    
+    await Process.run('explorer', [path]);
+  } catch (e) {
+    debugPrint(e.toString());
+  }
+}
+
+static Future<List<Map<String, dynamic>>> renderReceivers() async {
     final recentChat = db.collection(chatsCol);
     final persons = db.collection(personsCol);
     List<List<int>> users = [];
@@ -231,26 +289,247 @@ class MongoDB {
       return [];
     }
   }
+static Future<Map<String, dynamic>> getNotes() async {
+    var id = await getInfo();
+    var notesId = id['ID'];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(notesCol);
+    await db1.open();
 
-  static Future<List<Map<String, dynamic>>> sendMsg(
-      int rec, String content) async {
-    final coll = db.collection(chathistoryCol);
-    int sender = int.parse(StoreController.ID_controller.value.text.trim());
+    final info = await coll.findOne(Mongo.where.eq("employeeID", notesId))
+        as Map<String, dynamic>;
 
-    Map<String, dynamic> doc = {
-      "sender": sender,
-      "datetime": DateTime.now(),
-      "content": content,
-      "receiver": rec,
-    };
-    List<Map<String, dynamic>> list = [];
-    final info = coll.insertOne(doc);
-    list.add(doc);
-    StoreController.isSendingMessage = false.obs;
-    StoreController.Message_controller.value.clear();
-    return list;
+    return info;
+  }
+static Future<Map<String,dynamic>> logDocumentRequest(String docName )async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int counter = prefs.getInt('counter') ?? 0;
+
+   final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(documentRequestCol);
+    await db1.open();
+  
+  final document = {
+    "requestID": counter,
+    "userID": int.parse(StoreController.ID_controller.value.text.trim()),
+    "documentName": docName,
+    "DateTime": DateTime.now()
+  };
+  counter++;
+  prefs.setInt('counter', counter);
+  collection.insertOne(document);
+
+  return document;
+
+
+}
+
+
+
+static Future<List<String>> getDocNames() async {
+   final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(documentsCol);
+    await db1.open();
+
+  final docs = await collection.find().toList();
+
+  final docNames = docs.map((doc) => doc['docName'] as String).toList();
+
+  print(docNames);
+
+  await db.close();
+
+  return docNames;
+}
+
+ /* static void updateStatus(String taskname) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(tasksCol);
+    await db1.open();
+
+    coll.updateOne(
+        Mongo.where.eq("taskName", taskname), Mongo.modify.set("status", true));
+    print("called");
+    //not working ( most likely wrong query)
+  }*/
+
+  static Future<List<String>> fetchNamesForIds(List<int> idList) async {
+  final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(personsCol);
+    await db1.open();
+   List<String> names = <String>[];
+  Map<String,dynamic> document ;
+  for (int i = 0; i < idList.length; i++) {
+    document = await collection.findOne(where.eq("ID", idList[i])) as  Map<String,dynamic>;
+    names.add(document["name"]);
   }
 
+
+  return names;
+}
+
+static Future<List<dynamic>> getEmployeesByTeamId(int teamId) async {
+  final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(teamsCol);
+    await db1.open();
+  try {
+    
+    print('Database connection opened successfully');
+    final teams = db.collection('Teams');
+    final result = await collection.findOne(where.eq('teamID', teamId));
+    if (result == null) {
+      print('No document found with teamID: $teamId');
+      return [];
+    }
+    final employees = result['members'] ?? [];
+    print('Employees found: $employees');
+    return employees;
+  } catch (e) {
+    print('Error retrieving employees: $e');
+    return [];
+  } 
+}
+
+static String getEmployeeTeam(int employeeId) {
+  String team;
+  int firstDigit = employeeId ~/ 100000; // Get the first digit of the employee ID
+  
+  switch(firstDigit) {
+    case 1:
+      team = 'Legal Team';
+      break;
+    case 2:
+      team = 'Human Resources Team';
+      break;
+    case 3:
+      team = 'Development Team';
+      break;
+    case 4:
+      team = 'Design Team';
+      break;
+    case 5:
+      team = 'Marketing Team';
+      break;
+    case 6:
+      team = 'Accounting Team';
+      break;
+    default:
+      team = 'Unknown Team';
+  }
+  
+  return team;
+}
+static void addMeeting(String subject)async{
+SharedPreferences prefs1 = await SharedPreferences.getInstance();
+  int counter1 = prefs1.getInt('counter') ?? 0;
+
+   final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(meetingsCol);
+    await db1.open();
+final directorID = int.parse(StoreController.ID_controller.value.text.trim());
+final document =  {
+ "MeetingID": counter1, 
+"Director": directorID,
+"TeamName": getEmployeeTeam(directorID),
+"subject": subject,
+"DateTime": DateTime.now()
+};
+
+collection.insertOne(document);
+counter1++;
+  prefs1.setInt('counter', counter1);
+
+  
+}
+
+ 
+
+
+  
+  /*static Future<String> getFilePath() async {
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path; // 2
+    String filePath = '$appDocumentsPath/demoTextFile.txt'; // 3
+
+    return filePath;
+  }*/
+
+  /*List<int> getEmps(){
+  
+    List arr
+  }*/
+
+  static Future<void> addTask(int TaskID, String taskname,List<int> employees) async{
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(tasksCol);
+    await db1.open();
+
+final document = {
+  "TaskID":  TaskID,
+  "taskname":taskname,
+  "Employees": employees,
+  "status": false
+};
+  
+  collection.insertOne(document);
+  }
+
+  static Future <dynamic> getsalary(int id)async{
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(payrollCol);
+    await db1.open();
+    Map<String, dynamic> document = await collection.findOne(where.eq("ID", id)) as Map<String, dynamic> ;
+     dynamic salary = document["basepay"];
+     print(salary);
+     return salary;
+
+  }
+
+   
+
+
+  
+
+  static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+    final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
+        as Map<String, dynamic>;
+    if (othersInformation != null) {
+      return othersInformation;
+    } else {
+      return null as Map<String, dynamic>;
+    }
+
+    //await db.close();
+  }
+
+  static Future<List<Tasks>> getTask() async {
+    var id = await getInfo();
+    var getId = id["ID"];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final col1 = db1.collection(tasksCol);
+    await db1.open();
+    final getuser = await col1
+        .find(where.eq('Employees', {
+          '\$elemMatch': {'\$eq': getId}
+        }))
+        .toList();
+
+    return getuser
+        .map((e) =>
+            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
+        .toList();
+  }
+
+
+
+ 
+    
+  
+
+  
   static void addSearchedUserToDB() {
     final coll = db.collection(chatsCol);
     int sender = int.parse(StoreController.ID_controller.value.text.trim());
@@ -367,6 +646,8 @@ class MongoDB {
     }
     return true;
   }
+}
+
 
   static bool isHR_atLogin(int n) {
     String nStr = n.toString();
