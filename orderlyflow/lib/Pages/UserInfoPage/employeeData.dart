@@ -56,11 +56,10 @@ class employeeDataState extends State<employeeData> {
                       } else {
                         final salaryInfo = snapshot.data[0];
                         final empInfo = snapshot.data[1];
-                        String bonus = int.parse(
-                                ((salaryInfo['bonus'] * salaryInfo['basepay']) /
-                                        100) +
-                                    salaryInfo['basepay'])
-                            .toString();
+                        int bonus = int.parse(
+                            ((salaryInfo['bonus'] * salaryInfo['basepay']) /
+                                    100) +
+                                salaryInfo['basepay']);
                         final photoData = empInfo['profilePicture'];
                         Uint8List photoBytes = base64Decode(photoData);
                         ImageProvider imageProvider = MemoryImage(photoBytes);

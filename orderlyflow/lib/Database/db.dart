@@ -172,7 +172,11 @@ class MongoDB {
     if (id_info != null &&
         id_info['OTP'] == OTPCont &&
         id_info['password'] == PassCont) {
+      StoreController.isDirector = isDirectorLogin(IDCont).obs;
+      StoreController.isHR = isHR_atLogin(IDCont).obs;
       StoreController.Login_found.value = true;
+      print("Dir: " + StoreController.isDirector.toString());
+      print("HR: " + StoreController.isHR.toString());
       return true;
     } else {
       return false;
@@ -353,25 +357,51 @@ class MongoDB {
 
     return events;
   }
-}
-  /*static Future<Map<String, dynamic>> insertDoc(
-      int id, String docName, String content) async {
-    //final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db.collection(documentsCol);
-    //await db1.open();
-    final bytes = await File(content).readAsBytes();
-    final encoded = base64Encode(bytes);
-    Map<String, dynamic> doc = {
-      "docID": id,
-      "docName": docName,
-      "content": encoded
-    };
-    final info = coll.insertOne(doc);
-    print(encoded);
-    return doc;
-// hr reserved
+
+  static bool isDirectorLogin(int n) {
+    String nStr = n.toString();
+    for (int i = 1; i < nStr.length; i++) {
+      if (nStr[i] != "0") {
+        return false;
+      }
+    }
+    return true;
   }
-}*/
 
+  static bool isHR_atLogin(int n) {
+    String nStr = n.toString();
+    if (nStr[0] == 2 && nStr[1] == 0) {
+      return true;
+    }
+    return false;
+  }
 
+  static List<int> getParticipants(String text) {
+    List<int> participants = [];
+    List<String> participantStrings = text.split(',');
+    for (String participantString in participantStrings) {
+      String participant = participantString.trim();
+      if (participant.isNotEmpty) {
+        participants.add(int.parse(participant));
+      }
+    }
+    return participants;
+  }
 
+  /*static void addEventToDB(
+      String event_title, String event_location, String desc) {
+    final coll = db.collection(eventsCol);
+    List<int> participants = getParticipants(textFieldValue);
+
+    Map<String, dynamic> doc = {
+      "title": event_title,
+      "location": event_location,
+      "startTime": content,
+      "endTime": rec,
+      "participants": participants,
+      "eventDescription": desc,
+    };
+    List<Map<String, dynamic>> list = [];
+    final info = coll.insertOne(doc);
+  }*/
+}

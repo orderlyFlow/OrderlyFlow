@@ -21,7 +21,7 @@ class calendar extends StatefulWidget {
 class _calendarState extends State<calendar> {
   DateTime today = DateTime.now();
   List events = [];
-
+  final _formKey = GlobalKey<FormState>();
   //late double ScreenWidth;
   //late double ScreenHeight;
 
@@ -112,6 +112,7 @@ class _calendarState extends State<calendar> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+    var padd;
     return Scaffold(
       body: Stack(children: [
         const BlueBg(),
@@ -498,6 +499,114 @@ class _calendarState extends State<calendar> {
                                                   screenHeight * 0.0038),
                                         ],
                                       ),
+                                      Visibility(
+                                          visible: true,
+                                          child: SizedBox.fromSize(
+                                            size: Size(56, 56),
+                                            child: ClipOval(
+                                              child: Material(
+                                                color: Paletter.gradiant3,
+                                                child: InkWell(
+                                                  splashColor: Colors.green,
+                                                  onTap: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            content: Stack(
+                                                              children: <
+                                                                  Widget>[
+                                                                Positioned(
+                                                                  right: -40.0,
+                                                                  top: -40.0,
+                                                                  child:
+                                                                      InkResponse(
+                                                                    onTap: () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child:
+                                                                        CircleAvatar(
+                                                                      child: Icon(
+                                                                          Icons
+                                                                              .close),
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .red,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Form(
+                                                                  key: _formKey,
+                                                                  child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Padding(
+                                                                        padding:
+                                                                            EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            TextFormField(),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            TextFormField(),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            ElevatedButton(
+                                                                          child:
+                                                                              Text("Add Event"),
+                                                                          onPressed:
+                                                                              () {
+                                                                            if (_formKey.currentState!.validate()) {
+                                                                              //MongoDB.addEventToDB();
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.add,
+                                                        color: Colors.white,
+                                                      ), // <-- Icon
+                                                      Text(
+                                                        "Add event",
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              "conthrax",
+                                                          fontSize:
+                                                              screenHeight *
+                                                                  0.0002,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ), // <-- Text
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ))
                                     ],
                                   ),
                                 ]),
