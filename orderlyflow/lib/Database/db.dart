@@ -388,20 +388,20 @@ class MongoDB {
     return participants;
   }
 
-  /*static void addEventToDB(
-      String event_title, String event_location, String desc) {
+  static void addEventToDB(String event_title, String event_location,
+      String desc, String part, DateTime start, DateTime end) {
     final coll = db.collection(eventsCol);
-    List<int> participants = getParticipants(textFieldValue);
+    List<int> participants = getParticipants(part);
 
     Map<String, dynamic> doc = {
       "title": event_title,
       "location": event_location,
-      "startTime": content,
-      "endTime": rec,
+      "startTime": start,
+      "endTime": end,
       "participants": participants,
       "eventDescription": desc,
     };
     List<Map<String, dynamic>> list = [];
     final info = coll.insertOne(doc);
-  }*/
+  }
 }

@@ -22,97 +22,22 @@ class _calendarState extends State<calendar> {
   DateTime today = DateTime.now();
   List events = [];
   final _formKey = GlobalKey<FormState>();
-  //late double ScreenWidth;
-  //late double ScreenHeight;
-
-  /*void _DisplayDialog(
-      BuildContext context, DateTime selectedDate, List events) async {
-   //events = await MongoDB.getEventsOnSelectedDate(selectedDate);
-    setState(() {
-      today = selectedDate;
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              backgroundColor: null,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Container(
-                width: 500,
-                height: 200,
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      child: Text(
-                        DateFormat.yMMMMd("en_US").format(selectedDate),
-                        style: TextStyle(
-                          fontFamily: 'iceland',
-                          fontSize: ScreenHeight * 0.035,
-                          fontWeight: FontWeight.bold,
-                          color: Paletter.blackText.withOpacity(0.5),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Expanded(
-                        child: ListView.builder(
-                            itemCount: events.length == 0 ? 1 : events.length,
-                            itemBuilder: (context, index) {
-                              if (events.length == 0) {
-                                return Center(
-                                  child: Center(
-                                    child: Text(
-                                      '<no event>',
-                                      style: TextStyle(
-                                          fontFamily: 'iceland',
-                                          fontSize: ScreenHeight * 0.020,
-                                          color: Paletter.blackText
-                                              .withOpacity(0.5)),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Text(
-                                    events[index],
-                                    style: TextStyle(
-                                        fontFamily: 'iceland',
-                                        fontSize: ScreenHeight * 0.015,
-                                        color: Paletter.blackText
-                                            .withOpacity(0.5)),
-                                  ),
-                                );
-                              }
-                            }))
-                  ],
-                ),
-              ),
-            );
-          });
-    });
-  }*/
+  DateTimeRange dateRange = DateTimeRange(
+    start: DateTime(2023, 06, 05),
+    end: DateTime(2023, 06, 30),
+  );
 
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     var padd;
+    TextEditingController title_controller = new TextEditingController();
+    TextEditingController loc_controller = new TextEditingController();
+    TextEditingController part_controller = new TextEditingController();
+    TextEditingController desc_controller = new TextEditingController();
+    final start = dateRange.start;
+    final end = dateRange.end;
     return Scaffold(
       body: Stack(children: [
         const BlueBg(),
@@ -499,114 +424,6 @@ class _calendarState extends State<calendar> {
                                                   screenHeight * 0.0038),
                                         ],
                                       ),
-                                      Visibility(
-                                          visible: true,
-                                          child: SizedBox.fromSize(
-                                            size: Size(56, 56),
-                                            child: ClipOval(
-                                              child: Material(
-                                                color: Paletter.gradiant3,
-                                                child: InkWell(
-                                                  splashColor: Colors.green,
-                                                  onTap: () {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            content: Stack(
-                                                              children: <
-                                                                  Widget>[
-                                                                Positioned(
-                                                                  right: -40.0,
-                                                                  top: -40.0,
-                                                                  child:
-                                                                      InkResponse(
-                                                                    onTap: () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                    child:
-                                                                        CircleAvatar(
-                                                                      child: Icon(
-                                                                          Icons
-                                                                              .close),
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Form(
-                                                                  key: _formKey,
-                                                                  child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Padding(
-                                                                        padding:
-                                                                            EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            TextFormField(),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            TextFormField(),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            ElevatedButton(
-                                                                          child:
-                                                                              Text("Add Event"),
-                                                                          onPressed:
-                                                                              () {
-                                                                            if (_formKey.currentState!.validate()) {
-                                                                              //MongoDB.addEventToDB();
-                                                                            }
-                                                                          },
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        });
-                                                  },
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      Icon(
-                                                        Icons.add,
-                                                        color: Colors.white,
-                                                      ), // <-- Icon
-                                                      Text(
-                                                        "Add event",
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              "conthrax",
-                                                          fontSize:
-                                                              screenHeight *
-                                                                  0.0002,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ), // <-- Text
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ))
                                     ],
                                   ),
                                 ]),
@@ -625,10 +442,395 @@ class _calendarState extends State<calendar> {
                       }),
                 )
               ],
-            )
+            ),
           ],
-        )
+        ),
+        Visibility(
+          visible: true, //StoreController.isDirector.value,
+          child: Container(
+              margin: EdgeInsets.fromLTRB(screenWidth * 0, screenHeight * 0,
+                  screenWidth * 0.005, screenHeight * 0.01),
+              child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: SizedBox.fromSize(
+                    size: Size(screenWidth * 0.0495, screenHeight * 0.065),
+                    child: ClipOval(
+                      child: Material(
+                        color: Colors.green.shade300,
+                        child: InkWell(
+                          splashColor: Colors.indigoAccent.shade400,
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Stack(
+                                      children: <Widget>[
+                                        Positioned(
+                                          right: -40.0,
+                                          top: -40.0,
+                                          child: InkResponse(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: CircleAvatar(
+                                              child: Icon(Icons.close),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          ),
+                                        ),
+                                        Form(
+                                          key: _formKey,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: title_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.title_rounded,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText: 'Event Title',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter the title';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: loc_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.location_on,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText:
+                                                          'Enter Event Location',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter your Location';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: part_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.person_outline,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText:
+                                                          '{Participant1 Id,P2 Id...}',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter your participants';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: desc_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.description,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText:
+                                                          'Enter Event Description',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter your description';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                        child: ElevatedButton(
+                                                            onPressed:
+                                                                pickDateRange,
+                                                            child: Text(
+                                                                '${start.year}/${start.month}/${start.day}'))),
+                                                    SizedBox(
+                                                      width: screenWidth * 0.01,
+                                                    ),
+                                                    Expanded(
+                                                        child: ElevatedButton(
+                                                            onPressed:
+                                                                pickDateRange,
+                                                            child: Text(
+                                                                '${end.year}/${end.month}/${end.day}'))),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ElevatedButton(
+                                                  child: Text("Add Event"),
+                                                  onPressed: () {
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      MongoDB.addEventToDB(
+                                                          title_controller
+                                                              .value.text,
+                                                          loc_controller
+                                                              .value.text,
+                                                          desc_controller
+                                                              .value.text,
+                                                          part_controller
+                                                              .value.text,
+                                                          dateRange.start,
+                                                          dateRange.end);
+                                                      Navigator.pop(context);
+                                                    }
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ), // <-- Icon
+                              Text(
+                                "Add event",
+                                style: TextStyle(
+                                  fontFamily: "conthrax",
+                                  fontSize: screenHeight * 0.0002,
+                                  color: Colors.white,
+                                ),
+                              ), // <-- Text
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ))),
+        ),
       ]),
     );
+  }
+
+  Future pickDateRange() async {
+    DateTimeRange? newDateTimeRange;
+    DateTime initialStartDate = dateRange.start;
+    DateTime initialEndDate = dateRange.end;
+    DateTime? newStartDate;
+
+    // Show the start date picker
+    do {
+      newStartDate = await showDatePicker(
+        context: context,
+        initialDate: initialStartDate,
+        firstDate: DateTime(2023),
+        lastDate: DateTime(2030),
+      );
+    } while (newStartDate == null);
+
+    //print(newStartDate!.day);
+    if (newStartDate != null) {
+      TimeOfDay? newStartTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initialStartDate),
+      );
+      if (newStartTime != null) {
+        newStartDate = DateTime(
+          newStartDate.year,
+          newStartDate.month,
+          newStartDate.day,
+          newStartTime.hour,
+          newStartTime.minute,
+        );
+      }
+
+      // Show the end date picker
+      DateTime? newEndDate = await showDatePicker(
+        context: context,
+        initialDate: initialEndDate,
+        firstDate: DateTime(2023),
+        lastDate: DateTime(2030),
+      );
+      if (newEndDate != null) {
+        // Show the end time picker
+        TimeOfDay? newEndTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(initialEndDate),
+        );
+        if (newEndTime != null) {
+          newEndDate = DateTime(
+            newEndDate.year,
+            newEndDate.month,
+            newEndDate.day,
+            newEndTime.hour,
+            newEndTime.minute,
+          );
+        }
+
+        // Update the date range if both start and end dates are valid
+        if (newStartDate != null && newEndDate != null) {
+          newDateTimeRange =
+              DateTimeRange(start: newStartDate, end: newEndDate);
+          setState(() => dateRange = newDateTimeRange!);
+        }
+      }
+    }
+
+    return newDateTimeRange;
   }
 }
