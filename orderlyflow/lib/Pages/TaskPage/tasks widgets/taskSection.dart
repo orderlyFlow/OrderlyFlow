@@ -61,7 +61,7 @@ class _userTasksState extends State<userTasks> {
             Row(
               children: [
                 FutureBuilder(
-                    future: MongoDB.getInfo(),
+                    future: MongoDB.getTeamName()  ,
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('Error');
@@ -69,7 +69,7 @@ class _userTasksState extends State<userTasks> {
                         return Container(
                           margin: EdgeInsets.only(top: ScreenHeight * 0.01),
                           child: Text(
-                            '${snapshot.data['team']}',
+                            '${snapshot.data['name']}',
                             style: TextStyle(
                                 fontSize: ScreenHeight * 0.04,
                                 fontFamily: 'conthrax',
@@ -149,15 +149,17 @@ class _userTasksState extends State<userTasks> {
                       fontSize: ScreenHeight * 0.03,
                       fontFamily: "conthrax"),
                 ),
-                // SizedBox(width: ScreenWidth * 0.02,),
+                SizedBox(width: ScreenWidth * 0.3,),
                FutureBuilder(
-                    future: MongoDB.getInfo(),
+                    future: Future.wait([MongoDB.getIds(), MongoDB.getInfo(), MongoDB.fetchNamesForIds()]),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       } else if (snapshot.hasData) {
-                        int userID = snapshot.data['ID'];
-                        return addTaskButton(ID: userID);
+                        int userID = snapshot.data[1]['ID'];
+                        List<int> ids = snapshot.data[0] as List<int>;
+                        List<String> names = snapshot.data[2] as List<String>;
+                        return addTaskButton(ID: userID, ids: ids, names: names,);
                       } else {
                         return CircularProgressIndicator(
                           color: Colors.white,
@@ -184,7 +186,7 @@ class _userTasksState extends State<userTasks> {
                             value: task.status,
                             onChanged: (bool? value) {
                               if (value != null) {
-                                updateTask(task.ID, value);
+                                updateTask(task.ID!, value);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: value
@@ -207,12 +209,12 @@ class _userTasksState extends State<userTasks> {
                         // ),
                         Expanded(
                           child: Text(
-                            task.name,
+                            task.name!,
                             style: TextStyle(
                               fontFamily: 'iceland',
                               fontSize: ScreenHeight * 0.043,
                               color: Paletter.blackText,
-                              decoration: task.status
+                              decoration: task.status!
                                   ? TextDecoration.lineThrough
                                   : TextDecoration.none,
                             ),
@@ -227,7 +229,7 @@ class _userTasksState extends State<userTasks> {
                           height: ScreenHeight * 0.04,
                           width: ScreenWidth * 0.09,
                           decoration: BoxDecoration(
-                            color: task.status
+                            color: task.status!
                                 ? Color.fromRGBO(39, 174, 96, 1)
                                 : Color.fromRGBO(231, 76, 60, 1),
                             borderRadius:
@@ -235,7 +237,7 @@ class _userTasksState extends State<userTasks> {
                           ),
                           child: Center(
                             child: Text(
-                              task.status ? 'Complete' : 'Progress',
+                              task.status! ? 'Complete' : 'Progress',
                               style: TextStyle(
                                   fontSize: ScreenHeight * 0.035,
                                   fontFamily: 'iceland',

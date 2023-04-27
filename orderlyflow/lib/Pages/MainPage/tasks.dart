@@ -1,17 +1,17 @@
 class Tasks {
 
-  final int ID;
+  final int? ID;
 
-  final String name;
+  late final String? name;
 
-  late final bool status;
+  late final bool? status;
 
 
-  Tasks({required this.ID,required this.name, required this.status});
+  Tasks({required this.ID, required this.name, required this.status});
 
     @override
   String toString() {
-    return 'Task(name: $name, status: $status,)';
+    return 'Task(name?: $name!, status: $status,)';
   }
 
     Tasks copyWith({int? ID, String? name, bool? status}) {

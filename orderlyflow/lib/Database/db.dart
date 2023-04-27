@@ -60,7 +60,119 @@ class MongoDB {
     //await db.close();
   }
 
+
+  static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+    final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
+        as Map<String, dynamic>;
+    if (othersInformation != null) {
+      return othersInformation;
+    } else {
+      return null as Map<String, dynamic>;
+    }
+
+    //await db.close();
+  }
+
+  static Future<Map<String, dynamic>> getTasks() async{
+    var id= await getInfo();
+    var getID= id['ID'];
+     final db1 = await Mongo.Db.create(mongoDB_URL);
+    final col1 = db1.collection(tasksCol);
+    await db1.open();
+        final getuser = await col1
+        .find(where.eq('Employees', {
+          '\$elemMatch': {'\$eq': getID}
+        }))
+        .toList() as Map<String,dynamic>; 
+    return getuser;
+
+  }
+// get doc name
+  static Future<List<String>> getDocNames() async{
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(documentsCol);
+    await db1.open();
+    final docs = await coll.find().toList();
+    final docNames = docs.map((doc)=> doc['docName'] as String).toList();
+    return docNames;
+  }
+// get base 64 content
+  static Future<List<String>> getDocContent() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(documentsCol);
+    await db1.open();
+    final docs = await coll.find().toList();
+    final docContent = docs.map((doc) => doc['content'] as String).toList();
+    return docContent;
+  }
+
+  static Future<List<Tasks>> getTask() async {
+    var id = await getInfo();
+    var getId = id["ID"];
+    // print(getID);
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final col1 = db1.collection(tasksCol);
+    await db1.open();
+    final getuser = await col1
+        .find(where.eq('Employees', {
+          '\$elemMatch': {'\$eq': getId}
+        }))
+        .toList(); 
+    print(getuser
+        .map((e) =>
+            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
+        .toList());
+
+    return getuser
+        .map((e) =>
+            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
+        .toList();
+  }
+
+  static Future<Map<String,dynamic>> getTeams() async{
+    var id = await getInfo();
+    var directorID = id['ID'];
+    final db = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(teamsCol);
+    await db.open();
+    final info = await coll.findOne(Mongo.where.eq('director', directorID)) as Map<String, dynamic>;
+    return info;
+  }
+
+    static Future<List<String>> fetchNamesForIds() async {
+    var idlist = await getIds(); 
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(personsCol);
+    await db1.open();
+    List<String> names = <String>[];
+    Map<String, dynamic> document;
+    for (int i = 0; i < idlist.length; i++) {
+      document = await collection.findOne(Mongo.where.eq("ID", idlist[i]))
+          as Map<String, dynamic>;
+      names.add(document["name"]);
+    }
+
+    return names;
+  }
+
+
+  static Future<List<int>> getIds() async {
+    var ID = await getInfo();
+    var id = ID['ID'];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(teamsCol);
+    await db1.open();
+    final team = await coll.findOne(Mongo.where.eq("director", id));
+    final teamMembers = (team["members"] as List<dynamic>).cast<int>().toList();
+    return teamMembers;
+  }
+
+
   static Future<Map<String, dynamic>> getTasks() async {
+
     var id = await getInfo();
     var taskID = id["ID"];
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -71,6 +183,38 @@ class MongoDB {
         as Map<String, dynamic>;
 
     return information;
+  }
+
+  static Future<Map <String,dynamic>> getTeamName() async{
+    var id = await getInfo();
+    int team = id['ID'];
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(teamsCol);
+    await db1.open();
+
+    if(team.toString().startsWith('1')){
+      team = 100000;
+    } else if(team.toString().startsWith('2')){
+      team = 200000;
+    } else if(team.toString().startsWith('3')){
+      team = 300000;
+    } else if (team.toString().startsWith('4')){
+      team = 400000;
+    } else if(team.toString().startsWith('5')){
+      team = 500000;
+    } else if(team.toString().startsWith('6')){
+      team = 600000;
+    } else if(team.toString().startsWith('7')){
+      team = 700000;
+    } else if(team.toString().startsWith('8')){
+      team = 800000;
+    } else {
+      team = 900000;
+    }
+
+  final info =await coll.findOne(Mongo.where.eq("director", team)) as Map<String, dynamic>;
+  return info;
+
   }
 
   static Future<Map<String, dynamic>> getID() async {
