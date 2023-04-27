@@ -89,7 +89,6 @@ flutter:
   assets:
       - assets/images/
       - assets/images/OF.gif
-      - assets/word1.docx
 
   fonts:
       - family: conthrax
