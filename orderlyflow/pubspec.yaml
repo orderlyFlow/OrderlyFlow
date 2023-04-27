@@ -52,11 +52,16 @@ dependencies:
   bson: ^4.0.0
   email_auth: ^1.0.0
   flutter_termii: ^0.2.1
+  file_saver: ^0.2.1
+  downloads_path_provider_28: ^0.1.2
+  shared_preferences : ^2.1.0
   mailer: ^6.0.0
   http: ^0.13.5
   dotted_line: ^3.1.0
   pull_to_refresh: ^2.0.0
   downloads_path_provider_28: ^0.1.2
+  rxdart: ^0.27.7
+  skeleton_loader: ^2.0.0+4
 
 
 
@@ -85,7 +90,6 @@ flutter:
   assets:
       - assets/images/
       - assets/images/OF.gif
-      - assets/word1.docx
 
   fonts:
       - family: conthrax

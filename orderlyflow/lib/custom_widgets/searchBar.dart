@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -13,6 +14,7 @@ class SearchInput extends StatefulWidget {
 
 // ignore: prefer_const_constructors
 class _SearchInputState extends State<SearchInput> {
+  void callSearch() async {}
   @override
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
@@ -30,7 +32,6 @@ class _SearchInputState extends State<SearchInput> {
               fontSize: 0.027 * ScreenHeight,
             ),
             controller: StoreController.searchController.value,
-            onChanged: (value) {},
             cursorColor: Paletter.mainBg,
             decoration: InputDecoration(
               fillColor: Colors.grey[350],
@@ -42,13 +43,18 @@ class _SearchInputState extends State<SearchInput> {
               ),
               suffixIcon: IconButton(
                 icon: Icon(Icons.clear),
-                onPressed: () => StoreController.searchController.value.clear(),
+                onPressed: () {
+                  StoreController.isSearching.value = false;
+                  StoreController.searchController.value.clear();
+                },
               ),
               prefixIcon: IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () {
-                  var p = MongoDB.searchFor();
-                  print(p);
+                  if (StoreController.searchController != null &&
+                      StoreController.searchController.value.text.isNotEmpty) {
+                    StoreController.isSearching.value = true;
+                  }
                 },
               ),
               border: OutlineInputBorder(

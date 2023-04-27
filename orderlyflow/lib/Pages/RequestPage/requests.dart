@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orderlyflow/Database/db.dart';
+import 'package:orderlyflow/Pages/RequestPage/ListofRequest.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:orderlyflow/custom_widgets/BlueBg.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
@@ -16,35 +17,6 @@ class requests extends StatefulWidget {
 }
 
 class _requestsState extends State<requests> {
-  final String fileName = 'word1.docx';
-  final String name = "word1";
-  int downloadCount = 1;
-
-  Future<void> _downloadFile(BuildContext context) async {
-    // Get the app's documents directory
-    Directory documentsDir = await getApplicationDocumentsDirectory();
-
-    // Get the path to the asset file
-    String assetsPath = 'assets/' + fileName;
-    ByteData assetData = await rootBundle.load(assetsPath);
-
-    // Generate a unique filename based on the download count
-    String uniqueFileName = '$name-$downloadCount.docx';
-
-    // Increment the download count
-    downloadCount++;
-
-    // Write the asset file to the app's documents directory
-    File file = File('${documentsDir.path}/$uniqueFileName');
-    await file.writeAsBytes(assetData.buffer.asUint8List());
-    // Show a snackbar to indicate that the download is complete
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Download complete!'),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
@@ -105,65 +77,27 @@ class _requestsState extends State<requests> {
                               SizedBox(
                                 height: ScreenHeight * 0.02,
                               ),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: ScreenWidth * 0.02,
-                                            right: ScreenWidth * 0.02),
-                                        child: Container(
-                                          alignment: Alignment.topLeft,
-                                          height: ScreenHeight * 0.15,
-                                          width: ScreenWidth * 0.4,
-                                          decoration: BoxDecoration(
-                                            color: Paletter.containerLight,
-                                            borderRadius:
-                                                BorderRadius.circular(13),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: ScreenWidth * 0.006,
-                                                vertical: ScreenHeight * 0.03),
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/doc.png',
-                                                  width: ScreenHeight * 0.1,
-                                                ),
-                                                SizedBox(
-                                                  width: ScreenWidth * 0.01,
-                                                ),
-                                                Text(
-                                                  '${fileName}',
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          ScreenHeight * 0.03,
-                                                      fontFamily: 'conthrax',
-                                                      color:
-                                                          Paletter.blackText),
-                                                ),
-                                                SizedBox(
-                                                  width: ScreenWidth * 0.13,
-                                                ),
-                                                IconButton(
-                                                    onPressed: () {
-                                                      _downloadFile(context);
-                                                    },
-                                                    icon: Icon(Icons.download))
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: ScreenHeight * 0.02,
-                                      ),
-                       
-                                    ],
-                                  ),
-                                ),
+                              Container(
+                                child: FutureBuilder(
+                                    future: Future.wait([
+                                      MongoDB.getDocNames(),
+                                     
+                                    ]),
+                                    builder: (buildContext,
+                                        AsyncSnapshot snapshot) {
+                                      if (snapshot.hasError) {
+                                        return Text('${snapshot.error}');
+                                      } else if (snapshot.hasData) {
+                                        List<String> docNames =
+                                            snapshot.data[0];                               
+                                        return requestList(docNames: docNames);
+                                      } else {
+                                        return CircularProgressIndicator(
+                                          color: Colors.white,
+                                          
+                                        );
+                                      }
+                                    }),
                               )
                             ],
                           ),
