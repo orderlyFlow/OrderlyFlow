@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
+import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -69,9 +70,43 @@ class MongoDB {
     //await db.close();
   }
 
+  static Future<Map<String, dynamic>> getTasks() async{
+    var id= await getInfo();
+    var getID= id['ID'];
+     final db1 = await Mongo.Db.create(mongoDB_URL);
+    final col1 = db1.collection(tasksCol);
+    await db1.open();
+        final getuser = await col1
+        .find(where.eq('Employees', {
+          '\$elemMatch': {'\$eq': getID}
+        }))
+        .toList() as Map<String,dynamic>; 
+    return getuser;
+
+  }
+// get doc name
+  static Future<List<String>> getDocNames() async{
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(documentsCol);
+    await db1.open();
+    final docs = await coll.find().toList();
+    final docNames = docs.map((doc)=> doc['docName'] as String).toList();
+    return docNames;
+  }
+// get base 64 content
+  static Future<List<String>> getDocContent() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(documentsCol);
+    await db1.open();
+    final docs = await coll.find().toList();
+    final docContent = docs.map((doc) => doc['content'] as String).toList();
+    return docContent;
+  }
+
   static Future<List<Tasks>> getTask() async {
     var id = await getInfo();
     var getId = id["ID"];
+    // print(getID);
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final col1 = db1.collection(tasksCol);
     await db1.open();
@@ -79,7 +114,11 @@ class MongoDB {
         .find(where.eq('Employees', {
           '\$elemMatch': {'\$eq': getId}
         }))
-        .toList();
+        .toList(); 
+    print(getuser
+        .map((e) =>
+            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
+        .toList());
 
     return getuser
         .map((e) =>

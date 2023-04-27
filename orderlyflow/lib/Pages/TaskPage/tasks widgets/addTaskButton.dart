@@ -43,7 +43,7 @@ class _addTaskButtonState extends State<addTaskButton> {
     while (idList.contains(ID)) {
       ID++;
     }
-    late String taskName = tasksController.text;
+    late String? taskName = tasksController.text ;
     addTask(ID, taskName, pickedIds);
     Navigator.of(context).pop(pickedIds);
     Navigator.pushReplacement(

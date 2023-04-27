@@ -26,7 +26,7 @@ class _userProgressState extends State<userProgress> {
   void initState(){
     super.initState();
     for (var task in widget.taskInfo){
-      values.add(task.status);
+      values.add(task.status!);
     }
     int trueCount =values.where((element) => element ==  true).length;
     percent= trueCount / values.length;
