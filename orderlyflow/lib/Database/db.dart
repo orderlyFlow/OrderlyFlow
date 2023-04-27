@@ -76,20 +76,7 @@ class MongoDB {
     //await db.close();
   }
 
-  static Future<Map<String, dynamic>> getTasks() async{
-    var id= await getInfo();
-    var getID= id['ID'];
-     final db1 = await Mongo.Db.create(mongoDB_URL);
-    final col1 = db1.collection(tasksCol);
-    await db1.open();
-        final getuser = await col1
-        .find(where.eq('Employees', {
-          '\$elemMatch': {'\$eq': getID}
-        }))
-        .toList() as Map<String,dynamic>; 
-    return getuser;
 
-  }
 // get doc name
   static Future<List<String>> getDocNames() async{
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -456,18 +443,7 @@ class MongoDB {
     return document;
   }
 
-  static Future<List<String>> getDocNames() async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final collection = db1.collection(documentsCol);
-    await db1.open();
 
-    final docs = await collection.find().toList();
-
-    final docNames = docs.map((doc) => doc['docName'] as String).toList();
-    // await db.close();
-
-    return docNames;
-  }
 
   /* static void updateStatus(String taskname) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -479,21 +455,6 @@ class MongoDB {
     print("called");
     //not working ( most likely wrong query)
   }*/
-
-  static Future<List<String>> fetchNamesForIds(List<int> idList) async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final collection = db1.collection(personsCol);
-    await db1.open();
-    List<String> names = <String>[];
-    Map<String, dynamic> document;
-    for (int i = 0; i < idList.length; i++) {
-      document = await collection.findOne(where.eq("ID", idList[i]))
-          as Map<String, dynamic>;
-      names.add(document["name"]);
-    }
-
-    return names;
-  }
 
   static Future<List<dynamic>> getEmployeesByTeamId(int teamId) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -609,38 +570,9 @@ class MongoDB {
     return salary;
   }
 
-  static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(personsCol);
-    await db1.open();
-    final othersInformation = await coll.findOne(Mongo.where.eq("ID", Rec_ID))
-        as Map<String, dynamic>;
-    if (othersInformation != null) {
-      return othersInformation;
-    } else {
-      return null as Map<String, dynamic>;
-    }
 
-    //await db.close();
-  }
 
-  static Future<List<Tasks>> getTask() async {
-    var id = await getInfo();
-    var getId = id["ID"];
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final col1 = db1.collection(tasksCol);
-    await db1.open();
-    final getuser = await col1
-        .find(where.eq('Employees', {
-          '\$elemMatch': {'\$eq': getId}
-        }))
-        .toList();
 
-    return getuser
-        .map((e) =>
-            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
-        .toList();
-  }
 
   static void addSearchedUserToDB() {
     final coll = db.collection(chatsCol);
