@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
-import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';

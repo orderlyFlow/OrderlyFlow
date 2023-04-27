@@ -57,14 +57,14 @@ class _addTaskButtonState extends State<addTaskButton> {
   }
 
   static Future<void> addTask(
-      int TaskID, String taskname, List<int> employees) async {
+    int TaskID, String taskname, List<int> employees) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final collection = db1.collection(tasksCol);
     await db1.open();
 
     final document = {
       "TaskID": TaskID,
-      "taskname": taskname,
+      "taskName": taskname,
       "Employees": employees,
       "status": false
     };

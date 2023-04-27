@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orderlyflow/Database/db.dart';
-import 'package:orderlyflow/Pages/RequestPage/ListofRequests.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:orderlyflow/custom_widgets/BlueBg.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
@@ -161,27 +160,7 @@ class _requestsState extends State<requests> {
                                       SizedBox(
                                         height: ScreenHeight * 0.02,
                                       ),
-                                      FutureBuilder(
-                                          future: Future.wait([
-                                            MongoDB.getDocNames(),
-                                            MongoDB.getDocContent()
-                                          ]),
-                                          builder: (buildContext,
-                                              AsyncSnapshot snapshot) {
-                                            if (snapshot.hasError) {
-                                              return Text('${snapshot.error}');
-                                            } else if (snapshot.hasData) {
-                                              List<String> docNames =
-                                                  snapshot.data[0];
-                                              List<String> docContent = 
-                                                  snapshot.data[1];
-                                              return requestList(docContent: docContent, docNames: docNames);
-                                            } else {
-                                              return CircularProgressIndicator(
-                                                color: Colors.white,
-                                              );
-                                            }
-                                          })
+                       
                                     ],
                                   ),
                                 ),
