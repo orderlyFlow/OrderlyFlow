@@ -63,12 +63,12 @@ class _tasksState extends State<tasks> {
             child: CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
-                  task.name,
+                  task.name!,
                   style: TextStyle(
                     fontFamily: 'iceland',
                     fontSize: ScreenHeight * 0.03,
                     color: Paletter.blackText,
-                    decoration: task.status
+                    decoration: task.status!
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
                   ),
@@ -76,7 +76,7 @@ class _tasksState extends State<tasks> {
                 value: task.status,
                 onChanged: (bool? value) {
                   if (value != null) {
-                    updateTask(task.ID, value);
+                    updateTask(task.ID!, value);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: value
                             ? Text('Task Complete')

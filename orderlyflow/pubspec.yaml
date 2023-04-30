@@ -47,7 +47,7 @@ dependencies:
   url_launcher: ^6.1.10
   open_file: ^3.2.1
   permission_handler: ^10.2.0
-  path_provider: ^2.0.13
+  path_provider: ^2.0.14
   flutter_downloader: ^1.10.2
   bson: ^4.0.0
   email_auth: ^1.0.0
@@ -89,7 +89,6 @@ flutter:
   assets:
       - assets/images/
       - assets/images/OF.gif
-      - assets/word1.docx
 
   fonts:
       - family: conthrax
