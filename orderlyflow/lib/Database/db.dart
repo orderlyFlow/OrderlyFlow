@@ -199,14 +199,19 @@ class MongoDB {
     final persons = db.collection(personsCol);
     List<List<int>> users = [];
     List<dynamic> recList = [];
-
+    List<dynamic> groups = [];
     var usersList = await recentChat.find({
       'users': int.parse(StoreController.ID_controller.value.text.trim())
     }).toList();
 
     usersList.forEach((item) {
-      if (item.containsKey('users')) {
+      if (item.containsKey('users') && item['isGroup'] == false) {
+        //print(item['isGroup'].toString());
         users.add(List<int>.from(item['users']));
+      } else {
+        if (item.containsKey('users') && item['isGroup'] == true) {
+          groups.add(item);
+        }
       }
     });
 
@@ -215,7 +220,6 @@ class MongoDB {
     users.forEach((subList) {
       flattenedList.addAll(subList);
     });
-
     flattenedList.removeWhere((number) =>
         number == int.parse(StoreController.ID_controller.value.text.trim()));
     if (flattenedList.isNotEmpty) {
@@ -225,6 +229,9 @@ class MongoDB {
           recList.add(user);
         }
       }
+      groups.forEach((subList) {
+        recList.addAll(subList);
+      });
 
       return List<Map<String, dynamic>>.from(recList);
     } else {
@@ -257,7 +264,7 @@ class MongoDB {
     int searchedU = StoreController.Searched_ID.value;
     Map<String, dynamic> doc = {
       "users": [sender, searchedU],
-      "type": "private",
+      "isGroup": false,
       "Lastupdated": DateTime.now(),
     };
     coll.insertOne(doc);
@@ -329,33 +336,23 @@ class MongoDB {
     return sal_info;
   }
 
-  static Future<List<Map<String, dynamic>>> getEvent() async {
-    final coll = db.collection(eventsCol);
-    //List<List<int>> users = [];
-    //List<dynamic> recList = [];
-
-    var eventsList = await coll.find({
-      'participants': int.parse(StoreController.ID_controller.value.text.trim())
-    }).toList();
-
-    if (eventsList != null) {
-      return eventsList;
-    } else {
-      return [];
-    }
-  }
-
-  static Future<List> getEventsOnSelectedDate(DateTime selectedDate) async {
+  static Stream<List<Map<String, dynamic>>> getEventsOnSelectedDate(
+      DateTime selectedDate) async* {
     final eventsCollection = db.collection(eventsCol);
 
-    final events = await eventsCollection.find({
-      'date': {
-        '\$gte': selectedDate.toUtc(),
-        '\$lt': selectedDate.add(Duration(days: 1)).toUtc(),
-      }
-    }).toList();
+    final startDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day)
+            .toUtc();
+    final endDate = startDate.add(Duration(days: 1));
+    //print("DBBBBBB");
+    //print(selectedDate.toString());
+    final events = await eventsCollection
+        .find(where.gte('startTime', startDate).lt('startTime', endDate))
+        .toList();
+    Stream<List<Map<String, dynamic>>> eventsStream =
+        Stream.fromIterable([events]);
 
-    return events;
+    yield* eventsStream;
   }
 
   static bool isDirectorLogin(int n) {

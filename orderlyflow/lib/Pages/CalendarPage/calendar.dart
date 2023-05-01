@@ -21,11 +21,18 @@ class calendar extends StatefulWidget {
 class _calendarState extends State<calendar> {
   DateTime today = DateTime.now();
   List events = [];
+  late Stream<List<Map<String, dynamic>>> _eventsStream =
+      MongoDB.getEventsOnSelectedDate(today);
   final _formKey = GlobalKey<FormState>();
   DateTimeRange dateRange = DateTimeRange(
     start: DateTime(2023, 06, 05),
     end: DateTime(2023, 06, 30),
   );
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +43,7 @@ class _calendarState extends State<calendar> {
     TextEditingController loc_controller = new TextEditingController();
     TextEditingController part_controller = new TextEditingController();
     TextEditingController desc_controller = new TextEditingController();
+    //Future? _future = MongoDB.getEventsOnSelectedDate(today);
     final start = dateRange.start;
     final end = dateRange.end;
     return Scaffold(
@@ -125,11 +133,10 @@ class _calendarState extends State<calendar> {
                       selectedDayPredicate: (day) => isSameDay(day, today),
                       onDaySelected: (today, focusedDay) {
                         setState(() {
-                          today = today;
+                          today = focusedDay;
+                          _eventsStream =
+                              MongoDB.getEventsOnSelectedDate(today);
                         });
-                        //int day = today.day;
-                        MongoDB.getEventsOnSelectedDate(today);
-                        //print(day.toString());
                       },
                     ),
                   ),
@@ -144,27 +151,28 @@ class _calendarState extends State<calendar> {
                       color: Paletter.mainBgLight,
                       borderRadius: BorderRadius.circular(10)),
                   /////////////////////////////events/////////////////////////////////////
-                  child: FutureBuilder(
-                      future: MongoDB.getEvent(),
-                      builder: (buildContext, AsyncSnapshot snapshot) {
+                  child: StreamBuilder<List<Map<String, dynamic>>>(
+                      stream: _eventsStream,
+                      builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        } else if (snapshot.hasData) {
-                          var meetings = snapshot.data;
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        }
+                        if (ConnectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          var meetings = snapshot.data!.toList();
                           return ListView.builder(
                             itemCount: meetings.length,
                             itemBuilder: (BuildContext context, int index) {
                               final meeting = meetings[index];
-                              // DateTime dateTime =
-                              //   DateFormat('yyyy-MM-ddTHH:mm:ssZ')
-                              //     .parse(meeting['startTime']);
                               String startTime = DateFormat('HH:mm a')
                                   .format(meeting['startTime']);
                               String endTime = DateFormat('HH:mm a')
                                   .format(meeting['endTime']);
-                              // int day =
-                              //   dateTime.day; // extract the day component
-                              //int month = dateTime.month;
                               return Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: screenHeight * 0.02),
@@ -341,29 +349,10 @@ class _calendarState extends State<calendar> {
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                             ),
-                                            child:
-                                                /////////////////////////////////////////////////////////////////////////
-                                                Row(
+                                            child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                /*Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        screenWidth * 0,
-                                                        screenHeight * 0,
-                                                        screenWidth * 0,
-                                                        screenHeight * 0),
-                                                    width: screenWidth * 0.07,
-                                                    height: screenHeight * 0.15,
-                                                    child: FittedBox(
-                                                      fit: BoxFit
-                                                          .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
-                                                      child: Image(
-                                                        image: MemoryImage(
-                                                            meeting['icon']),
-                                                      ),
-                                                    ),
-                                                  ),*/
                                                 Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -377,21 +366,6 @@ class _calendarState extends State<calendar> {
                                                         fontFamily: 'conthrax',
                                                       ),
                                                     ),
-                                                    /*SizedBox(
-                                                          height: screenHeight *
-                                                              0.015),
-                                                      Text(
-                                                        meeting[
-                                                            'eventDescription'],
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              screenHeight *
-                                                                  0.018,
-                                                          color: Colors.black87,
-                                                          fontFamily:
-                                                              'conthrax',
-                                                        ),
-                                                      ),*/
                                                     SizedBox(
                                                         height: screenHeight *
                                                             0.015),
@@ -429,14 +403,6 @@ class _calendarState extends State<calendar> {
                                 ]),
                               );
                             },
-                          );
-                        } else {
-                          return Container(
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Paletter.gradiant3,
-                              ),
-                            ),
                           );
                         }
                       }),

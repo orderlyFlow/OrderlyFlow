@@ -12,6 +12,7 @@ import 'package:orderlyflow/Pages/TaskPage/tasks.dart';
 import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../Pages/ManualPage/HelpManual.dart';
 import '../Pages/UserInfoPage/employeeData.dart';
 
 class SideBar extends StatefulWidget {
@@ -247,7 +248,7 @@ class _SideBarState extends State<SideBar> {
                       context,
                       PageTransition(
                           childCurrent: const myTasks(),
-                          child: myTasks(),
+                          child: helpManual(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
                 },

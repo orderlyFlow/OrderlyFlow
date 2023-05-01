@@ -21,6 +21,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../custom_widgets/BlueBg.dart';
 import '../../custom_widgets/palette.dart';
 import '../../custom_widgets/side_bar.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key});
@@ -33,11 +34,15 @@ class chatPageState extends State<chatPage> {
   bool isHovered = false;
   bool isVisible = false;
   bool isSearch = StoreController.isSearching.value;
+  bool isListening = false;
   var newMessage;
   Future<List<Map<String, dynamic>>>? receiversList;
-  //var db;
   Future? _future;
+  late StreamController<List<Map<String, dynamic>>> _streamController =
+      StreamController<List<Map<String, dynamic>>>();
   var searchedUser;
+  SpeechToText _speech = SpeechToText();
+  String text = '';
 
   Future<dynamic> sendData(int Rec_ID) async {
     final data1 = await MongoDB.getPersonByID(Rec_ID);
@@ -47,24 +52,6 @@ class chatPageState extends State<chatPage> {
     }
   }
 
-  /*Stream<List<Map<String, dynamic>>> getMessageStream() async* {
-    db = await Mongo.Db.create(mongoDB_URL);
-    int id = int.parse(StoreController.ID_controller.value.text.trim());
-    await db.open();
-    final messages = await db
-        .collection('ChatsHistory')
-        .find(Mongo.where.eq("sender", id).or(Mongo.where.eq("receiver", id)))
-        .toList();
-    var newMessage = MongoDB.sendMsg();
-    if (StoreController.isSendingMessage == true) {
-      messages.add(newMessage);
-    }
-    Stream<List<Map<String, dynamic>>> messageStream =
-        Stream.fromIterable([messages]);getMessageStream
-    yield* messageStream;
-  }*/
-  late StreamController<List<Map<String, dynamic>>> _streamController =
-      StreamController<List<Map<String, dynamic>>>();
   Stream<List<Map<String, dynamic>>> getMessageStream() async* {
     db = await Mongo.Db.create(mongoDB_URL);
     int id = int.parse(StoreController.ID_controller.value.text.trim());
@@ -90,10 +77,6 @@ class chatPageState extends State<chatPage> {
     }
   }
 
-  void disposeOfStream() {
-    _streamController.close();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -110,9 +93,6 @@ class chatPageState extends State<chatPage> {
     }
   }
 
-  /*void onEntered(bool isHovered) => setState(() {
-        this.isHovered = isHovered;
-      });*/
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -279,9 +259,6 @@ class chatPageState extends State<chatPage> {
                                                               !isVisible;
                                                         });
                                                         _future = sendData(id);
-                                                        //if (isVisible == false) {
-                                                        //disposeOfStream();
-                                                        //}
                                                       },
                                                       visualDensity:
                                                           VisualDensity(
@@ -731,12 +708,12 @@ class chatPageState extends State<chatPage> {
                                   fontSize: 0.027 * screenHeight),
                               fillColor: Colors.grey[350],
                               filled: true,
-                              prefixIcon: IconButton(
-                                  onPressed: () => MongoDB,
+                              /*prefixIcon: IconButton(
+                                  onPressed: _listen,
                                   icon: Icon(
-                                    Icons.attach_file_rounded,
+                                    isListening ? Icons.mic : Icons.mic_none,
                                     color: Paletter.containerDark,
-                                  )),
+                                  )),*/
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   Icons.send_rounded,

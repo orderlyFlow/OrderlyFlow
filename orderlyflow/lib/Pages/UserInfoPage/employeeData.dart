@@ -69,6 +69,11 @@ class employeeDataState extends State<employeeData> {
                                     screenHeight * 0.05),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Paletter.gradiant3,
+                                    ),
+                                  ),
                                 ),
                               )),
                           ///////////////////////Employee Info///////////////////////
@@ -94,6 +99,11 @@ class employeeDataState extends State<employeeData> {
                                         screenHeight * 0.01),
                                     width: screenWidth * 0.12,
                                     height: screenHeight * 0.15,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: Paletter.gradiant3,
+                                      ),
+                                    ),
                                   ),
                                   Align(
                                       alignment: Alignment.centerLeft,
@@ -216,6 +226,11 @@ class employeeDataState extends State<employeeData> {
                                           screenHeight * 0.0,
                                           screenWidth * 0,
                                           screenHeight * 0.03),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: Paletter.gradiant3,
+                                        ),
+                                      ),
                                     )),
                                 SizedBox(
                                   height: screenHeight * 0.033,
@@ -239,6 +254,11 @@ class employeeDataState extends State<employeeData> {
                                           top: 20.0,
                                           right: 30.0,
                                           bottom: 20.0),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: Paletter.gradiant3,
+                                        ),
+                                      ),
                                     )),
                                 SizedBox(
                                   height: screenHeight * 0.031,
@@ -260,6 +280,11 @@ class employeeDataState extends State<employeeData> {
                                   decoration: BoxDecoration(
                                     color: Color.fromARGB(255, 86, 96, 96),
                                     borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Paletter.gradiant3,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -306,7 +331,7 @@ class employeeDataState extends State<employeeData> {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "Bonus Percentage:     ${salaryInfo['bonus']}\n\n"
+                                      "Bonus Percentage:     ${salaryInfo['bonus']}%\n\n"
                                       "After Bonus:       $bonus",
                                       style: TextStyle(
                                         fontSize: screenHeight * 0.035,
