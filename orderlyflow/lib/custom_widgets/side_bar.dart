@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:orderlyflow/Pages/HrPage/HRpage.dart';
 import 'package:orderlyflow/announcement.dart';
 import 'package:orderlyflow/Pages/CalendarPage/calendar.dart';
 import 'package:orderlyflow/Pages/ChatPage/chatPage.dart';
@@ -9,6 +10,7 @@ import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/Pages/RequestPage/requests.dart';
 import 'package:bson/bson.dart';
 import 'package:orderlyflow/Pages/TaskPage/tasks.dart';
+import 'package:orderlyflow/Pages/HrPage/HRpage.dart';
 import 'package:orderlyflow/Database/db.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -71,7 +73,7 @@ class _SideBarState extends State<SideBar> {
                               Navigator.push(
                                   context,
                                   PageTransition(
-                                      childCurrent: const employeeData(),
+                                      //childCurrent: const employeeData(),
                                       child: employeeData(),
                                       type: PageTransitionType.theme,
                                       duration: const Duration(seconds: 2)));
@@ -124,7 +126,7 @@ class _SideBarState extends State<SideBar> {
                     Navigator.push(
                         context,
                         PageTransition(
-                            childCurrent: const SideBar(),
+                            //childCurrent: const SideBar(),
                             child: mainPage(),
                             type: PageTransitionType.theme,
                             duration: const Duration(seconds: 2)));
@@ -148,7 +150,7 @@ class _SideBarState extends State<SideBar> {
                     Navigator.push(
                         context,
                         PageTransition(
-                            childCurrent: const chatPage(),
+                            //childCurrent: const chatPage(),
                             child: const chatPage(),
                             type: PageTransitionType.theme,
                             duration: const Duration(seconds: 2)));
@@ -172,7 +174,7 @@ class _SideBarState extends State<SideBar> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          childCurrent: const calendar(),
+                          //childCurrent: const calendar(),
                           child: calendar(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
@@ -195,7 +197,7 @@ class _SideBarState extends State<SideBar> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          childCurrent: const myTasks(),
+                          //childCurrent: const myTasks(),
                           child: myTasks(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));
@@ -222,7 +224,7 @@ class _SideBarState extends State<SideBar> {
                     Navigator.push(
                         context,
                         PageTransition(
-                            childCurrent: const requests(),
+                            //childCurrent: const requests(),
                             child: requests(),
                             type: PageTransitionType.theme,
                             duration: const Duration(seconds: 2)));
@@ -247,7 +249,7 @@ class _SideBarState extends State<SideBar> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          childCurrent: const myTasks(),
+                          //childCurrent: const HRpage(),
                           child: helpManual(),
                           type: PageTransitionType.theme,
                           duration: const Duration(seconds: 2)));

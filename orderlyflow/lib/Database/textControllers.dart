@@ -16,6 +16,9 @@ class StoreController extends GetxController {
       StreamController<List<Map<String, dynamic>>>.broadcast();
   static Future<List<Map<String, dynamic>>>? searchedEmployee;
   static List<Map<String, dynamic>> input = [];
+  static List<int> individualRec = [];
+  static List<Map<String, dynamic>> indRec = [];
+  static List<Map<String, dynamic>> groups = [];
 
   static RxInt Rec_ID = 0.obs;
   static RxInt Searched_ID = 0.obs;
@@ -28,4 +31,6 @@ class StoreController extends GetxController {
   static RxBool Login_found = false.obs;
   static RxBool isSearching = false.obs;
   static RxBool isSendingMessage = false.obs;
+  static RxDouble onSiteRatio = 0.0.obs;
+  static RxDouble remoteRatio = 0.0.obs;
 }

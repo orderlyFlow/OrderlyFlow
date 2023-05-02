@@ -372,7 +372,81 @@ class MongoDB {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> renderReceivers() async {
+  static Future<List<int>> renderReceivers() async {
+    final recentChat = db.collection(chatsCol);
+    List<List<int>> users = [];
+    List<int> rec = [];
+    var usersList = await recentChat.find({
+      'users': int.parse(StoreController.ID_controller.value.text.trim())
+    }).toList();
+    usersList.forEach((item) {
+      if (item.containsKey('users') && item['isGroup'] == false) {
+        users.add(List<int>.from(item['users']));
+      } else {
+        if (item.containsKey('users') && item['isGroup'] == true) {
+          StoreController.groups.add(item);
+        }
+      }
+    });
+    users.forEach((subList) {
+      rec.addAll(subList);
+    });
+    rec.removeWhere((number) =>
+        number == int.parse(StoreController.ID_controller.value.text.trim()));
+    return rec;
+  }
+
+  static Future<List<Map<String, dynamic>>> fetchAll() async {
+    final coll = db.collection(personsCol);
+    await db.open();
+
+    final pers_info = await coll.find().toList();
+    if (pers_info != null) {
+      return pers_info;
+    } else {
+      return [];
+    }
+  }
+
+  static Future<dynamic> pieChartValues() async {
+    List<Map<String, dynamic>> persons = await fetchAll();
+    int total = persons.length;
+    int onSite = 0, away = 0;
+    for (var person in persons) {
+      if (person['status'] == "Remotely") {
+        away = away + 1;
+      } else {
+        if (person['status'] == "On site") {
+          onSite = onSite + 1;
+        }
+      }
+    }
+    StoreController.remoteRatio.value = away / total;
+    StoreController.onSiteRatio.value = onSite / total;
+  }
+
+  static Future<List<Map<String, dynamic>>> getIndRec() async {
+    final persons = db.collection(personsCol);
+    List<int> individualRec = await renderReceivers();
+    //var flattenedList = List.from(individualRec);
+    List<Map<String, dynamic>> recPers = [];
+    if (individualRec.isNotEmpty) {
+      for (var receiver in individualRec) {
+        print(receiver.toString());
+        var user = persons.findOne(where.eq("ID", receiver));
+        if (user != null) {
+          print(user['name']);
+          recPers.add(user);
+        }
+      }
+      var recList = (StoreController.groups + recPers);
+      return List<Map<String, dynamic>>.from(recList);
+    } else {
+      return [];
+    }
+  }
+
+  /*static Future<List<Map<String, dynamic>>> renderReceivers() async {
     final recentChat = db.collection(chatsCol);
     final persons = db.collection(personsCol);
     List<List<int>> users = [];
@@ -384,7 +458,6 @@ class MongoDB {
 
     usersList.forEach((item) {
       if (item.containsKey('users') && item['isGroup'] == false) {
-        //print(item['isGroup'].toString());
         users.add(List<int>.from(item['users']));
       } else {
         if (item.containsKey('users') && item['isGroup'] == true) {
@@ -415,7 +488,7 @@ class MongoDB {
     } else {
       return [];
     }
-  }
+  }*/
 
   static Future<Map<String, dynamic>> getNotes() async {
     var id = await getInfo();

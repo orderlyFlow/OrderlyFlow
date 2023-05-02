@@ -35,6 +35,7 @@ class chatPageState extends State<chatPage> {
   bool isVisible = false;
   bool isSearch = StoreController.isSearching.value;
   bool isListening = false;
+  //List<Map<String, dynamic>> receiversList=[];
   var newMessage;
   Future<List<Map<String, dynamic>>>? receiversList;
   Future? _future;
@@ -81,7 +82,8 @@ class chatPageState extends State<chatPage> {
   void initState() {
     super.initState();
     isHovered = false;
-    receiversList = MongoDB.renderReceivers();
+    receiversList = MongoDB.getIndRec();
+    ;
   }
 
   void searchHandler() {

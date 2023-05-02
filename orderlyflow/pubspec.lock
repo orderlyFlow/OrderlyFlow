@@ -288,6 +288,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.5"
+  glass:
+    dependency: "direct main"
+    description:
+      name: glass
+      sha256: "21bc231f98f14be381f0022d99b56326075a3645122c59dc8124c9b8bd9ac337"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1+1"
   glassmorphism:
     dependency: "direct main"
     description:
@@ -552,6 +560,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.2"
+  pie_chart:
+    dependency: "direct main"
+    description:
+      name: pie_chart
+      sha256: "5dba6d0eb4718e8ed00a9079361cd8947c3f84ac5a5d76f05a27f4ec5e27589e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.3.2"
   platform:
     dependency: "direct main"
     description:
