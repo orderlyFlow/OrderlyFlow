@@ -339,13 +339,10 @@ class MongoDB {
   static Stream<List<Map<String, dynamic>>> getEventsOnSelectedDate(
       DateTime selectedDate) async* {
     final eventsCollection = db.collection(eventsCol);
-
     final startDate =
         DateTime(selectedDate.year, selectedDate.month, selectedDate.day)
             .toUtc();
     final endDate = startDate.add(Duration(days: 1));
-    //print("DBBBBBB");
-    //print(selectedDate.toString());
     final events = await eventsCollection
         .find(where.gte('startTime', startDate).lt('startTime', endDate))
         .toList();

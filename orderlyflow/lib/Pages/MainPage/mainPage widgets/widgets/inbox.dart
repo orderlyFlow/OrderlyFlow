@@ -77,7 +77,7 @@ class _inboxState extends State<inbox> {
           ),
           Container(
             width: ScreenWidth * 0.6,
-            height: ScreenHeight * 0.18,
+            height: ScreenHeight * 0.19,
             alignment: Alignment.topLeft,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
@@ -89,15 +89,10 @@ class _inboxState extends State<inbox> {
               child: Text(
                 _joke,
                 style: TextStyle(
-                    fontFamily: 'neuropol',
-                    fontSize: ScreenHeight * 0.033,
-                    color: Color.fromRGBO(20, 70, 103, 1),
-                    shadows: <Shadow>[
-                      Shadow(
-                          offset: Offset(0.8, 2.0),
-                          blurRadius: 3,
-                          color: Color.fromARGB(122, 35, 35, 35))
-                    ]),
+                  fontFamily: 'iceland',
+                  fontSize: ScreenHeight * 0.04,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),

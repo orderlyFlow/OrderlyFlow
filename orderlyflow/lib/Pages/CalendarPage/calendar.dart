@@ -133,7 +133,7 @@ class _calendarState extends State<calendar> {
                       selectedDayPredicate: (day) => isSameDay(day, today),
                       onDaySelected: (today, focusedDay) {
                         setState(() {
-                          today = focusedDay;
+                          today = today;
                           _eventsStream =
                               MongoDB.getEventsOnSelectedDate(today);
                         });
@@ -158,252 +158,151 @@ class _calendarState extends State<calendar> {
                           return Center(
                             child: Text('Error: ${snapshot.error}'),
                           );
-                        }
-                        if (ConnectionState == ConnectionState.waiting) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
                         } else {
-                          var meetings = snapshot.data!.toList();
-                          return ListView.builder(
-                            itemCount: meetings.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final meeting = meetings[index];
-                              String startTime = DateFormat('HH:mm a')
-                                  .format(meeting['startTime']);
-                              String endTime = DateFormat('HH:mm a')
-                                  .format(meeting['endTime']);
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: screenHeight * 0.02),
-                                child: Column(children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Time on left
-                                      Column(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '08:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '09:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '10:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '11:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '12:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '01:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '02:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '03:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0),
-                                            child: Text(
-                                              '04:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      // Meeting name and dotted line
-                                      Column(
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            var meetings = snapshot.data!.toList();
+                            if (meetings.isEmpty) {
+                              return Center(
+                                child: Text(
+                                  '<<<No events>>>',
+                                  style: TextStyle(
+                                    fontSize: screenHeight * 0.018,
+                                    color: Colors.black87,
+                                    fontFamily: 'conthrax',
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return ListView.builder(
+                                itemCount: meetings.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final meeting = meetings[index];
+                                  Duration offset =
+                                      DateTime.now().timeZoneOffset;
+                                  DateTime startUTC = meeting['startTime'];
+                                  DateTime endUTC = meeting['endTime'];
+                                  DateTime localStartTime =
+                                      startUTC.add(offset);
+                                  DateTime localEndTime = endUTC.add(offset);
+                                  String startTime = DateFormat('HH:mm a')
+                                      .format(localStartTime);
+                                  String endTime = DateFormat('HH:mm a')
+                                      .format(localEndTime);
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: screenHeight * 0.02),
+                                    child: Column(children: [
+                                      Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            height: screenHeight * 0.12,
-                                            margin: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.01,
-                                                screenHeight * 0,
-                                                screenWidth * 0,
-                                                screenHeight * 0),
-                                            width: screenWidth * 0.767,
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.014,
-                                                screenHeight * 0.014,
-                                                screenWidth * 0.014,
-                                                screenHeight * 0.014),
-                                            decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 117, 165, 204),
-                                              border: Border.all(
+                                          // Meeting name and dotted line
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height: screenHeight * 0.12,
+                                                margin: EdgeInsets.fromLTRB(
+                                                    screenWidth * 0.018,
+                                                    screenHeight * 0,
+                                                    screenWidth * 0,
+                                                    screenHeight * 0),
+                                                width: screenWidth * 0.87,
+                                                padding: EdgeInsets.fromLTRB(
+                                                    screenWidth * 0.014,
+                                                    screenHeight * 0.014,
+                                                    screenWidth * 0.014,
+                                                    screenHeight * 0.014),
+                                                decoration: BoxDecoration(
                                                   color: Color.fromARGB(
-                                                      255, 117, 165, 204)),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Column(
+                                                      255, 117, 165, 204),
+                                                  border: Border.all(
+                                                      color: Color.fromARGB(
+                                                          255, 117, 165, 204)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      meeting['title'],
-                                                      style: TextStyle(
-                                                        fontSize: screenHeight *
-                                                            0.025,
-                                                        color: Colors.black87,
-                                                        fontFamily: 'conthrax',
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                        height: screenHeight *
-                                                            0.015),
-                                                    Text(
-                                                      startTime +
-                                                          " - " +
-                                                          endTime,
-                                                      style: TextStyle(
-                                                        fontSize: screenHeight *
-                                                            0.018,
-                                                        color: Colors.black87,
-                                                        fontFamily: 'conthrax',
-                                                      ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          meeting['title'],
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                screenHeight *
+                                                                    0.025,
+                                                            color:
+                                                                Colors.black87,
+                                                            fontFamily:
+                                                                'conthrax',
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                            height:
+                                                                screenHeight *
+                                                                    0.015),
+                                                        Text(
+                                                          startTime +
+                                                              " - " +
+                                                              endTime,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                screenHeight *
+                                                                    0.018,
+                                                            color:
+                                                                Colors.black87,
+                                                            fontFamily:
+                                                                'conthrax',
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: screenHeight * 0.01),
+                                              ),
+                                              SizedBox(
+                                                  height: screenHeight * 0.018),
 
-                                          // Dotted line
-                                          DottedLine(
-                                              dashRadius: 16.0,
-                                              dashColor: Colors.grey.shade800,
-                                              dashGapLength:
-                                                  screenWidth * 0.002,
-                                              lineLength: screenWidth * 0.788,
-                                              lineThickness:
-                                                  screenHeight * 0.0038),
+                                              // Dotted line
+                                              Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      screenWidth * 0.014,
+                                                      screenHeight * 0,
+                                                      screenWidth * 0,
+                                                      screenHeight * 0),
+                                                  child: DottedLine(
+                                                      dashRadius: 16.0,
+                                                      dashColor:
+                                                          Colors.grey.shade800,
+                                                      dashGapLength:
+                                                          screenWidth * 0.002,
+                                                      lineLength:
+                                                          screenWidth * 0.885,
+                                                      lineThickness:
+                                                          screenHeight *
+                                                              0.0038)),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ]),
+                                    ]),
+                                  );
+                                },
                               );
-                            },
-                          );
+                            }
+                          }
                         }
                       }),
                 )
