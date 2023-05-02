@@ -26,7 +26,7 @@ class _userProgressState extends State<userProgress> {
   void initState(){
     super.initState();
     for (var task in widget.taskInfo){
-      values.add(task.status);
+      values.add(task.status!);
     }
     int trueCount =values.where((element) => element ==  true).length;
     percent= trueCount / values.length;
@@ -114,7 +114,7 @@ class _userProgressState extends State<userProgress> {
                               child: Text(
                                 '${snapshot.data['name']}',
                                 style: TextStyle(
-                                    fontSize: ScreenHeight * 0.05,
+                                    fontSize: ScreenHeight * 0.03,
                                     fontFamily: 'conthrax',
                                     color: Paletter.blackText),
                               ),
@@ -142,7 +142,7 @@ class _userProgressState extends State<userProgress> {
                               child: Text(
                                 '${snapshot.data['jobDescription']}',
                                 style: TextStyle(
-                                    fontSize: ScreenHeight * 0.024,
+                                    fontSize: ScreenHeight * 0.02,
                                     fontFamily: 'iceland',
                                     color: Paletter.blackText),
                               ),
