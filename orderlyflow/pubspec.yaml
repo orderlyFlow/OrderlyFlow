@@ -61,6 +61,11 @@ dependencies:
   pull_to_refresh: ^2.0.0
   rxdart: ^0.27.7
   skeleton_loader: ^2.0.0+4
+  ffi: ^1.0.0
+  path: ^1.8.0
+  platform: ^3.0.0
+  speech_to_text: ^6.1.1
+  audioplayers: ^4.0.1
 
 
 

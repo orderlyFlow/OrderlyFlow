@@ -19,6 +19,8 @@ class StoreController extends GetxController {
 
   static RxInt Rec_ID = 0.obs;
   static RxInt Searched_ID = 0.obs;
+  static RxBool isHR = false.obs;
+  static RxBool isDirector = false.obs;
 
   static RxBool ID_found = false.obs;
   static RxBool Pass_found = false.obs;
@@ -26,5 +28,4 @@ class StoreController extends GetxController {
   static RxBool Login_found = false.obs;
   static RxBool isSearching = false.obs;
   static RxBool isSendingMessage = false.obs;
-  static RxBool isDirector = false.obs;
 }

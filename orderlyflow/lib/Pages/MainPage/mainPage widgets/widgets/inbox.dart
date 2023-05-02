@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:orderlyflow/custom_widgets/palette.dart';
 
 class inbox extends StatefulWidget {
@@ -9,6 +11,30 @@ class inbox extends StatefulWidget {
 }
 
 class _inboxState extends State<inbox> {
+  String _joke = '';
+  void _fetchJoke() async {
+    final response = await http
+        .get(Uri.parse('https://official-joke-api.appspot.com/random_joke'));
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      final setup = json['setup'] as String;
+      final punchline = json['punchline'] as String;
+      setState(() {
+        _joke = '$setup\n\n$punchline';
+      });
+    } else {
+      setState(() {
+        _joke = 'Failed to fetch joke';
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchJoke();
+  }
+
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
@@ -32,12 +58,13 @@ class _inboxState extends State<inbox> {
                   topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(top: 10, left: 10),
+              padding: EdgeInsets.only(
+                  top: ScreenHeight * 0.01, left: ScreenWidth * 0.01),
               child: Text(
-                'Inbox',
+                "Random Joke",
                 style: TextStyle(
                     fontFamily: 'neuropol',
-                    fontSize: 24,
+                    fontSize: ScreenHeight * 0.03,
                     color: Color.fromRGBO(20, 70, 103, 1),
                     shadows: <Shadow>[
                       Shadow(
@@ -47,7 +74,34 @@ class _inboxState extends State<inbox> {
                     ]),
               ),
             ),
-          )
+          ),
+          Container(
+            width: ScreenWidth * 0.6,
+            height: ScreenHeight * 0.19,
+            alignment: Alignment.topLeft,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: ScreenHeight * 0.02, left: ScreenWidth * 0.01),
+              child: Text(
+                _joke,
+                style: TextStyle(
+                  fontFamily: 'iceland',
+                  fontSize: ScreenHeight * 0.04,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          FloatingActionButton(
+            onPressed: _fetchJoke,
+            backgroundColor: Color.fromARGB(255, 119, 132, 152),
+            splashColor: Paletter.containerDark,
+            child: Icon(Icons.refresh),
+          ),
         ],
       ),
     );

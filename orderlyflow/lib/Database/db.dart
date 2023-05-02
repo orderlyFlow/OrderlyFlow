@@ -60,7 +60,6 @@ class MongoDB {
     //await db.close();
   }
 
-
   static Future<Map<String, dynamic>> getPersonByID(int Rec_ID) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
@@ -76,16 +75,16 @@ class MongoDB {
     //await db.close();
   }
 
-
 // get doc name
-  static Future<List<String>> getDocNames() async{
+  static Future<List<String>> getDocNames() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(documentsCol);
     await db1.open();
     final docs = await coll.find().toList();
-    final docNames = docs.map((doc)=> doc['docName'] as String).toList();
+    final docNames = docs.map((doc) => doc['docName'] as String).toList();
     return docNames;
   }
+
 // get base 64 content
   static Future<List<String>> getDocContent() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -107,7 +106,7 @@ class MongoDB {
         .find(where.eq('Employees', {
           '\$elemMatch': {'\$eq': getId}
         }))
-        .toList(); 
+        .toList();
     print(getuser
         .map((e) =>
             Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
@@ -119,18 +118,19 @@ class MongoDB {
         .toList();
   }
 
-  static Future<Map<String,dynamic>> getTeams() async{
+  static Future<Map<String, dynamic>> getTeams() async {
     var id = await getInfo();
     var directorID = id['ID'];
     final db = await Mongo.Db.create(mongoDB_URL);
     final coll = db.collection(teamsCol);
     await db.open();
-    final info = await coll.findOne(Mongo.where.eq('director', directorID)) as Map<String, dynamic>;
+    final info = await coll.findOne(Mongo.where.eq('director', directorID))
+        as Map<String, dynamic>;
     return info;
   }
 
-    static Future<List<String>> fetchNamesForIds() async {
-    var idlist = await getIds(); 
+  static Future<List<String>> fetchNamesForIds() async {
+    var idlist = await getIds();
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final collection = db1.collection(personsCol);
     await db1.open();
@@ -145,7 +145,6 @@ class MongoDB {
     return names;
   }
 
-
   static Future<List<int>> getIds() async {
     var ID = await getInfo();
     var id = ID['ID'];
@@ -157,9 +156,7 @@ class MongoDB {
     return teamMembers;
   }
 
-
   static Future<Map<String, dynamic>> getTasks() async {
-
     var id = await getInfo();
     var taskID = id["ID"];
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -172,36 +169,36 @@ class MongoDB {
     return information;
   }
 
-  static Future<Map <String,dynamic>> getTeamName() async{
+  static Future<Map<String, dynamic>> getTeamName() async {
     var id = await getInfo();
     int team = id['ID'];
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(teamsCol);
     await db1.open();
 
-    if(team.toString().startsWith('1')){
+    if (team.toString().startsWith('1')) {
       team = 100000;
-    } else if(team.toString().startsWith('2')){
+    } else if (team.toString().startsWith('2')) {
       team = 200000;
-    } else if(team.toString().startsWith('3')){
+    } else if (team.toString().startsWith('3')) {
       team = 300000;
-    } else if (team.toString().startsWith('4')){
+    } else if (team.toString().startsWith('4')) {
       team = 400000;
-    } else if(team.toString().startsWith('5')){
+    } else if (team.toString().startsWith('5')) {
       team = 500000;
-    } else if(team.toString().startsWith('6')){
+    } else if (team.toString().startsWith('6')) {
       team = 600000;
-    } else if(team.toString().startsWith('7')){
+    } else if (team.toString().startsWith('7')) {
       team = 700000;
-    } else if(team.toString().startsWith('8')){
+    } else if (team.toString().startsWith('8')) {
       team = 800000;
     } else {
       team = 900000;
     }
 
-  final info =await coll.findOne(Mongo.where.eq("director", team)) as Map<String, dynamic>;
-  return info;
-
+    final info = await coll.findOne(Mongo.where.eq("director", team))
+        as Map<String, dynamic>;
+    return info;
   }
 
   static Future<Map<String, dynamic>> getID() async {
@@ -275,7 +272,11 @@ class MongoDB {
     if (id_info != null &&
         id_info['OTP'] == OTPCont &&
         id_info['password'] == PassCont) {
+      StoreController.isDirector = isDirectorLogin(IDCont).obs;
+      StoreController.isHR = isHR_atLogin(IDCont).obs;
       StoreController.Login_found.value = true;
+      print("Dir: " + StoreController.isDirector.toString());
+      print("HR: " + StoreController.isHR.toString());
       return true;
     } else {
       return false;
@@ -376,14 +377,19 @@ class MongoDB {
     final persons = db.collection(personsCol);
     List<List<int>> users = [];
     List<dynamic> recList = [];
-
+    List<dynamic> groups = [];
     var usersList = await recentChat.find({
       'users': int.parse(StoreController.ID_controller.value.text.trim())
     }).toList();
 
     usersList.forEach((item) {
-      if (item.containsKey('users')) {
+      if (item.containsKey('users') && item['isGroup'] == false) {
+        //print(item['isGroup'].toString());
         users.add(List<int>.from(item['users']));
+      } else {
+        if (item.containsKey('users') && item['isGroup'] == true) {
+          groups.add(item);
+        }
       }
     });
 
@@ -392,7 +398,6 @@ class MongoDB {
     users.forEach((subList) {
       flattenedList.addAll(subList);
     });
-
     flattenedList.removeWhere((number) =>
         number == int.parse(StoreController.ID_controller.value.text.trim()));
     if (flattenedList.isNotEmpty) {
@@ -402,6 +407,9 @@ class MongoDB {
           recList.add(user);
         }
       }
+      groups.forEach((subList) {
+        recList.addAll(subList);
+      });
 
       return List<Map<String, dynamic>>.from(recList);
     } else {
@@ -442,8 +450,6 @@ class MongoDB {
 
     return document;
   }
-
-
 
   /* static void updateStatus(String taskname) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -570,17 +576,13 @@ class MongoDB {
     return salary;
   }
 
-
-
-
-
   static void addSearchedUserToDB() {
     final coll = db.collection(chatsCol);
     int sender = int.parse(StoreController.ID_controller.value.text.trim());
     int searchedU = StoreController.Searched_ID.value;
     Map<String, dynamic> doc = {
       "users": [sender, searchedU],
-      "type": "private",
+      "isGroup": false,
       "Lastupdated": DateTime.now(),
     };
     coll.insertOne(doc);
@@ -652,32 +654,66 @@ class MongoDB {
     return sal_info;
   }
 
-  static Future<List<Map<String, dynamic>>> getEvent() async {
-    final coll = db.collection(eventsCol);
-    //List<List<int>> users = [];
-    //List<dynamic> recList = [];
+  static Stream<List<Map<String, dynamic>>> getEventsOnSelectedDate(
+      DateTime selectedDate) async* {
+    final eventsCollection = db.collection(eventsCol);
+    final startDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day)
+            .toUtc();
+    final endDate = startDate.add(Duration(days: 1));
+    final events = await eventsCollection
+        .find(where.gte('startTime', startDate).lt('startTime', endDate))
+        .toList();
+    Stream<List<Map<String, dynamic>>> eventsStream =
+        Stream.fromIterable([events]);
 
-    var eventsList = await coll.find({
-      'participants': int.parse(StoreController.ID_controller.value.text.trim())
-    }).toList();
-
-    if (eventsList != null) {
-      return eventsList;
-    } else {
-      return [];
-    }
+    yield* eventsStream;
   }
 
-  static Future<List> getEventsOnSelectedDate(DateTime selectedDate) async {
-    final eventsCollection = db.collection(eventsCol);
-
-    final events = await eventsCollection.find({
-      'date': {
-        '\$gte': selectedDate.toUtc(),
-        '\$lt': selectedDate.add(Duration(days: 1)).toUtc(),
+  static bool isDirectorLogin(int n) {
+    String nStr = n.toString();
+    for (int i = 1; i < nStr.length; i++) {
+      if (nStr[i] != "0") {
+        return false;
       }
-    }).toList();
+    }
+    return true;
+  }
 
-    return events;
+  static bool isHR_atLogin(int n) {
+    String nStr = n.toString();
+    if (nStr[0] == 2 && nStr[1] == 0) {
+      return true;
+    }
+    return false;
+  }
+
+  static List<int> getParticipants(String text) {
+    List<int> participants = [];
+    List<String> participantStrings = text.split(',');
+    for (String participantString in participantStrings) {
+      String participant = participantString.trim();
+      if (participant.isNotEmpty) {
+        participants.add(int.parse(participant));
+      }
+    }
+    return participants;
+  }
+
+  static void addEventToDB(String event_title, String event_location,
+      String desc, String part, DateTime start, DateTime end) {
+    final coll = db.collection(eventsCol);
+    List<int> participants = getParticipants(part);
+
+    Map<String, dynamic> doc = {
+      "title": event_title,
+      "location": event_location,
+      "startTime": start,
+      "endTime": end,
+      "participants": participants,
+      "eventDescription": desc,
+    };
+    List<Map<String, dynamic>> list = [];
+    final info = coll.insertOne(doc);
   }
 }

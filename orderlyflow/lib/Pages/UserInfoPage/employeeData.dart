@@ -46,21 +46,264 @@ class employeeDataState extends State<employeeData> {
                   future: _future,
                   builder: (context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                          child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ));
+                      return Column(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  screenWidth * 0.027,
+                                  screenHeight * 0.045,
+                                  screenWidth * 0,
+                                  screenHeight * 0.02),
+                              width: screenWidth * 0.87,
+                              height: screenHeight * 0.20,
+                              alignment: Alignment.bottomLeft,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 84, 90, 121),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    screenWidth * 0.02,
+                                    screenHeight * 0.04,
+                                    screenWidth * 0,
+                                    screenHeight * 0.05),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Paletter.gradiant3,
+                                    ),
+                                  ),
+                                ),
+                              )),
+                          ///////////////////////Employee Info///////////////////////
+                          Row(children: [
+                            Container(
+                                decoration: BoxDecoration(
+                                  color: Paletter.mainBgLight,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                margin: EdgeInsets.fromLTRB(
+                                    screenWidth * 0.03,
+                                    screenHeight * 0.035,
+                                    screenWidth * 0,
+                                    screenHeight * 0.02),
+                                width: screenWidth * 0.4,
+                                height: screenHeight * 0.65,
+                                child: Column(children: [
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        screenWidth * 0.018,
+                                        screenHeight * 0.05,
+                                        screenWidth * 0,
+                                        screenHeight * 0.01),
+                                    width: screenWidth * 0.12,
+                                    height: screenHeight * 0.15,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: Paletter.gradiant3,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            screenWidth * 0,
+                                            screenHeight * 0.01,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        padding: EdgeInsets.fromLTRB(
+                                            screenWidth * 0.02,
+                                            screenHeight * 0,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                      )),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            screenWidth * 0,
+                                            screenHeight * 0.005,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        padding: EdgeInsets.fromLTRB(
+                                            screenWidth * 0.02,
+                                            screenHeight * 0,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                      )),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            screenWidth * 0,
+                                            screenHeight * 0.005,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        padding: EdgeInsets.fromLTRB(
+                                            screenWidth * 0.02,
+                                            screenHeight * 0,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                      )),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            screenWidth * 0,
+                                            screenHeight * 0.005,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        padding: EdgeInsets.fromLTRB(
+                                            screenWidth * 0.02,
+                                            screenHeight * 0,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                      )),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            screenWidth * 0,
+                                            screenHeight * 0.005,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        padding: EdgeInsets.fromLTRB(
+                                            screenWidth * 0.02,
+                                            screenHeight * 0,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                      )),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            screenWidth * 0,
+                                            screenHeight * 0.005,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        padding: EdgeInsets.fromLTRB(
+                                            screenWidth * 0.02,
+                                            screenHeight * 0,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        width: screenWidth * 0.34,
+                                      )),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            screenWidth * 0,
+                                            screenHeight * 0.005,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                        padding: EdgeInsets.fromLTRB(
+                                            screenWidth * 0.02,
+                                            screenHeight * 0,
+                                            screenWidth * 0,
+                                            screenHeight * 0.01),
+                                      )),
+                                ])),
+                            Column(
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        screenWidth * 0.034,
+                                        screenHeight * 0.0112,
+                                        screenWidth * 0,
+                                        screenHeight * 0),
+                                    width: screenWidth * 0.44,
+                                    height: screenHeight * 0.19,
+                                    alignment: Alignment.topRight,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 237, 187, 153),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          screenWidth * 0.02,
+                                          screenHeight * 0.0,
+                                          screenWidth * 0,
+                                          screenHeight * 0.03),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: Paletter.gradiant3,
+                                        ),
+                                      ),
+                                    )),
+                                SizedBox(
+                                  height: screenHeight * 0.033,
+                                ),
+                                Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        screenWidth * 0.032,
+                                        screenHeight * 0,
+                                        screenWidth * 0,
+                                        screenHeight * 0),
+                                    width: screenWidth * 0.44,
+                                    height: screenHeight * 0.19,
+                                    alignment: Alignment.topRight,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 191, 201, 202),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 30.0,
+                                          top: 20.0,
+                                          right: 30.0,
+                                          bottom: 20.0),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: Paletter.gradiant3,
+                                        ),
+                                      ),
+                                    )),
+                                SizedBox(
+                                  height: screenHeight * 0.031,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      screenWidth * 0.032,
+                                      screenHeight * 0,
+                                      screenWidth * 0,
+                                      screenHeight * 0),
+                                  width: screenWidth * 0.44,
+                                  height: screenHeight * 0.19,
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.fromLTRB(
+                                      screenWidth * 0.03,
+                                      screenHeight * 0,
+                                      screenWidth * 0,
+                                      screenHeight * 0.01),
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 86, 96, 96),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Paletter.gradiant3,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            //,
+                          ])
+                        ],
+                      );
                     } else {
                       if (snapshot.hasError) {
                         return Text(snapshot.error.toString());
                       } else {
                         final salaryInfo = snapshot.data[0];
                         final empInfo = snapshot.data[1];
-                        String bonus = int.parse(
-                                ((salaryInfo['bonus'] * salaryInfo['basepay']) /
-                                        100) +
+                        int bonus =
+                            ((salaryInfo['bonus'] * salaryInfo['basepay']) ~/
+                                        100 +
                                     salaryInfo['basepay'])
-                            .toString();
+                                .round();
                         final photoData = empInfo['profilePicture'];
                         Uint8List photoBytes = base64Decode(photoData);
                         ImageProvider imageProvider = MemoryImage(photoBytes);
@@ -82,13 +325,14 @@ class employeeDataState extends State<employeeData> {
                                 child: Container(
                                   margin: EdgeInsets.fromLTRB(
                                       screenWidth * 0.02,
-                                      screenHeight * 0,
+                                      screenHeight * 0.04,
                                       screenWidth * 0,
                                       screenHeight * 0.05),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "Yearly Bonus:       $bonus",
+                                      "Bonus Percentage:     ${salaryInfo['bonus']}%\n\n"
+                                      "After Bonus:       $bonus",
                                       style: TextStyle(
                                         fontSize: screenHeight * 0.035,
                                         color:
@@ -421,181 +665,6 @@ class employeeDataState extends State<employeeData> {
                       }
                     }
                   })
-              /* 
-              Column(children: [
-                Row(children: [
-                  SizedBox(
-                    width: ScreenWidth * 0.05,
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(
-                            ScreenWidth * 0,
-                            ScreenHeight * 0.04,
-                            ScreenWidth * 0.05,
-                            ScreenHeight * 0.04),
-                        width: ScreenWidth * 0.37,
-                        height: ScreenHeight * 0.2,
-                        alignment: Alignment.bottomLeft,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 46, 64, 83),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: 30.0,
-                                top: 20.0,
-                                right: 30.0,
-                                bottom: 20.0),
-                            child: Text(
-                              "Bonnus /                                                             MONTH",
-                              style: TextStyle(
-                                  fontSize: ScreenHeight * 0.024,
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontFamily: 'neuropol'),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(
-                            ScreenWidth * 0,
-                            ScreenHeight * 0.04,
-                            ScreenWidth * 0.05,
-                            ScreenHeight * 0.04),
-                        width: ScreenWidth * 0.37,
-                        height: ScreenHeight * 0.62,
-                        alignment: Alignment.bottomLeft,
-                        decoration: BoxDecoration(
-                          color: Paletter.mainBgLight,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        /* child: Text(
-                          "Personal Data",
-                          semanticsLabel: "Personal Data",
-                          style: ThemeStyles.containerText,
-                        ),*/
-                        // ignore: sort_child_properties_last
-                        child: Center(
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(30, 30.0, 30.0, 0),
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              width: ScreenWidth * 0.15,
-                              height: ScreenHeight * 0.15,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ], //children
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                          margin: EdgeInsets.fromLTRB(
-                              ScreenWidth * 0.04,
-                              ScreenHeight * 0.04,
-                              ScreenWidth * 0.05,
-                              ScreenHeight * 0),
-                          width: ScreenWidth * 0.37,
-                          height: ScreenHeight * 0.19,
-                          alignment: Alignment.topRight,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 217, 136, 128),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: 30.0,
-                                top: 20.0,
-                                right: 30.0,
-                                bottom: 20.0),
-                            child: Text(
-                              "Progress of the                                                          WEEK",
-                              style: ThemeStyles.containerText,
-                            ),
-                          )),
-                      Container(
-                          margin: EdgeInsets.fromLTRB(
-                              ScreenWidth * 0.04,
-                              ScreenHeight * 0.04,
-                              ScreenWidth * 0.05,
-                              ScreenHeight * 0),
-                          width: ScreenWidth * 0.37,
-                          height: ScreenHeight * 0.19,
-                          alignment: Alignment.topRight,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 237, 187, 153),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: 30.0,
-                                top: 20.0,
-                                right: 30.0,
-                                bottom: 20.0),
-                            child: Text(
-                              "Salary /                                                             MONTH",
-                              style: ThemeStyles.containerText,
-                            ),
-                          )),
-                      Container(
-                          margin: EdgeInsets.fromLTRB(
-                              ScreenWidth * 0.04,
-                              ScreenHeight * 0.04,
-                              ScreenWidth * 0.05,
-                              ScreenHeight * 0),
-                          width: ScreenWidth * 0.37,
-                          height: ScreenHeight * 0.19,
-                          alignment: Alignment.topRight,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 191, 201, 202),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: 30.0,
-                                top: 20.0,
-                                right: 30.0,
-                                bottom: 20.0),
-                            child: Text(
-                              "Hours of work /                                                             WEEK",
-                              style: ThemeStyles.containerText,
-                            ),
-                          )),
-                      Container(
-                          margin: EdgeInsets.fromLTRB(
-                              ScreenWidth * 0.04,
-                              ScreenHeight * 0.04,
-                              ScreenWidth * 0.05,
-                              ScreenHeight * 0),
-                          width: ScreenWidth * 0.37,
-                          height: ScreenHeight * 0.19,
-                          alignment: Alignment.topRight,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 81, 90, 90),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          //child: Align(),
-                          //alignment: Alignment.topRight,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: 30.0,
-                                top: 20.0,
-                                right: 30.0,
-                                bottom: 20.0),
-                            child: Text(
-                              "Day off /                                                             MONTH",
-                              style: ThemeStyles.containerText,
-                            ),
-                          )),
-                    ],
-                  ),
-                ]),
-              ])*/
             ]),
       ]),
     );
