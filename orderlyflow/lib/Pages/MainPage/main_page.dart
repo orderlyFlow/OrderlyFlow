@@ -4,6 +4,8 @@ import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/dashboard.dart';
 import 'package:orderlyflow/custom_widgets/side_bar.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 
+import '../../Database/db.dart';
+
 class mainPage extends StatefulWidget {
   @override
   State<mainPage> createState() => _mainPageState();

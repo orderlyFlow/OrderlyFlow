@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 import 'package:orderlyflow/custom_widgets/side_bar.dart';
@@ -26,6 +27,9 @@ class employeeDataState extends State<employeeData> {
     return [data1, data2];
   }
 
+  var employee = StoreController.currentUser!;
+  final photoData = StoreController.currentUser!['profilePicture'];
+
   void initState() {
     _future = sendData();
     super.initState();
@@ -35,6 +39,8 @@ class employeeDataState extends State<employeeData> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    Uint8List photoBytes = base64Decode(photoData);
+    ImageProvider imageProvider = MemoryImage(photoBytes);
     return Scaffold(
       body: Stack(children: [
         const BlueBg(),
@@ -304,9 +310,7 @@ class employeeDataState extends State<employeeData> {
                                         100 +
                                     salaryInfo['basepay'])
                                 .round();
-                        final photoData = empInfo['profilePicture'];
-                        Uint8List photoBytes = base64Decode(photoData);
-                        ImageProvider imageProvider = MemoryImage(photoBytes);
+
                         return Column(
                           children: [
                             Container(
@@ -390,7 +394,7 @@ class employeeDataState extends State<employeeData> {
                                                 screenHeight * 0.01),
                                             child: Text(
                                               'Name :  '
-                                              '${empInfo['name']}',
+                                              '${employee['name']}',
                                               style: TextStyle(
                                                 fontSize: screenHeight * 0.025,
                                                 color: Color.fromARGB(
@@ -414,7 +418,7 @@ class employeeDataState extends State<employeeData> {
                                                 screenHeight * 0.01),
                                             child: Text(
                                               'Phone :  '
-                                              '${empInfo['phone']}',
+                                              '${employee['phone']}',
                                               style: TextStyle(
                                                 fontSize: screenHeight * 0.025,
                                                 color: Color.fromARGB(
@@ -437,7 +441,7 @@ class employeeDataState extends State<employeeData> {
                                                 screenHeight * 0.01),
                                             child: Text(
                                               'Email :  '
-                                              '${empInfo['email']}',
+                                              '${employee['email']}',
                                               style: TextStyle(
                                                 fontSize: screenHeight * 0.025,
                                                 color: Color.fromARGB(
@@ -461,7 +465,7 @@ class employeeDataState extends State<employeeData> {
                                                 screenHeight * 0.01),
                                             child: Text(
                                               'Country :  '
-                                              '${empInfo['country']}',
+                                              '${employee['country']}',
                                               style: TextStyle(
                                                 fontSize: screenHeight * 0.025,
                                                 color: Color.fromARGB(
@@ -485,7 +489,7 @@ class employeeDataState extends State<employeeData> {
                                                 screenHeight * 0.01),
                                             child: Text(
                                               'Position :  '
-                                              '${empInfo['title']}',
+                                              '${employee['title']}',
                                               style: TextStyle(
                                                 fontSize: screenHeight * 0.025,
                                                 color: Color.fromARGB(
@@ -510,7 +514,7 @@ class employeeDataState extends State<employeeData> {
                                             width: screenWidth * 0.34,
                                             child: Text(
                                               'Description :  '
-                                              '${empInfo['jobDescription']}',
+                                              '${employee['jobDescription']}',
                                               style: TextStyle(
                                                 fontSize: screenHeight * 0.025,
                                                 color: Color.fromARGB(
@@ -534,7 +538,7 @@ class employeeDataState extends State<employeeData> {
                                                 screenHeight * 0.01),
                                             child: Text(
                                               'ID :  '
-                                              '${empInfo['ID'].toString()}',
+                                              '${employee['ID'].toString()}',
                                               style: TextStyle(
                                                 fontSize: screenHeight * 0.025,
                                                 color: Color.fromARGB(

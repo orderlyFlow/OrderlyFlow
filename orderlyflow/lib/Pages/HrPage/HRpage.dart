@@ -11,14 +11,14 @@ import 'package:glass/glass.dart';
 import '../../Database/db.dart';
 import '../../custom_widgets/BlueBg.dart';
 
-class HRpage extends StatefulWidget {
-  const HRpage({super.key});
+class HrPage extends StatefulWidget {
+  const HrPage({super.key});
 
   @override
-  HRpageState createState() => HRpageState();
+  HrPageState createState() => HrPageState();
 }
 
-class HRpageState extends State<HRpage> {
+class HrPageState extends State<HrPage> {
   Uint8List? get PhotoBytes => null;
 
   List<Color> colorList = [
@@ -86,7 +86,7 @@ class HRpageState extends State<HRpage> {
                           onPressed: () {
                             // Action to perform when button is pressed
                           },
-                          child: Text('Click me!'),
+                          child: Text('New employee'),
                           color: Colors.teal,
                           textColor: Colors.white,
                         ),

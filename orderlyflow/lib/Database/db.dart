@@ -277,6 +277,7 @@ class MongoDB {
       StoreController.Login_found.value = true;
       print("Dir: " + StoreController.isDirector.toString());
       print("HR: " + StoreController.isHR.toString());
+      StoreController.currentUser = id_info;
       return true;
     } else {
       return false;
@@ -372,7 +373,7 @@ class MongoDB {
     }
   }
 
-  static Future<List<int>> renderReceivers() async {
+  /*static Future<List<int>> renderReceivers() async {
     final recentChat = db.collection(chatsCol);
     List<List<int>> users = [];
     List<int> rec = [];
@@ -380,11 +381,12 @@ class MongoDB {
       'users': int.parse(StoreController.ID_controller.value.text.trim())
     }).toList();
     usersList.forEach((item) {
-      if (item.containsKey('users') && item['isGroup'] == false) {
+      if (item['isGroup'] == false) {
         users.add(List<int>.from(item['users']));
       } else {
-        if (item.containsKey('users') && item['isGroup'] == true) {
+        if (item['isGroup'] == true) {
           StoreController.groups.add(item);
+          print(item.toString());
         }
       }
     });
@@ -393,7 +395,62 @@ class MongoDB {
     });
     rec.removeWhere((number) =>
         number == int.parse(StoreController.ID_controller.value.text.trim()));
+    print(rec.toString());
+    /*for (var group in StoreController.groups) {
+      print(group['name'].toString());
+    }*/
     return rec;
+  }*/
+  static Future<bool> getChats() async {
+    final recentChat = db.collection(chatsCol);
+    final persons = db.collection(personsCol);
+    List<List<int>> users = [];
+    List<dynamic> recList = [];
+    List<dynamic> groups = [];
+    var usersList = await recentChat.find({
+      'users': int.parse(StoreController.ID_controller.value.text.trim())
+    }).toList();
+
+    usersList.forEach((item) {
+      if (item['isGroup'] == false) {
+        users.add(List<int>.from(item['users']));
+      } else {
+        StoreController.groups.add(item);
+      }
+    });
+
+    users.forEach((subList) {
+      StoreController.individualRecIDs.addAll(subList);
+    });
+    StoreController.individualRecIDs.removeWhere((number) =>
+        number == int.parse(StoreController.ID_controller.value.text.trim()));
+    if (StoreController.individualRecIDs != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getIndRec() async {
+    bool foundChats = await MongoDB.getChats();
+    final persons = db.collection(personsCol);
+    print(StoreController.groups.isEmpty);
+    print(StoreController.individualRecIDs.toString());
+    List<dynamic> recList = [];
+    if (StoreController.individualRecIDs.isNotEmpty && foundChats == true) {
+      for (var receiver in StoreController.individualRecIDs) {
+        var user = await persons.findOne(where.eq("ID", receiver));
+        if (user != null) {
+          recList.add(user);
+        }
+      }
+      StoreController.AllChats = List<Map<String, dynamic>>.from(recList);
+      StoreController.AllChats.addAll(StoreController.groups);
+
+      return StoreController.AllChats;
+    } else {
+      return [];
+    }
   }
 
   static Future<List<Map<String, dynamic>>> fetchAll() async {
@@ -424,71 +481,6 @@ class MongoDB {
     StoreController.remoteRatio.value = away / total;
     StoreController.onSiteRatio.value = onSite / total;
   }
-
-  static Future<List<Map<String, dynamic>>> getIndRec() async {
-    final persons = db.collection(personsCol);
-    List<int> individualRec = await renderReceivers();
-    //var flattenedList = List.from(individualRec);
-    List<Map<String, dynamic>> recPers = [];
-    if (individualRec.isNotEmpty) {
-      for (var receiver in individualRec) {
-        print(receiver.toString());
-        var user = persons.findOne(where.eq("ID", receiver));
-        if (user != null) {
-          print(user['name']);
-          recPers.add(user);
-        }
-      }
-      var recList = (StoreController.groups + recPers);
-      return List<Map<String, dynamic>>.from(recList);
-    } else {
-      return [];
-    }
-  }
-
-  /*static Future<List<Map<String, dynamic>>> renderReceivers() async {
-    final recentChat = db.collection(chatsCol);
-    final persons = db.collection(personsCol);
-    List<List<int>> users = [];
-    List<dynamic> recList = [];
-    List<dynamic> groups = [];
-    var usersList = await recentChat.find({
-      'users': int.parse(StoreController.ID_controller.value.text.trim())
-    }).toList();
-
-    usersList.forEach((item) {
-      if (item.containsKey('users') && item['isGroup'] == false) {
-        users.add(List<int>.from(item['users']));
-      } else {
-        if (item.containsKey('users') && item['isGroup'] == true) {
-          groups.add(item);
-        }
-      }
-    });
-
-    List<int> flattenedList = [];
-
-    users.forEach((subList) {
-      flattenedList.addAll(subList);
-    });
-    flattenedList.removeWhere((number) =>
-        number == int.parse(StoreController.ID_controller.value.text.trim()));
-    if (flattenedList.isNotEmpty) {
-      for (var receiver in flattenedList) {
-        var user = await persons.findOne(where.eq("ID", receiver));
-        if (user != null) {
-          recList.add(user);
-        }
-      }
-      groups.forEach((subList) {
-        recList.addAll(subList);
-      });
-
-      return List<Map<String, dynamic>>.from(recList);
-    } else {
-      return [];
-    }
-  }*/
 
   static Future<Map<String, dynamic>> getNotes() async {
     var id = await getInfo();
@@ -638,17 +630,6 @@ class MongoDB {
     collection.insertOne(document);
   }
 
-  static Future<dynamic> getsalary(int id) async {
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final collection = db1.collection(payrollCol);
-    await db1.open();
-    Map<String, dynamic> document =
-        await collection.findOne(where.eq("ID", id)) as Map<String, dynamic>;
-    dynamic salary = document["basepay"];
-    print(salary);
-    return salary;
-  }
-
   static void addSearchedUserToDB() {
     final coll = db.collection(chatsCol);
     int sender = int.parse(StoreController.ID_controller.value.text.trim());
@@ -788,5 +769,14 @@ class MongoDB {
     };
     List<Map<String, dynamic>> list = [];
     final info = coll.insertOne(doc);
+  }
+
+  static void getMembersName() async {
+    final coll = db.collection(personsCol);
+    await db.open();
+    StoreController.groups.forEach((subID) async {
+      var information = await coll.findOne(Mongo.where.eq("ID", subID));
+      StoreController.GroupMembers.add(information['name']);
+    });
   }
 }

@@ -3,10 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/welcome.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/calendar.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/inbox.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/tasks.dart';
+import 'package:orderlyflow/Pages/MainPage/tasks.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 
 import '../../../Database/db.dart';
@@ -17,10 +19,16 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  void getAllTasks() async {
+    StoreController.renderedTasks = await MongoDB.getTask();
+  }
+
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
     late double ScreenHeight = MediaQuery.of(context).size.height;
+    String UserName = StoreController.currentUser!['name'];
+    getAllTasks();
     return Material(
       color: Paletter.mainBgLight,
       child: Container(
@@ -56,42 +64,11 @@ class _DashboardState extends State<Dashboard> {
             ),
             Column(
               children: [
-                FutureBuilder(
-                    future: MongoDB.getInfo(),
-                    builder: (buildContext, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      } else if (snapshot.hasData) {
-                        String UserName = snapshot.data['name'];
-                        return welcome(name: UserName);
-                      } else {
-                        return welcome(name: " ");
-                      }
-                    }),
+                welcome(name: UserName),
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
-                FutureBuilder(
-                    future: MongoDB.getTask(),
-                    builder: (buildContext, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      } else if (snapshot.hasData) {
-                        return tasks(taskInfo: snapshot.data);
-                      } else {
-                        return Container(
-                            width: ScreenWidth * 0.397,
-                            height: ScreenHeight * 0.44,
-                            decoration: BoxDecoration(
-                                color: Paletter.containerLight,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            ));
-                      }
-                    }),
+                tasks(taskInfo: StoreController.renderedTasks),
               ],
             )
           ],

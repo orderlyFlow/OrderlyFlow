@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/Pages/HrPage/HRpage.dart';
 import 'package:orderlyflow/announcement.dart';
 import 'package:orderlyflow/Pages/CalendarPage/calendar.dart';
@@ -32,11 +34,14 @@ class _SideBarState extends State<SideBar> {
   bool _isHoveredCalendar = false;
   bool _isHoveredManual = false;
   bool _isHoveredTask = false;
+  final photoData = StoreController.currentUser!['profilePicture'];
 
   @override
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
+    Uint8List photoBytes = base64Decode(photoData);
+    ImageProvider imageProvider = MemoryImage(photoBytes);
 
     return Drawer(
         width: ScreenWidth * 0.07,
@@ -51,8 +56,8 @@ class _SideBarState extends State<SideBar> {
                 height: ScreenHeight * 0.04,
               ),
               Center(
-                child: FutureBuilder(
-                    future: MongoDB.getProfilePic(),
+                  child: /*FutureBuilder(
+                    future: StoreController.currentUser,
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Container(
@@ -66,49 +71,54 @@ class _SideBarState extends State<SideBar> {
                             ),
                           ),
                         );
-                      } else if (snapshot.hasData) {
-                        return Column(children: [
-                          InkWell(
+                      } else if (snapshot.hasData) {*/
+                      //return
+                      Column(children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => employeeData(),
+                      maintainState: true,
+                    ));
+                  },
+                  child: Container(
+                      margin:
+                          EdgeInsets.fromLTRB(0, ScreenHeight * 0.045, 0, 0),
+                      width: ScreenWidth * 0.078,
+                      height: ScreenHeight * 0.078,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: FittedBox(
+                          fit: BoxFit
+                              .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                          child: CircleAvatar(
+                            backgroundImage: imageProvider,
+                          ))),
+                )
+              ])),
+              /*} else {
+                        return InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      //childCurrent: const employeeData(),
-                                      child: employeeData(),
-                                      type: PageTransitionType.theme,
-                                      duration: const Duration(seconds: 2)));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => employeeData(),
+                                maintainState: true,
+                              ));
                             },
                             child: Container(
-                                margin: EdgeInsets.fromLTRB(
-                                    0, ScreenHeight * 0.045, 0, 0),
-                                width: ScreenWidth * 0.078,
-                                height: ScreenHeight * 0.078,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
+                              margin: EdgeInsets.fromLTRB(
+                                  0, ScreenHeight * 0.045, 0, 0),
+                              width: ScreenWidth * 0.078,
+                              height: ScreenHeight * 0.078,
+                              child: const Center(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.black,
                                 ),
-                                child: FittedBox(
-                                    fit: BoxFit
-                                        .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
-                                    child: CircleAvatar(
-                                      backgroundImage: snapshot.data,
-                                    ))),
-                          )
-                        ]);
-                      } else {
-                        return Container(
-                          margin: EdgeInsets.fromLTRB(
-                              0, ScreenHeight * 0.045, 0, 0),
-                          width: ScreenWidth * 0.078,
-                          height: ScreenHeight * 0.078,
-                          child: const Center(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                            ),
-                          ),
-                        );
+                              ),
+                            ));
                       }
-                    }),
-              ),
+                    }),*/
+
               SizedBox(
                 height: ScreenHeight * 0.07,
               ),
@@ -123,13 +133,14 @@ class _SideBarState extends State<SideBar> {
                       height: ScreenHeight * 0.07,
                       width: ScreenWidth * 0.08),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            //childCurrent: const SideBar(),
-                            child: mainPage(),
-                            type: PageTransitionType.theme,
-                            duration: const Duration(seconds: 2)));
+                    StoreController.groups = [];
+                    StoreController.individualRecIDs = [];
+                    StoreController.indRec = [];
+
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => mainPage(),
+                      maintainState: true,
+                    ));
                   },
                 ),
               ),
@@ -147,13 +158,11 @@ class _SideBarState extends State<SideBar> {
                       height: ScreenHeight * 0.07,
                       width: ScreenWidth * 0.08),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            //childCurrent: const chatPage(),
-                            child: const chatPage(),
-                            type: PageTransitionType.theme,
-                            duration: const Duration(seconds: 2)));
+                    StoreController.renderedTasks = [];
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => chatPage(),
+                      maintainState: true,
+                    ));
                   },
                 ),
               ),
@@ -171,13 +180,10 @@ class _SideBarState extends State<SideBar> {
                     height: ScreenHeight * 0.07,
                     width: ScreenWidth * 0.08),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          //childCurrent: const calendar(),
-                          child: calendar(),
-                          type: PageTransitionType.theme,
-                          duration: const Duration(seconds: 2)));
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => calendar(),
+                    maintainState: true,
+                  ));
                 },
               )),
               SizedBox(
@@ -194,13 +200,10 @@ class _SideBarState extends State<SideBar> {
                     height: ScreenHeight * 0.07,
                     width: ScreenWidth * 0.08),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          //childCurrent: const myTasks(),
-                          child: myTasks(),
-                          type: PageTransitionType.theme,
-                          duration: const Duration(seconds: 2)));
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => myTasks(),
+                    maintainState: true,
+                  ));
                 },
               )),
               SizedBox(
@@ -221,13 +224,10 @@ class _SideBarState extends State<SideBar> {
                     width: ScreenWidth * 0.13,
                   ),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            //childCurrent: const requests(),
-                            child: requests(),
-                            type: PageTransitionType.theme,
-                            duration: const Duration(seconds: 2)));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => requests(),
+                      maintainState: true,
+                    ));
                   },
                 ),
               )),
@@ -246,13 +246,10 @@ class _SideBarState extends State<SideBar> {
                   width: ScreenWidth * 0.08,
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          //childCurrent: const HRpage(),
-                          child: helpManual(),
-                          type: PageTransitionType.theme,
-                          duration: const Duration(seconds: 2)));
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => helpManual(),
+                    maintainState: true,
+                  ));
                 },
               )),
             ]),
