@@ -1,13 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/Database/db.dart';
+import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/Pages/RequestPage/ListofRequest.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:orderlyflow/custom_widgets/BlueBg.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/custom_widgets/side_bar.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
 class requests extends StatefulWidget {
   const requests({super.key});
@@ -17,6 +22,46 @@ class requests extends StatefulWidget {
 }
 
 class _requestsState extends State<requests> {
+  bool _isHead = false;
+  bool _isHR = false;
+  bool _isUpload = false;
+
+  static void uploadFiledDocs() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(documentsFiled);
+    await db1.open();
+
+    final base64 = await openFilePicker();
+
+    final document = {
+      "uploaderID": int.parse(StoreController.ID_controller.value.text.trim()),
+      "base64": base64,
+      "Date": DateTime.now()
+    };
+
+    coll.insertOne(document);
+    print("uploaded");
+  }
+
+  static Future<String> openFilePicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['doc', 'docx'],
+    );
+
+    if (result == null || result.files.isEmpty) {
+      print("user canceled");
+      return '';
+    }
+
+    File file = File(result.files.single.path!);
+    List<int> bytes = await file.readAsBytes();
+
+    String base64String = base64Encode(bytes);
+
+    return base64String;
+  }
+
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
@@ -59,20 +104,27 @@ class _requestsState extends State<requests> {
                               SizedBox(
                                 height: ScreenHeight * 0.02,
                               ),
-                              Container(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(left: ScreenWidth * 0.02),
-                                  child: Text(
-                                    "Forms",
-                                    style: TextStyle(
-                                      color: Paletter.blackText,
-                                      fontFamily: 'iceland',
-                                      fontSize: ScreenHeight * 0.07,
+                              Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          left: ScreenWidth * 0.02),
+                                      child: Text(
+                                        "Forms",
+                                        style: TextStyle(
+                                          color: Paletter.blackText,
+                                          fontFamily: 'iceland',
+                                          fontSize: ScreenHeight * 0.07,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: ScreenWidth * 0.03,
+                                  ),
+                                ],
                               ),
                               SizedBox(
                                 height: ScreenHeight * 0.02,
@@ -81,20 +133,18 @@ class _requestsState extends State<requests> {
                                 child: FutureBuilder(
                                     future: Future.wait([
                                       MongoDB.getDocNames(),
-                                     
                                     ]),
-                                    builder: (buildContext,
-                                        AsyncSnapshot snapshot) {
+                                    builder:
+                                        (buildContext, AsyncSnapshot snapshot) {
                                       if (snapshot.hasError) {
                                         return Text('${snapshot.error}');
                                       } else if (snapshot.hasData) {
                                         List<String> docNames =
-                                            snapshot.data[0];                               
+                                            snapshot.data[0];
                                         return requestList(docNames: docNames);
                                       } else {
                                         return CircularProgressIndicator(
                                           color: Colors.white,
-                                          
                                         );
                                       }
                                     }),
@@ -108,21 +158,27 @@ class _requestsState extends State<requests> {
                         Column(
                           children: [
                             Container(
-                              height: ScreenHeight * 0.53,
+                              height: ScreenHeight * 0.93,
                               width: ScreenWidth * 0.5,
                               decoration: BoxDecoration(
                                   color: Paletter.containerLight,
                                   borderRadius: BorderRadius.circular(13)),
-                            ),
-                            SizedBox(
-                              height: ScreenHeight * 0.024,
-                            ),
-                            Container(
-                              height: ScreenHeight * 0.4,
-                              width: ScreenWidth * 0.5,
-                              decoration: BoxDecoration(
-                                  color: Paletter.containerLight,
-                                  borderRadius: BorderRadius.circular(13)),
+                              child: Center(
+                                child: InkWell(
+                                  onHover: (isHovered) =>
+                                      setState(() => _isUpload = isHovered),
+                                  child: Image.asset(
+                                    _isUpload
+                                        ? 'assets/images/cloud-computingHover.png'
+                                        : 'assets/images/cloud-computing.png',
+                                    height: ScreenHeight * 0.07,
+                                    width: ScreenWidth * 0.13,
+                                  ),
+                                  onTap: () {
+                                    uploadFiledDocs();
+                                  },
+                                ),
+                              ),
                             ),
                           ],
                         )

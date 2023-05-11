@@ -424,7 +424,7 @@ class MongoDB {
     final coll = db1.collection(notesCol);
     await db1.open();
 
-    final info = await coll.findOne(Mongo.where.eq("employeeID", notesId))
+    final info = await coll.findOne(Mongo.where.eq("noteID", notesId))
         as Map<String, dynamic>;
 
     return info;
