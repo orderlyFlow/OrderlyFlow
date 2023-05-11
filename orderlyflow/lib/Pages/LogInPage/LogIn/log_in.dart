@@ -88,9 +88,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       // Perform some action for logged in user
     } catch (e) {
       // Perform some action for non-logged in user
+      setState(() {
+        _isDisabled = true;
+      });
     } finally {
       setState(() { 
         _isLoading = false;
+
       });
       if (StoreController.Login_found.isTrue) {
         Navigator.push(
@@ -104,6 +108,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Please check your credentials'),
         ));
+        setState(() {        
+          _isDisabled = true;
+        });
       }
     }
   }

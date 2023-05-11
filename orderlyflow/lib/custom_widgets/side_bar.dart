@@ -30,7 +30,6 @@ class _SideBarState extends State<SideBar> {
   bool _isHoveredManual = false;
   bool _isHoveredTask = false;
   bool _isHoverdHR = false;
-  bool _isHoveredHR2 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -260,37 +259,11 @@ class _SideBarState extends State<SideBar> {
                                     duration: const Duration(seconds: 2)));
                           },
                         ),
-                      )),
-                      SizedBox(
-                        height: ScreenHeight * 0.02,
-                      ),
-                      Center(
-                          child: Container(
-                        child: InkWell(
-                          onHover: (isHovered) =>
-                              setState(() => _isHoveredHR2 = isHovered),
-                          child: Image.asset(
-                            _isHoveredHR2
-                                ? 'assets/images/screeningHover.png'
-                                : 'assets/images/screening.png',
-                            height: ScreenHeight * 0.07,
-                            width: ScreenWidth * 0.08,
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    childCurrent: const requests(),
-                                    child: requests(),
-                                    type: PageTransitionType.theme,
-                                    duration: const Duration(seconds: 2)));
-                          },
-                        ),
-                      )),
+                      )),        
                     ],
                   ),
                   SizedBox(
-                    height: ScreenHeight * 0.06,
+                    height: ScreenHeight * 0.16,
                   ),
                   Center(
                       child: InkWell(
