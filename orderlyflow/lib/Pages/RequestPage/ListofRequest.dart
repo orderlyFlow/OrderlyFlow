@@ -88,7 +88,7 @@ class _requestListState extends State<requestList> {
                 color: Paletter.containerLight,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
