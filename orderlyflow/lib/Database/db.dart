@@ -18,17 +18,21 @@ import 'package:bson/bson.dart';
 import 'package:http/http.dart' as http;
 import 'db.dart';
 import 'dart:developer';
+import 'package:flutter_sms/flutter_sms.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'package:bson/bson.dart';
-//import 'package:email_auth/email_auth.dart';
+import 'package:email_auth/email_auth.dart';
+import 'package:bson/bson.dart';
+import 'package:email_auth/email_auth.dart';
 import 'dart:io';
-//import 'package:file_saver/file_saver.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-//import 'package:permission_handler/permission_handler.dart';
-//import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
-//import 'package:path_provider/path_provider.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var db;
 var collection;
@@ -43,6 +47,26 @@ class MongoDB {
     print(status);
   }
 
+  static Future<List<Map<String, dynamic>>> getReports() async {
+//this function returns a list of all the reports in mongodb ( we may need to limit the number of documents fetched
+//in the future to avoid long  fetch times )
+
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(reportCol);
+    await db.open();
+    final documents = await coll.find().toList();
+    return documents;
+  }
+
+  static Future<List<dynamic>> getIndividualForms() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection('DocumentsFiled');
+    await db1.open();
+
+    final documents = await coll.find(where.eq("uploaderID", 100001)).toList();
+    return documents;
+  }
+
   static Future<Map<String, dynamic>> getInfo() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
@@ -50,6 +74,50 @@ class MongoDB {
 
     var IDCont = int.parse(StoreController.ID_controller.value.text.trim());
     final information = await coll.findOne(Mongo.where.eq("ID", IDCont))
+        as Map<String, dynamic>;
+    return information;
+
+    //await db.close();
+  }
+
+  static Future<dynamic> getSalaryhr(int IDUser) async {
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(payrollCol);
+    //await db1.open();
+    final sal_info = await coll.findOne(Mongo.where.eq("ID", IDUser))
+        as Map<String, dynamic>;
+    //print(sal_info['basepay']);
+    return sal_info;
+  }
+
+  static Future<dynamic> getHOW() async {
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(payrollCol);
+    //await db1.open();
+    int user = int.parse(StoreController.ID_controller.value.text.trim());
+    final sal_info =
+        await coll.findOne(Mongo.where.eq("ID", user)) as Map<String, dynamic>;
+    print(sal_info['hoursOW']);
+    return sal_info['hoursOW'];
+  }
+
+  static Future<dynamic> getBounus() async {
+    //final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db.collection(payrollCol);
+    //await db1.open();
+    int user = int.parse(StoreController.ID_controller.value.text.trim());
+    final sal_info =
+        await coll.findOne(Mongo.where.eq("ID", user)) as Map<String, dynamic>;
+    print(sal_info['bonus']);
+    return sal_info['bonus'];
+  }
+
+  static Future<Map<String, dynamic>> getInfobyid(int persID) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection(personsCol);
+    await db1.open();
+
+    final information = await coll.findOne(Mongo.where.eq("ID", persID))
         as Map<String, dynamic>;
     return information;
 
@@ -335,7 +403,7 @@ class MongoDB {
 // hr reserved
   }
 
-  /*static Future<dynamic> requestDocument(String docName) async {
+  static Future<dynamic> requestDocument(String docName) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final collection = db1.collection(documentsCol);
     await db1.open();
@@ -362,7 +430,7 @@ class MongoDB {
     } catch (e) {
       debugPrint(e.toString());
     }
-  }*/
+  }
 
   static Future<List<Map<String, dynamic>>> renderReceivers() async {
     final recentChat = db.collection(chatsCol);
@@ -415,7 +483,7 @@ class MongoDB {
     return info;
   }
 
-  /*static Future<Map<String, dynamic>> logDocumentRequest(String docName) async {
+  static Future<Map<String, dynamic>> logDocumentRequest(String docName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int counter = prefs.getInt('counter') ?? 0;
 
@@ -434,7 +502,7 @@ class MongoDB {
     collection.insertOne(document);
 
     return document;
-  }*/
+  }
 
   /* static void updateStatus(String taskname) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -445,6 +513,32 @@ class MongoDB {
     print("called");
     //not working ( most likely wrong query)
   }*/
+  static Future<List<Map<String, dynamic>>> fetchAll() async {
+    final collection = db.collection(personsCol);
+    await db.open();
+    final result = await collection.find().toList();
+    if (result != null) {
+      return result;
+    } else {
+      return [];
+    }
+  }
+
+  static Future<dynamic> pieChartValues() async {
+    var peopleList = await fetchAll();
+    int total = peopleList.length;
+    int onSite = 0, remote = 0;
+    for (var person in peopleList) {
+      if (person['status'] == "On site") {
+        onSite = onSite + 1;
+      }
+      if (person['status'] == "Remotely") {
+        remote = remote + 1;
+      }
+    }
+    StoreController.remoteRatio.value = remote / total;
+    StoreController.onSiteRatio.value = onSite / total;
+  }
 
   static Future<List<dynamic>> getEmployeesByTeamId(int teamId) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
@@ -498,7 +592,7 @@ class MongoDB {
     return team;
   }
 
-  /* static void addMeeting(String subject) async {
+  static void addMeeting(String subject) async {
     SharedPreferences prefs1 = await SharedPreferences.getInstance();
     int counter1 = prefs1.getInt('counter') ?? 0;
 
@@ -518,7 +612,7 @@ class MongoDB {
     collection.insertOne(document);
     counter1++;
     prefs1.setInt('counter', counter1);
-  }*/
+  }
 
   /*static Future<String> getFilePath() async {
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1

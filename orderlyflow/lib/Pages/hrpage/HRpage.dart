@@ -9,8 +9,8 @@ import 'package:orderlyflow/custom_widgets/searchBar.dart';
 import 'package:orderlyflow/side_bar.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:glass/glass.dart';
-import '../Database/db.dart';
-import '../custom_widgets/BlueBg.dart';
+import '../../Database/db.dart';
+import '../../custom_widgets/BlueBg.dart';
 
 class HRpage extends StatefulWidget {
   const HRpage({super.key});

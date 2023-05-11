@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orderlyflow/Pages/hrpage/HRpage.dart';
 import 'package:orderlyflow/calendar.dart';
 import 'package:orderlyflow/Pages/chatPage.dart';
 import 'package:orderlyflow/employeeData.dart';
-import 'package:orderlyflow/hrpage/threepoint.dart';
+import 'package:orderlyflow/Pages/hrpage/threepoint.dart';
 import 'package:orderlyflow/mainPage%20widgets/dashboard.dart';
 import 'package:orderlyflow/tasks.dart';
 import 'LogIn/log_in.dart';

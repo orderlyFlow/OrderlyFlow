@@ -19,6 +19,8 @@ class StoreController extends GetxController {
 
   static RxInt Rec_ID = 0.obs;
   static RxInt Searched_ID = 0.obs;
+  static RxDouble onSiteRatio = 0.0.obs;
+  static RxDouble remoteRatio = 0.0.obs;
 
   static RxBool ID_found = false.obs;
   static RxBool Pass_found = false.obs;

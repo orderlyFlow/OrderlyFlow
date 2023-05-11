@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
   flutter_spinkit: ^5.1.0
   loading_animation_widget: ^1.2.0+4
-  mongo_dart: ^0.8.2
+  mongo_dart: ^0.9.1
   crypto: ^3.0.0
   page_transition: ^2.0.9
   auto_size_text: ^3.0.0
@@ -42,8 +42,27 @@ dependencies:
   indexed: ^0.0.8
   argon_buttons_flutter: ^1.1.0
   get: ^4.6.5
+  flutter_sms: ^2.3.3
+  sms: ^0.2.4
+  url_launcher: ^6.1.10
+  open_file: ^3.2.1
+  permission_handler: ^10.2.0
+  path_provider: ^2.0.14
+  flutter_downloader: ^1.10.2
+  bson: ^4.0.0
+  flutter_termii: ^0.2.1
+  file_saver: ^0.2.1
+  downloads_path_provider_28: ^0.1.2
+  shared_preferences : ^2.1.0
+  mailer: ^6.0.0
+  http: ^0.13.5
+  dotted_line: ^3.1.0
   pie_chart: ^5.3.2
   glass: ^1.0.1+1
+  pull_to_refresh: ^2.0.0
+  rxdart: ^0.27.7
+  skeleton_loader: ^2.0.0+4
+  email_auth: ^1.0.0
 
 dev_dependencies:
   flutter_test:
