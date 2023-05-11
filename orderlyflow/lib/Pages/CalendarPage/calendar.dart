@@ -21,97 +21,31 @@ class calendar extends StatefulWidget {
 class _calendarState extends State<calendar> {
   DateTime today = DateTime.now();
   List events = [];
+  late Stream<List<Map<String, dynamic>>> _eventsStream =
+      MongoDB.getEventsOnSelectedDate(today);
+  final _formKey = GlobalKey<FormState>();
+  DateTimeRange dateRange = DateTimeRange(
+    start: DateTime(2023, 06, 05),
+    end: DateTime(2023, 06, 30),
+  );
 
-  //late double ScreenWidth;
-  //late double ScreenHeight;
-
-  /*void _DisplayDialog(
-      BuildContext context, DateTime selectedDate, List events) async {
-   //events = await MongoDB.getEventsOnSelectedDate(selectedDate);
-    setState(() {
-      today = selectedDate;
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              backgroundColor: null,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Container(
-                width: 500,
-                height: 200,
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      child: Text(
-                        DateFormat.yMMMMd("en_US").format(selectedDate),
-                        style: TextStyle(
-                          fontFamily: 'iceland',
-                          fontSize: ScreenHeight * 0.035,
-                          fontWeight: FontWeight.bold,
-                          color: Paletter.blackText.withOpacity(0.5),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Expanded(
-                        child: ListView.builder(
-                            itemCount: events.length == 0 ? 1 : events.length,
-                            itemBuilder: (context, index) {
-                              if (events.length == 0) {
-                                return Center(
-                                  child: Center(
-                                    child: Text(
-                                      '<no event>',
-                                      style: TextStyle(
-                                          fontFamily: 'iceland',
-                                          fontSize: ScreenHeight * 0.020,
-                                          color: Paletter.blackText
-                                              .withOpacity(0.5)),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Text(
-                                    events[index],
-                                    style: TextStyle(
-                                        fontFamily: 'iceland',
-                                        fontSize: ScreenHeight * 0.015,
-                                        color: Paletter.blackText
-                                            .withOpacity(0.5)),
-                                  ),
-                                );
-                              }
-                            }))
-                  ],
-                ),
-              ),
-            );
-          });
-    });
-  }*/
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+    var padd;
+    TextEditingController title_controller = new TextEditingController();
+    TextEditingController loc_controller = new TextEditingController();
+    TextEditingController part_controller = new TextEditingController();
+    TextEditingController desc_controller = new TextEditingController();
+    //Future? _future = MongoDB.getEventsOnSelectedDate(today);
+    final start = dateRange.start;
+    final end = dateRange.end;
     return Scaffold(
       body: Stack(children: [
         const BlueBg(),
@@ -200,10 +134,9 @@ class _calendarState extends State<calendar> {
                       onDaySelected: (today, focusedDay) {
                         setState(() {
                           today = today;
+                          _eventsStream =
+                              MongoDB.getEventsOnSelectedDate(today);
                         });
-                        //int day = today.day;
-                        MongoDB.getEventsOnSelectedDate(today);
-                        //print(day.toString());
                       },
                     ),
                   ),
@@ -218,308 +151,551 @@ class _calendarState extends State<calendar> {
                       color: Paletter.mainBgLight,
                       borderRadius: BorderRadius.circular(10)),
                   /////////////////////////////events/////////////////////////////////////
-                  child: FutureBuilder(
-                      future: MongoDB.getEvent(),
-                      builder: (buildContext, AsyncSnapshot snapshot) {
+                  child: StreamBuilder<List<Map<String, dynamic>>>(
+                      stream: _eventsStream,
+                      builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        } else if (snapshot.hasData) {
-                          var meetings = snapshot.data;
-                          return ListView.builder(
-                            itemCount: meetings.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final meeting = meetings[index];
-                              // DateTime dateTime =
-                              //   DateFormat('yyyy-MM-ddTHH:mm:ssZ')
-                              //     .parse(meeting['startTime']);
-                              String startTime = DateFormat('HH:mm a')
-                                  .format(meeting['startTime']);
-                              String endTime = DateFormat('HH:mm a')
-                                  .format(meeting['endTime']);
-                              // int day =
-                              //   dateTime.day; // extract the day component
-                              //int month = dateTime.month;
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: screenHeight * 0.02),
-                                child: Column(children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Time on left
-                                      Column(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '08:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '09:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '10:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '11:00 AM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '12:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '01:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '02:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.0879),
-                                            child: Text(
-                                              '03:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.021,
-                                                screenHeight * 0.007,
-                                                screenWidth * 0.021,
-                                                screenHeight * 0),
-                                            child: Text(
-                                              '04:00 PM',
-                                              style: TextStyle(
-                                                fontSize: screenHeight * 0.018,
-                                                color: Colors.black87,
-                                                fontFamily: 'conthrax',
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      // Meeting name and dotted line
-                                      Column(
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        } else {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            var meetings = snapshot.data!.toList();
+                            if (meetings.isEmpty) {
+                              return Center(
+                                child: Text(
+                                  '<<<No events>>>',
+                                  style: TextStyle(
+                                    fontSize: screenHeight * 0.018,
+                                    color: Colors.black87,
+                                    fontFamily: 'conthrax',
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return ListView.builder(
+                                itemCount: meetings.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final meeting = meetings[index];
+                                  Duration offset =
+                                      DateTime.now().timeZoneOffset;
+                                  DateTime startUTC = meeting['startTime'];
+                                  DateTime endUTC = meeting['endTime'];
+                                  DateTime localStartTime =
+                                      startUTC.add(offset);
+                                  DateTime localEndTime = endUTC.add(offset);
+                                  String startTime = DateFormat('HH:mm a')
+                                      .format(localStartTime);
+                                  String endTime = DateFormat('HH:mm a')
+                                      .format(localEndTime);
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: screenHeight * 0.02),
+                                    child: Column(children: [
+                                      Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            height: screenHeight * 0.12,
-                                            margin: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.01,
-                                                screenHeight * 0,
-                                                screenWidth * 0,
-                                                screenHeight * 0),
-                                            width: screenWidth * 0.767,
-                                            padding: EdgeInsets.fromLTRB(
-                                                screenWidth * 0.014,
-                                                screenHeight * 0.014,
-                                                screenWidth * 0.014,
-                                                screenHeight * 0.014),
-                                            decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 117, 165, 204),
-                                              border: Border.all(
+                                          // Meeting name and dotted line
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height: screenHeight * 0.12,
+                                                margin: EdgeInsets.fromLTRB(
+                                                    screenWidth * 0.018,
+                                                    screenHeight * 0,
+                                                    screenWidth * 0,
+                                                    screenHeight * 0),
+                                                width: screenWidth * 0.87,
+                                                padding: EdgeInsets.fromLTRB(
+                                                    screenWidth * 0.014,
+                                                    screenHeight * 0.014,
+                                                    screenWidth * 0.014,
+                                                    screenHeight * 0.014),
+                                                decoration: BoxDecoration(
                                                   color: Color.fromARGB(
-                                                      255, 117, 165, 204)),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                            child:
-                                                /////////////////////////////////////////////////////////////////////////
-                                                Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                /*Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        screenWidth * 0,
-                                                        screenHeight * 0,
-                                                        screenWidth * 0,
-                                                        screenHeight * 0),
-                                                    width: screenWidth * 0.07,
-                                                    height: screenHeight * 0.15,
-                                                    child: FittedBox(
-                                                      fit: BoxFit
-                                                          .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
-                                                      child: Image(
-                                                        image: MemoryImage(
-                                                            meeting['icon']),
-                                                      ),
-                                                    ),
-                                                  ),*/
-                                                Column(
+                                                      255, 117, 165, 204),
+                                                  border: Border.all(
+                                                      color: Color.fromARGB(
+                                                          255, 117, 165, 204)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      meeting['title'],
-                                                      style: TextStyle(
-                                                        fontSize: screenHeight *
-                                                            0.025,
-                                                        color: Colors.black87,
-                                                        fontFamily: 'conthrax',
-                                                      ),
-                                                    ),
-                                                    /*SizedBox(
-                                                          height: screenHeight *
-                                                              0.015),
-                                                      Text(
-                                                        meeting[
-                                                            'eventDescription'],
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              screenHeight *
-                                                                  0.018,
-                                                          color: Colors.black87,
-                                                          fontFamily:
-                                                              'conthrax',
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          meeting['title'],
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                screenHeight *
+                                                                    0.025,
+                                                            color:
+                                                                Colors.black87,
+                                                            fontFamily:
+                                                                'conthrax',
+                                                          ),
                                                         ),
-                                                      ),*/
-                                                    SizedBox(
-                                                        height: screenHeight *
-                                                            0.015),
-                                                    Text(
-                                                      startTime +
-                                                          " - " +
-                                                          endTime,
-                                                      style: TextStyle(
-                                                        fontSize: screenHeight *
-                                                            0.018,
-                                                        color: Colors.black87,
-                                                        fontFamily: 'conthrax',
-                                                      ),
+                                                        SizedBox(
+                                                            height:
+                                                                screenHeight *
+                                                                    0.015),
+                                                        Text(
+                                                          startTime +
+                                                              " - " +
+                                                              endTime,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                screenHeight *
+                                                                    0.018,
+                                                            color:
+                                                                Colors.black87,
+                                                            fontFamily:
+                                                                'conthrax',
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: screenHeight * 0.01),
+                                              ),
+                                              SizedBox(
+                                                  height: screenHeight * 0.018),
 
-                                          // Dotted line
-                                          DottedLine(
-                                              dashRadius: 16.0,
-                                              dashColor: Colors.grey.shade800,
-                                              dashGapLength:
-                                                  screenWidth * 0.002,
-                                              lineLength: screenWidth * 0.788,
-                                              lineThickness:
-                                                  screenHeight * 0.0038),
+                                              // Dotted line
+                                              Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      screenWidth * 0.014,
+                                                      screenHeight * 0,
+                                                      screenWidth * 0,
+                                                      screenHeight * 0),
+                                                  child: DottedLine(
+                                                      dashRadius: 16.0,
+                                                      dashColor:
+                                                          Colors.grey.shade800,
+                                                      dashGapLength:
+                                                          screenWidth * 0.002,
+                                                      lineLength:
+                                                          screenWidth * 0.885,
+                                                      lineThickness:
+                                                          screenHeight *
+                                                              0.0038)),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ]),
+                                    ]),
+                                  );
+                                },
                               );
-                            },
-                          );
-                        } else {
-                          return Container(
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Paletter.gradiant3,
-                              ),
-                            ),
-                          );
+                            }
+                          }
                         }
                       }),
                 )
               ],
-            )
+            ),
           ],
-        )
+        ),
+        Visibility(
+          visible: true, //StoreController.isDirector.value,
+          child: Container(
+              margin: EdgeInsets.fromLTRB(screenWidth * 0, screenHeight * 0,
+                  screenWidth * 0.005, screenHeight * 0.01),
+              child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: SizedBox.fromSize(
+                    size: Size(screenWidth * 0.0495, screenHeight * 0.065),
+                    child: ClipOval(
+                      child: Material(
+                        color: Colors.green.shade300,
+                        child: InkWell(
+                          splashColor: Colors.indigoAccent.shade400,
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Stack(
+                                      children: <Widget>[
+                                        Positioned(
+                                          right: -40.0,
+                                          top: -40.0,
+                                          child: InkResponse(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: CircleAvatar(
+                                              child: Icon(Icons.close),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          ),
+                                        ),
+                                        Form(
+                                          key: _formKey,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: title_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.title_rounded,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText: 'Event Title',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter the title';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: loc_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.location_on,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText:
+                                                          'Enter Event Location',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter your Location';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: part_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.person_outline,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText:
+                                                          '{Participant1 Id,P2 Id...}',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter your participants';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  controller: desc_controller,
+                                                  style: TextStyle(
+                                                      color: Paletter.blackText,
+                                                      fontFamily: 'Neuropol'),
+                                                  decoration: InputDecoration(
+                                                      // ignore: prefer_const_constructors
+                                                      prefixIcon: Icon(
+                                                        Icons.description,
+                                                        color:
+                                                            Paletter.logInText,
+                                                      ),
+                                                      hintText:
+                                                          'Enter Event Description',
+                                                      // ignore: prefer_const_constructors
+                                                      hintStyle: TextStyle(
+                                                          color: Paletter
+                                                              .logInText),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      40.0),
+                                                              // ignore: prefer_const_constructors
+                                                              borderSide: BorderSide(
+                                                                  color: Color.fromRGBO(
+                                                                      199,
+                                                                      215,
+                                                                      225,
+                                                                      0.56))),
+                                                      filled: true,
+                                                      fillColor: const Color.fromRGBO(
+                                                          199, 215, 225, 0.56),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  40.0),
+                                                          borderSide: const BorderSide(
+                                                              color: Color.fromRGBO(
+                                                                  199, 215, 225, 0.56)))),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Please Enter your description';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  //onSaved: (value) => user = value!,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                        child: ElevatedButton(
+                                                            onPressed:
+                                                                pickDateRange,
+                                                            child: Text(
+                                                                '${start.year}/${start.month}/${start.day}'))),
+                                                    SizedBox(
+                                                      width: screenWidth * 0.01,
+                                                    ),
+                                                    Expanded(
+                                                        child: ElevatedButton(
+                                                            onPressed:
+                                                                pickDateRange,
+                                                            child: Text(
+                                                                '${end.year}/${end.month}/${end.day}'))),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ElevatedButton(
+                                                  child: Text("Add Event"),
+                                                  onPressed: () {
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      MongoDB.addEventToDB(
+                                                          title_controller
+                                                              .value.text,
+                                                          loc_controller
+                                                              .value.text,
+                                                          desc_controller
+                                                              .value.text,
+                                                          part_controller
+                                                              .value.text,
+                                                          dateRange.start,
+                                                          dateRange.end);
+                                                      Navigator.pop(context);
+                                                    }
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ), // <-- Icon
+                              Text(
+                                "Add event",
+                                style: TextStyle(
+                                  fontFamily: "conthrax",
+                                  fontSize: screenHeight * 0.0002,
+                                  color: Colors.white,
+                                ),
+                              ), // <-- Text
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ))),
+        ),
       ]),
     );
+  }
+
+  Future pickDateRange() async {
+    DateTimeRange? newDateTimeRange;
+    DateTime initialStartDate = dateRange.start;
+    DateTime initialEndDate = dateRange.end;
+    DateTime? newStartDate;
+
+    // Show the start date picker
+    do {
+      newStartDate = await showDatePicker(
+        context: context,
+        initialDate: initialStartDate,
+        firstDate: DateTime(2023),
+        lastDate: DateTime(2030),
+      );
+    } while (newStartDate == null);
+
+    //print(newStartDate!.day);
+    if (newStartDate != null) {
+      TimeOfDay? newStartTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initialStartDate),
+      );
+      if (newStartTime != null) {
+        newStartDate = DateTime(
+          newStartDate.year,
+          newStartDate.month,
+          newStartDate.day,
+          newStartTime.hour,
+          newStartTime.minute,
+        );
+      }
+
+      // Show the end date picker
+      DateTime? newEndDate = await showDatePicker(
+        context: context,
+        initialDate: initialEndDate,
+        firstDate: DateTime(2023),
+        lastDate: DateTime(2030),
+      );
+      if (newEndDate != null) {
+        // Show the end time picker
+        TimeOfDay? newEndTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(initialEndDate),
+        );
+        if (newEndTime != null) {
+          newEndDate = DateTime(
+            newEndDate.year,
+            newEndDate.month,
+            newEndDate.day,
+            newEndTime.hour,
+            newEndTime.minute,
+          );
+        }
+
+        // Update the date range if both start and end dates are valid
+        if (newStartDate != null && newEndDate != null) {
+          newDateTimeRange =
+              DateTimeRange(start: newStartDate, end: newEndDate);
+          setState(() => dateRange = newDateTimeRange!);
+        }
+      }
+    }
+
+    return newDateTimeRange;
   }
 }
