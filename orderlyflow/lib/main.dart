@@ -23,7 +23,7 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     initialRoute: '/',
     routes: {
-      '/': (context) => threepoint(),
+      '/': (context) => HRpage(),
     },
   ));
 }

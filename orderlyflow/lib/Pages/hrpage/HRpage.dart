@@ -83,14 +83,6 @@ class HRpageState extends State<HRpage> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        FlatButton(
-                          onPressed: () {
-                            // Action to perform when button is pressed
-                          },
-                          child: Text('Click me!'),
-                          color: Colors.teal,
-                          textColor: Colors.white,
-                        ),
                         Container(
                             width: ScreenWidth * 0.8,
                             height: ScreenHeight * 0.35,
@@ -244,6 +236,46 @@ class HRpageState extends State<HRpage> {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
+                                  Container(
+                                      width: ScreenWidth * 0.36,
+                                      height: ScreenHeight * 0.35,
+                                      child: FutureBuilder<List<dynamic>>(
+                                        future: MongoDB.getIndividualForms1(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot snapshot) {
+                                          if (snapshot.hasData) {
+                                            return ListView.builder(
+                                              itemCount: snapshot.data!.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Container(
+                                                    width: ScreenWidth * 0.34,
+                                                    height: ScreenHeight * 0.09,
+                                                    child: ListTile(
+                                                      onTap: () {},
+                                                      title: Text(
+                                                          snapshot.data![index]
+                                                              ['title']),
+                                                      subtitle: Text(snapshot
+                                                          .data![index]['Date']
+                                                          .toString()),
+                                                    ));
+                                              },
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            return Container(
+                                                width: ScreenWidth * 0.16,
+                                                height: ScreenHeight * 0.10,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator()));
+                                          }
+                                        },
+                                      )),
                                 ]))
                         /*child: Container(
                           margin: EdgeInsets.only(
@@ -268,10 +300,3 @@ class HRpageState extends State<HRpage> {
     ]));
   }
 }
-
-FlatButton({
-  required Null Function() onPressed,
-  required Text child,
-  required MaterialColor color,
-  required Color textColor,
-}) {}

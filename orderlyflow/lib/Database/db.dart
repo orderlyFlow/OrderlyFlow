@@ -67,6 +67,15 @@ class MongoDB {
     return documents;
   }
 
+  static Future<List<dynamic>> getIndividualForms1() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection('DocumentsFiled');
+    await db1.open();
+
+    final documents = await coll.find().toList();
+    return documents;
+  }
+
   static Future<Map<String, dynamic>> getInfo() async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final coll = db1.collection(personsCol);
