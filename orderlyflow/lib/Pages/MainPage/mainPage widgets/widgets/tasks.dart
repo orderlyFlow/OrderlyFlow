@@ -14,8 +14,6 @@ class tasks extends StatefulWidget {
 }
 
 class _tasksState extends State<tasks> {
-
- 
   Future<void> updateTask(int id, bool status) async {
     var db = await Mongo.Db.create(mongoDB_URL);
     await db.open();
@@ -35,13 +33,10 @@ class _tasksState extends State<tasks> {
       // _taskInfo[index] = _taskInfo[index].copyWith(status: status);
       widget.taskInfo.clear();
       widget.taskInfo.addAll(updatedTaskList);
-      
     });
-
-   
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
     late double ScreenHeight = MediaQuery.of(context).size.height;
@@ -82,9 +77,7 @@ class _tasksState extends State<tasks> {
                             ? Text('Task Complete')
                             : Text('Work In Progress')));
                   }
-
                 }),
-                
           );
         },
       ),

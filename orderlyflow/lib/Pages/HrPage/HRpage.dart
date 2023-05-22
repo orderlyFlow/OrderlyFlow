@@ -82,14 +82,14 @@ class HrPageState extends State<HrPage> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        FlatButton(
+                        /* FlatButton(
                           onPressed: () {
                             // Action to perform when button is pressed
                           },
                           child: Text('New employee'),
                           color: Colors.teal,
                           textColor: Colors.white,
-                        ),
+                        ),*/
                         Container(
                             width: ScreenWidth * 0.8,
                             height: ScreenHeight * 0.35,

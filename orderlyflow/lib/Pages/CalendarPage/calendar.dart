@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:dotted_line/dotted_line.dart';
 
 import '../../Database/db.dart';
+import '../../Database/textControllers.dart';
 import '../../custom_widgets/BlueBg.dart';
 import 'package:intl/intl.dart';
 
@@ -311,7 +312,7 @@ class _calendarState extends State<calendar> {
           ],
         ),
         Visibility(
-          visible: true, //StoreController.isDirector.value,
+          visible: StoreController.isDirector.value,
           child: Container(
               margin: EdgeInsets.fromLTRB(screenWidth * 0, screenHeight * 0,
                   screenWidth * 0.005, screenHeight * 0.01),

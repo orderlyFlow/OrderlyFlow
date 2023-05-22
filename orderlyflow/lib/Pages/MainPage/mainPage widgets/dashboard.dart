@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -10,7 +12,7 @@ import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/inbox.dart
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/tasks.dart';
 import 'package:orderlyflow/Pages/MainPage/tasks.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Database/db.dart';
 
 class Dashboard extends StatefulWidget {
@@ -18,17 +20,14 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
-  void getAllTasks() async {
-    StoreController.renderedTasks = await MongoDB.getTask();
-  }
-
+class _DashboardState extends State<Dashboard> with ChangeNotifier {
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
     late double ScreenHeight = MediaQuery.of(context).size.height;
     String UserName = StoreController.currentUser!['name'];
-    getAllTasks();
+    MongoDB.getTask();
+
     return Material(
       color: Paletter.mainBgLight,
       child: Container(

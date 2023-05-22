@@ -111,7 +111,10 @@ class MongoDB {
         .map((e) =>
             Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
         .toList());
-
+    StoreController.renderedTasks = getuser
+        .map((e) =>
+            Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
+        .toList();
     return getuser
         .map((e) =>
             Tasks(ID: e['TaskID'], name: e['taskName'], status: e['status']))
@@ -434,8 +437,8 @@ class MongoDB {
   static Future<List<Map<String, dynamic>>> getIndRec() async {
     bool foundChats = await MongoDB.getChats();
     final persons = db.collection(personsCol);
-    print(StoreController.groups.isEmpty);
-    print(StoreController.individualRecIDs.toString());
+    //print(StoreController.groups.isEmpty);
+    //print(StoreController.individualRecIDs.toString());
     List<dynamic> recList = [];
     if (StoreController.individualRecIDs.isNotEmpty && foundChats == true) {
       for (var receiver in StoreController.individualRecIDs) {
