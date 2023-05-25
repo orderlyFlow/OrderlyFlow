@@ -17,7 +17,6 @@ class addTaskButton extends StatefulWidget {
 }
 
 class _addTaskButtonState extends State<addTaskButton> {
-  TextEditingController _textEditingController = TextEditingController();
   late int id;
   bool _isUpper = false;
   late TextEditingController tasksController = TextEditingController();
@@ -43,7 +42,7 @@ class _addTaskButtonState extends State<addTaskButton> {
     while (idList.contains(ID)) {
       ID++;
     }
-    late String? taskName = tasksController.text ;
+    late String? taskName = tasksController.text;
     addTask(ID, taskName, pickedIds);
     Navigator.of(context).pop(pickedIds);
     Navigator.pushReplacement(
@@ -57,7 +56,7 @@ class _addTaskButtonState extends State<addTaskButton> {
   }
 
   static Future<void> addTask(
-    int TaskID, String taskname, List<int> employees) async {
+      int TaskID, String taskname, List<int> employees) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final collection = db1.collection(tasksCol);
     await db1.open();
@@ -115,11 +114,10 @@ class _addTaskButtonState extends State<addTaskButton> {
                                     MediaQuery.of(context).viewInsets.bottom,
                               ),
                               child: Container(
-                                padding: EdgeInsets.only(
-                                    left: ScreenWidth * 0.001),
+                                padding:
+                                    EdgeInsets.only(left: ScreenWidth * 0.001),
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
@@ -129,16 +127,17 @@ class _addTaskButtonState extends State<addTaskButton> {
                                           fontSize: ScreenHeight * 0.03,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: ScreenHeight * 0.02),
+                                    SizedBox(height: ScreenHeight * 0.05),
                                     Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           padding: EdgeInsets.only(
                                               left: ScreenWidth * 0.0001),
+                                              margin: EdgeInsets.only(left: ScreenWidth * 0.01),
                                           width: ScreenWidth * 0.4,
                                           child: TextField(
                                             controller: tasksController,
@@ -162,9 +161,8 @@ class _addTaskButtonState extends State<addTaskButton> {
                                                     subtitle: Text(
                                                         'ID: ${widget.ids[index]}'),
                                                     leading: Checkbox(
-                                                      value: pickedIds
-                                                          .contains(widget
-                                                              .ids[index]),
+                                                      value: pickedIds.contains(
+                                                          widget.ids[index]),
                                                       onChanged: (value) {
                                                         setState(() {
                                                           toggleId(widget
@@ -181,6 +179,7 @@ class _addTaskButtonState extends State<addTaskButton> {
                                         SizedBox(width: ScreenWidth * 0.01),
                                         Container(
                                           height: ScreenHeight * 0.08,
+                                          margin: EdgeInsets.only(right: ScreenWidth * 0.01),
                                           child: ElevatedButton(
                                             onPressed: checkID,
                                             child: Icon(Icons.check),
@@ -193,8 +192,7 @@ class _addTaskButtonState extends State<addTaskButton> {
                                       ],
                                     ),
                                     SizedBox(height: ScreenHeight * 0.03),
-                                    Text(
-                                        'Picked IDs: ${pickedIds.join(', ')}'),
+                                    Text('Picked IDs: ${pickedIds.join(', ')}'),
                                     SizedBox(
                                       height: ScreenHeight * 0.02,
                                     ),
@@ -221,7 +219,7 @@ class _addTaskButtonState extends State<addTaskButton> {
       );
     } else {
       return Container(
-        child: Text('not a boss'),
+        child: Text(''),
       );
     }
   }

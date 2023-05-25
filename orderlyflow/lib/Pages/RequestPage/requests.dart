@@ -8,6 +8,7 @@ import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/Database/db.dart';
 import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/Pages/RequestPage/ListofRequest.dart';
+import 'package:orderlyflow/Pages/RequestPage/addRequestButton.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:orderlyflow/custom_widgets/BlueBg.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
@@ -22,8 +23,6 @@ class requests extends StatefulWidget {
 }
 
 class _requestsState extends State<requests> {
-  bool _isHead = false;
-  bool _isHR = false;
   bool _isUpload = false;
 
   static void uploadFiledDocs() async {
@@ -124,6 +123,21 @@ class _requestsState extends State<requests> {
                                   SizedBox(
                                     width: ScreenWidth * 0.03,
                                   ),
+                                  FutureBuilder(
+                                      future: MongoDB.getInfo(),
+                                      builder: (buildContext,
+                                          AsyncSnapshot snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Text('${snapshot.error}');
+                                        } else if (snapshot.hasData) {
+                                          var userID = snapshot.data["ID"];
+                                          return addReq(ID: userID);
+                                        } else {
+                                          return CircularProgressIndicator(
+                                            color: Colors.white,
+                                          );
+                                        }
+                                      }),
                                 ],
                               ),
                               SizedBox(
@@ -158,7 +172,7 @@ class _requestsState extends State<requests> {
                         Column(
                           children: [
                             Container(
-                              height: ScreenHeight * 0.93,
+                              height: ScreenHeight * 0.96,
                               width: ScreenWidth * 0.5,
                               decoration: BoxDecoration(
                                   color: Paletter.containerLight,
@@ -171,8 +185,8 @@ class _requestsState extends State<requests> {
                                     _isUpload
                                         ? 'assets/images/cloud-computingHover.png'
                                         : 'assets/images/cloud-computing.png',
-                                    height: ScreenHeight * 0.07,
-                                    width: ScreenWidth * 0.13,
+                                    height: ScreenHeight * 0.1,
+                                    width: ScreenWidth * 0.23,
                                   ),
                                   onTap: () {
                                     uploadFiledDocs();
