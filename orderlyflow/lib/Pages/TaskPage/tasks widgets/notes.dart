@@ -4,12 +4,10 @@ import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 
-
-
 class notes extends StatefulWidget {
   String content;
   int noteId;
-  notes({super.key,  required  this.content, required this.noteId});
+  notes({super.key, required this.content, required this.noteId});
 
   @override
   State<notes> createState() => _notesState();
@@ -19,33 +17,34 @@ class _notesState extends State<notes> {
   late String textIntro;
   late TextEditingController notesController = TextEditingController();
 
-  Future<void> Save(String data) async{
+  Future<void> Save(String data) async {
     var db = await Mongo.Db.create(mongoDB_URL);
     await db.open();
     var col = db.collection(notesCol);
-    await col.update(Mongo.where.eq('noteID', widget.noteId), Mongo.modify.set('content', data));
-
+    await col.update(Mongo.where.eq('noteID', widget.noteId),
+        Mongo.modify.set('content', data));
   }
 
-  Future <void> delete() async{
+  Future<void> delete() async {
     var db = await Mongo.Db.create(mongoDB_URL);
     await db.open();
     var col = db.collection(notesCol);
-    await col.update(Mongo.where.eq('noteID', widget.noteId), Mongo.modify.set('content', ''));
+    await col.update(Mongo.where.eq('noteID', widget.noteId),
+        Mongo.modify.set('content', ''));
   }
 
-  void handleSave(){
+  void handleSave() {
     String txt = notesController.text;
     Save(txt);
   }
 
-  void handleDelete(){
+  void handleDelete() {
     notesController.clear();
     delete();
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     textIntro = widget.content;
     notesController = TextEditingController(text: textIntro);
@@ -78,32 +77,34 @@ class _notesState extends State<notes> {
                   color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
-              SizedBox(width: ScreenWidth * 0.15,),
+              SizedBox(
+                width: ScreenWidth * 0.15,
+              ),
               CircleAvatar(
                 radius: ScreenHeight * 0.03,
                 backgroundColor: Paletter.mainBg,
                 child: Center(
                   child: IconButton(
-                    onPressed: handleDelete,
-                    icon: Icon(
-                      Icons.delete,
-                      color: Paletter.containerLight,
-                    )),
+                      onPressed: handleDelete,
+                      icon: Icon(
+                        Icons.delete,
+                        color: Paletter.containerLight,
+                      )),
                 ),
               ),
-              SizedBox(width: ScreenWidth * 0.01,),
+              SizedBox(
+                width: ScreenWidth * 0.01,
+              ),
               CircleAvatar(
                 radius: ScreenHeight * 0.03,
                 backgroundColor: Paletter.mainBg,
                 child: Center(
-                  child: IconButton(onPressed: handleSave,
-                   icon: Icon(
-                    Icons.save,
-                    color: Paletter.containerLight,
-                    
-                    
-                   )
-                   ),
+                  child: IconButton(
+                      onPressed: handleSave,
+                      icon: Icon(
+                        Icons.save,
+                        color: Paletter.containerLight,
+                      )),
                 ),
               )
             ],
@@ -132,10 +133,8 @@ class _notesState extends State<notes> {
                           fontSize: ScreenHeight * 0.016,
                           letterSpacing: ScreenHeight * 0.005),
                     ),
-              
                   ),
                 ),
-              
               ]),
             ),
           ))

@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/Database/db.dart';
-import 'package:orderlyflow/Pages/MainPage/tasks.dart';
 import 'package:orderlyflow/Pages/TaskPage/tasks.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
-
-import '../../../Database/textControllers.dart';
 
 class addTaskButton extends StatefulWidget {
   int ID;
@@ -20,7 +17,6 @@ class addTaskButton extends StatefulWidget {
 }
 
 class _addTaskButtonState extends State<addTaskButton> {
-  TextEditingController _textEditingController = TextEditingController();
   late int id;
   bool _isUpper = false;
   late TextEditingController tasksController = TextEditingController();
@@ -73,7 +69,6 @@ class _addTaskButtonState extends State<addTaskButton> {
     };
 
     collection.insertOne(document);
-    StoreController.renderedTasks.add(document as Tasks);
   }
 
   @override
@@ -132,16 +127,18 @@ class _addTaskButtonState extends State<addTaskButton> {
                                           fontSize: ScreenHeight * 0.03,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: ScreenHeight * 0.02),
+                                    SizedBox(height: ScreenHeight * 0.05),
                                     Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           padding: EdgeInsets.only(
                                               left: ScreenWidth * 0.0001),
+                                          margin: EdgeInsets.only(
+                                              left: ScreenWidth * 0.01),
                                           width: ScreenWidth * 0.4,
                                           child: TextField(
                                             controller: tasksController,
@@ -183,6 +180,8 @@ class _addTaskButtonState extends State<addTaskButton> {
                                         SizedBox(width: ScreenWidth * 0.01),
                                         Container(
                                           height: ScreenHeight * 0.08,
+                                          margin: EdgeInsets.only(
+                                              right: ScreenWidth * 0.01),
                                           child: ElevatedButton(
                                             onPressed: checkID,
                                             child: Icon(Icons.check),
@@ -222,7 +221,7 @@ class _addTaskButtonState extends State<addTaskButton> {
       );
     } else {
       return Container(
-        child: Text('not a boss'),
+        child: Text(''),
       );
     }
   }

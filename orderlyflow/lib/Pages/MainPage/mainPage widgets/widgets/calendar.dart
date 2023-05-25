@@ -290,40 +290,40 @@ class _calendarMainState extends State<calendarMain> {
                 todayTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.20,
+                  fontSize: screenHeight * 0.010,
                 ),
                 selectedTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.20,
+                  fontSize: screenHeight * 0.03,
                 ),
                 defaultTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.20,
+                  fontSize: screenHeight * 0.03,
                 ),
                 outsideDaysVisible: false,
                 weekendTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.20,
+                  fontSize: screenHeight * 0.03,
                 ),
                 holidayTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.20,
+                  fontSize: screenHeight * 0.03,
                 ),
               ),
               daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
                   fontFamily: 'neuropol',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.20,
+                  fontSize: screenHeight * 0.03,
                 ),
                 weekendStyle: TextStyle(
                   fontFamily: 'neuropol',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.20,
+                  fontSize: screenHeight * 0.03,
                 ),
               ),
               headerStyle: HeaderStyle(
@@ -332,7 +332,7 @@ class _calendarMainState extends State<calendarMain> {
                 formatButtonVisible: false,
                 titleTextStyle: TextStyle(
                   fontFamily: 'neuropol',
-                  fontSize: screenHeight * 0.30,
+                  fontSize: screenHeight * 0.04,
                   fontWeight: FontWeight.bold,
                 ),
               ),

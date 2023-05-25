@@ -138,11 +138,8 @@ class _userTasksState extends State<userTasks> {
                   width: ScreenWidth * 0.3,
                 ),
                 FutureBuilder(
-                    future: Future.wait([
-                      MongoDB.getIds(),
-                      //MongoDB.getInfo(),
-                      MongoDB.fetchNamesForIds()
-                    ]),
+                    future: Future.wait(
+                        [MongoDB.getIds(), MongoDB.fetchNamesForIds()]),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('${snapshot.error}');
