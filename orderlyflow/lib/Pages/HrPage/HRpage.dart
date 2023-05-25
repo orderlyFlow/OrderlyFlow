@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 import 'package:orderlyflow/custom_widgets/side_bar.dart';
-import 'package:pie_chart/pie_chart.dart';
 import 'package:glass/glass.dart';
 import '../../Database/db.dart';
 import '../../custom_widgets/BlueBg.dart';
@@ -143,75 +142,20 @@ class HrPageState extends State<HrPage> {
                   ),
                   Row(children: [
                     Container(
-                        margin: EdgeInsets.fromLTRB(
-                            ScreenWidth * 0.02,
-                            ScreenHeight * 0,
-                            ScreenWidth * 0.01,
-                            ScreenHeight * 0),
-                        width: ScreenWidth * 0.42,
-                        height: ScreenHeight * 0.46,
-                        alignment: Alignment.bottomLeft,
-                        decoration: BoxDecoration(
-                          //color: Color.fromARGB(255, 115, 114, 170),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: FutureBuilder(
-                            future: MongoDB.pieChartValues(),
-                            builder:
-                                (context, AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.hasData) {
-                                return PieChart(
-                                  dataMap: {
-                                    "Office": StoreController.onSiteRatio.value,
-                                    "Remote": StoreController.remoteRatio.value,
-                                  },
-                                  animationDuration: Duration(seconds: 5),
-                                  chartLegendSpacing: 29,
-                                  chartRadius:
-                                      MediaQuery.of(context).size.width / 2,
-                                  colorList: colorList,
-                                  initialAngleInDegree: 0,
-                                  chartType: ChartType.disc,
-                                  ringStrokeWidth: 10,
-                                  centerText: "Employee",
-                                  //  text:"employee",
-                                  legendOptions: LegendOptions(
-                                    showLegendsInRow: false,
-                                    legendPosition: LegendPosition.right,
-                                    showLegends: true,
-                                    //legendShape: _BoxShape.circle,
-                                    legendTextStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'neuropol',
-                                      fontSize: 17,
-                                    ),
-                                  ),
-                                  chartValuesOptions: ChartValuesOptions(
-                                    showChartValueBackground: false,
-                                    showChartValues: true,
-                                    showChartValuesInPercentage: false,
-                                    showChartValuesOutside: false,
-                                    decimalPlaces: 1,
-                                  ),
-                                );
-                              } else {
-                                if (!snapshot.hasData ||
-                                    ConnectionState ==
-                                        ConnectionState.waiting) {
-                                  return const Center(
-                                      child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ));
-                                } else {
-                                  return Text(
-                                      "OOoopppsss.....Error while rendering");
-                                }
-                              }
-                            })),
-                    /*asGlass(
-                      tintColor: Color.fromARGB(255, 194, 160, 199),
-                      clipBorderRadius: BorderRadius.circular(10),
-                    ),*/
+                      margin: EdgeInsets.fromLTRB(
+                          ScreenWidth * 0.02,
+                          ScreenHeight * 0,
+                          ScreenWidth * 0.01,
+                          ScreenHeight * 0),
+                      width: ScreenWidth * 0.42,
+                      height: ScreenHeight * 0.46,
+                      alignment: Alignment.bottomLeft,
+                      decoration: BoxDecoration(
+                        //color: Color.fromARGB(255, 115, 114, 170),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      ////////////////////////child://///////////////
+                    ),
                     Container(
                         margin: EdgeInsets.fromLTRB(
                             ScreenWidth * 0.02,
