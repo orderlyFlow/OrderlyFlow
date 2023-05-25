@@ -12,4 +12,3 @@ const picturesCol = "fs.chunks";
 const documentRequestCol = "DocumentsRequests";
 const teamsCol = "Teams";
 const notesCol = "Notes";
-

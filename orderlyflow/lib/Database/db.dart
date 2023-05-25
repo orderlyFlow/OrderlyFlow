@@ -170,33 +170,11 @@ class MongoDB {
     return information;
   }
 
-  static Future<Map<String, dynamic>> getTeamName() async {
+  static Future<Map<String, dynamic>> getTeamInfo() async {
     var id = StoreController.currentUser!['ID'];
-    int team = id['ID'];
     final coll = db.collection(teamsCol);
-
-    if (team.toString().startsWith('1')) {
-      team = 100000;
-    } else if (team.toString().startsWith('2')) {
-      team = 200000;
-    } else if (team.toString().startsWith('3')) {
-      team = 300000;
-    } else if (team.toString().startsWith('4')) {
-      team = 400000;
-    } else if (team.toString().startsWith('5')) {
-      team = 500000;
-    } else if (team.toString().startsWith('6')) {
-      team = 600000;
-    } else if (team.toString().startsWith('7')) {
-      team = 700000;
-    } else if (team.toString().startsWith('8')) {
-      team = 800000;
-    } else {
-      team = 900000;
-    }
-
-    final info = await coll.findOne(Mongo.where.eq("director", team))
-        as Map<String, dynamic>;
+    var document = await coll.findOne({'members': id});
+    var info = document as Map<String, dynamic>;
     return info;
   }
 
@@ -463,31 +441,11 @@ class MongoDB {
     }
   }
 
-  static Future<dynamic> pieChartValues() async {
-    List<Map<String, dynamic>> persons = await fetchAll();
-    int total = persons.length;
-    int onSite = 0, away = 0;
-    for (var person in persons) {
-      if (person['status'] == "Remotely") {
-        away = away + 1;
-      } else {
-        if (person['status'] == "On site") {
-          onSite = onSite + 1;
-        }
-      }
-    }
-    StoreController.remoteRatio.value = away / total;
-    StoreController.onSiteRatio.value = onSite / total;
-  }
-
   static Future<Map<String, dynamic>> getNotes() async {
-    var id = await getInfo();
-    var notesId = id['ID'];
-    final db1 = await Mongo.Db.create(mongoDB_URL);
-    final coll = db1.collection(notesCol);
-    await db1.open();
+    var id = StoreController.currentUser!['ID'];
+    final coll = db.collection(notesCol);
 
-    final info = await coll.findOne(Mongo.where.eq("employeeID", notesId))
+    final info = await coll.findOne(Mongo.where.eq("noteID", id))
         as Map<String, dynamic>;
 
     return info;
@@ -530,7 +488,6 @@ class MongoDB {
     final collection = db1.collection(teamsCol);
     await db1.open();
     try {
-      print('Database connection opened successfully');
       final teams = db.collection('Teams');
       final result = await collection.findOne(where.eq('teamID', teamId));
       if (result == null) {

@@ -62,10 +62,10 @@ class _userTasksState extends State<userTasks> {
             Row(
               children: [
                 FutureBuilder(
-                    future: MongoDB.getTeamName(),
+                    future: MongoDB.getTeamInfo(),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
-                        return Text('Error');
+                        return Text('${snapshot.error.toString()}');
                       } else if (snapshot.hasData) {
                         return Container(
                           margin: EdgeInsets.only(top: ScreenHeight * 0.01),
@@ -87,14 +87,6 @@ class _userTasksState extends State<userTasks> {
                         );
                       }
                     }),
-                // Text(
-                //   'Development Team',
-                //   style: TextStyle(
-                //     color: Paletter.blackText,
-                //     fontFamily: 'conthrax',
-                //     fontSize: ScreenHeight * 0.033,
-                //   ),
-                // ),
                 SizedBox(
                   width: ScreenWidth * 0.02,
                 ),
