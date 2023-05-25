@@ -71,7 +71,6 @@ class MongoDB {
     } else {
       return null as Map<String, dynamic>;
     }
-
   }
 
 // get doc name
@@ -248,8 +247,8 @@ class MongoDB {
       StoreController.isDirector = isDirectorLogin(IDCont).obs;
       StoreController.isHR = isHR_atLogin(IDCont).obs;
       StoreController.Login_found.value = true;
-      print("Dir: " + StoreController.isDirector.toString());
-      print("HR: " + StoreController.isHR.toString());
+      //print("Dir: " + StoreController.isDirector.toString());
+      //print("HR: " + StoreController.isHR.toString());
       StoreController.currentUser = id_info;
       return true;
     } else {
@@ -472,8 +471,7 @@ class MongoDB {
 
   static String getEmployeeTeam(int employeeId) {
     String team;
-    int firstDigit =
-        employeeId ~/ 100000;
+    int firstDigit = employeeId ~/ 100000;
 
     switch (firstDigit) {
       case 1:
@@ -522,7 +520,7 @@ class MongoDB {
     counter1++;
     prefs1.setInt('counter', counter1);
   }
-  
+
   static Future<void> addTask(
       int TaskID, String taskname, List<int> employees) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
