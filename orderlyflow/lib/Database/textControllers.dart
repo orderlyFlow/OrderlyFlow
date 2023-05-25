@@ -23,7 +23,9 @@ class StoreController extends GetxController {
   static List<Map<String, dynamic>> groups = [];
   static List<Map<String, dynamic>> indRec = [];
   static Map<String, dynamic>? currentUser;
+  static Future<List<Tasks>>? renderedFutureTasks;
   static List<Tasks> renderedTasks = [];
+  static Future<List<Map<String, dynamic>>>? receiversList;
   static List<Map<String, dynamic>> AllChats = [];
   static List<String> GroupMembers = [];
 

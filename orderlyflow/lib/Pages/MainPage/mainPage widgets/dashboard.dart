@@ -1,33 +1,35 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/welcome.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/calendar.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/inbox.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/tasks.dart';
-import 'package:orderlyflow/Pages/MainPage/tasks.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../Database/db.dart';
+import '../../../Database/textControllers.dart';
 
 class Dashboard extends StatefulWidget {
   @override
   State<Dashboard> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> with ChangeNotifier {
+class _DashboardState extends State<Dashboard> {
+  void fetchTasks() async {
+    if (StoreController.renderedTasks.isEmpty) {
+      StoreController.renderedFutureTasks = MongoDB.getTask();
+      //StoreController.renderedTasks = await MongoDB.getTask();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
     late double ScreenHeight = MediaQuery.of(context).size.height;
-    String UserName = StoreController.currentUser!['name'];
-    MongoDB.getTask();
-
+    fetchTasks();
     return Material(
       color: Paletter.mainBgLight,
       child: Container(
@@ -63,11 +65,31 @@ class _DashboardState extends State<Dashboard> with ChangeNotifier {
             ),
             Column(
               children: [
-                welcome(name: UserName),
+                welcome(name: StoreController.currentUser!['name']),
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
-                tasks(taskInfo: StoreController.renderedTasks),
+                FutureBuilder(
+                    future: StoreController.renderedFutureTasks,
+                    builder: (buildContext, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        return tasks(taskInfo: StoreController.renderedTasks);
+                      } else {
+                        return Container(
+                            width: ScreenWidth * 0.397,
+                            height: ScreenHeight * 0.44,
+                            decoration: BoxDecoration(
+                                color: Paletter.containerLight,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ));
+                      }
+                    }),
               ],
             )
           ],

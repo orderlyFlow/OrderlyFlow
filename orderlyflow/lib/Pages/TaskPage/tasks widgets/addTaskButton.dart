@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
 import 'package:orderlyflow/Database/db.dart';
+import 'package:orderlyflow/Pages/MainPage/tasks.dart';
 import 'package:orderlyflow/Pages/TaskPage/tasks.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
+
+import '../../../Database/textControllers.dart';
 
 class addTaskButton extends StatefulWidget {
   int ID;
@@ -43,7 +46,7 @@ class _addTaskButtonState extends State<addTaskButton> {
     while (idList.contains(ID)) {
       ID++;
     }
-    late String? taskName = tasksController.text ;
+    late String? taskName = tasksController.text;
     addTask(ID, taskName, pickedIds);
     Navigator.of(context).pop(pickedIds);
     Navigator.pushReplacement(
@@ -57,7 +60,7 @@ class _addTaskButtonState extends State<addTaskButton> {
   }
 
   static Future<void> addTask(
-    int TaskID, String taskname, List<int> employees) async {
+      int TaskID, String taskname, List<int> employees) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final collection = db1.collection(tasksCol);
     await db1.open();
@@ -70,6 +73,7 @@ class _addTaskButtonState extends State<addTaskButton> {
     };
 
     collection.insertOne(document);
+    StoreController.renderedTasks.add(document as Tasks);
   }
 
   @override
@@ -115,11 +119,10 @@ class _addTaskButtonState extends State<addTaskButton> {
                                     MediaQuery.of(context).viewInsets.bottom,
                               ),
                               child: Container(
-                                padding: EdgeInsets.only(
-                                    left: ScreenWidth * 0.001),
+                                padding:
+                                    EdgeInsets.only(left: ScreenWidth * 0.001),
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
@@ -162,9 +165,8 @@ class _addTaskButtonState extends State<addTaskButton> {
                                                     subtitle: Text(
                                                         'ID: ${widget.ids[index]}'),
                                                     leading: Checkbox(
-                                                      value: pickedIds
-                                                          .contains(widget
-                                                              .ids[index]),
+                                                      value: pickedIds.contains(
+                                                          widget.ids[index]),
                                                       onChanged: (value) {
                                                         setState(() {
                                                           toggleId(widget
@@ -193,8 +195,7 @@ class _addTaskButtonState extends State<addTaskButton> {
                                       ],
                                     ),
                                     SizedBox(height: ScreenHeight * 0.03),
-                                    Text(
-                                        'Picked IDs: ${pickedIds.join(', ')}'),
+                                    Text('Picked IDs: ${pickedIds.join(', ')}'),
                                     SizedBox(
                                       height: ScreenHeight * 0.02,
                                     ),

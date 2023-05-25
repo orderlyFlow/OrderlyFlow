@@ -11,6 +11,7 @@ import 'package:orderlyflow/Pages/TaskPage/tasks%20widgets/progress.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../Database/textControllers.dart';
 import '../../custom_widgets/BlueBg.dart';
 
 class myTasks extends StatefulWidget {
@@ -69,28 +70,7 @@ class _myTasksState extends State<myTasks> {
                     Row(children: [
                       Column(
                         children: [
-                          FutureBuilder(
-                              future: MongoDB.getTask(),
-                              builder: (buildContext, AsyncSnapshot snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                } else if (snapshot.hasData) {
-                                  return userTasks(taskInfo: snapshot.data);
-                                } else {
-                                  return Container(
-                                      height: ScreenHeight * 0.96,
-                                      width: ScreenWidth * 0.5,
-                                      decoration: BoxDecoration(
-                                          color: Paletter.containerLight,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                        ),
-                                      ));
-                                }
-                              }),
+                          userTasks(taskInfo: StoreController.renderedTasks),
                         ],
                       ),
                       SizedBox(
@@ -98,28 +78,7 @@ class _myTasksState extends State<myTasks> {
                       ),
                       Column(
                         children: [
-                          FutureBuilder(
-                              future: MongoDB.getTask(),
-                              builder: (buildContext, AsyncSnapshot snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                } else if (snapshot.hasData) {
-                                  return userProgress(taskInfo: snapshot.data);
-                                } else {
-                                  return Container(
-                                      height: ScreenHeight * 0.34,
-                                      width: ScreenWidth * 0.4,
-                                      decoration: BoxDecoration(
-                                          color: Paletter.containerDark,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                        ),
-                                      ));
-                                }
-                              }),
+                          userProgress(taskInfo: StoreController.renderedTasks),
                           SizedBox(
                             height: ScreenHeight * 0.02,
                           ),

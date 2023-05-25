@@ -39,7 +39,6 @@ class _calendarState extends State<calendar> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    var padd;
     TextEditingController title_controller = new TextEditingController();
     TextEditingController loc_controller = new TextEditingController();
     TextEditingController part_controller = new TextEditingController();

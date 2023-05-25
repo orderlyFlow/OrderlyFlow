@@ -37,7 +37,6 @@ class chatPageState extends State<chatPage> {
   bool isListening = false;
   final photoData = StoreController.currentUser!['profilePicture'];
   var newMessage;
-  Future<List<Map<String, dynamic>>>? receiversList;
   Future? _future;
   late StreamController<List<Map<String, dynamic>>> _streamController =
       StreamController<List<Map<String, dynamic>>>();
@@ -91,7 +90,9 @@ class chatPageState extends State<chatPage> {
   void initState() {
     super.initState();
     isHovered = false;
-    receiversList = MongoDB.getIndRec();
+    if (StoreController.AllChats.isEmpty) {
+      StoreController.receiversList = MongoDB.getIndRec();
+    }
   }
 
   void searchHandler() {
@@ -240,7 +241,7 @@ class chatPageState extends State<chatPage> {
                                 screenWidth * 0,
                                 screenHeight * 0.003),
                             child: FutureBuilder<List<Map<String, dynamic>>>(
-                              future: receiversList,
+                              future: StoreController.receiversList,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   StoreController.input = snapshot.data!;
@@ -277,16 +278,15 @@ class chatPageState extends State<chatPage> {
                                                               vertical: 1),
                                                       leading: CircleAvatar(
                                                         backgroundImage: MemoryImage(
-                                                            base64Decode(
-                                                                StoreController
-                                                                            .input[
-                                                                        index][
-                                                                    'profilePicture'])),
+                                                            base64Decode(StoreController
+                                                                        .AllChats[
+                                                                    index][
+                                                                'profilePicture'])),
                                                       ),
                                                       title: Text(
                                                           StoreController
-                                                                  .input[index]
-                                                              ['name'],
+                                                                  .AllChats[
+                                                              index]['name'],
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   'conthrax',

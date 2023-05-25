@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:ui';
 
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../Database/db.dart';
 
 class calendarMain extends StatefulWidget {
   const calendarMain({super.key});
@@ -17,8 +20,10 @@ class calendarMain extends StatefulWidget {
 class _calendarMainState extends State<calendarMain> {
   DateTime today = DateTime.now();
   List events = [];
-  late double ScreenWidth = MediaQuery.of(context).size.width;
-  late double ScreenHeight = MediaQuery.of(context).size.height;
+  late double screenWidth = MediaQuery.of(context).size.width;
+  late double screenHeight = MediaQuery.of(context).size.height;
+  late Stream<List<Map<String, dynamic>>> _eventsStream =
+      MongoDB.getEventsOnSelectedDate(today);
   void _DisplayDialog(
       BuildContext context, DateTime selectedDate, List events) {
     setState(() {
@@ -31,8 +36,8 @@ class _calendarMainState extends State<calendarMain> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: GlassmorphicContainer(
-                width: ScreenWidth * 0.40,
-                height: ScreenWidth * 0.2,
+                width: screenWidth * 0.40,
+                height: screenWidth * 0.2,
                 blur: 10,
                 borderRadius: 15,
                 border: 2,
@@ -67,52 +72,198 @@ class _calendarMainState extends State<calendarMain> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10),
+                      margin: EdgeInsets.only(left: screenWidth * 0.01),
                       child: Text(
                         DateFormat.yMMMMd("en_US").format(selectedDate),
                         style: TextStyle(
                           fontFamily: 'iceland',
-                          fontSize: 35,
+                          fontSize: screenHeight * 0.03,
                           fontWeight: FontWeight.bold,
                           color: Paletter.blackText.withOpacity(0.5),
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: ScreenHeight * 0.1,
+                      height: screenHeight * 0.0032,
                     ),
-                    Expanded(
-                        child: ListView.builder(
-                            itemCount: events.length == 0 ? 1 : events.length,
-                            itemBuilder: (context, index) {
-                              if (events.length == 0) {
+                    Container(
+                      width: screenWidth * 0.40,
+                      height: screenWidth * 0.1,
+                      child: StreamBuilder<List<Map<String, dynamic>>>(
+                          stream: _eventsStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text('Error: ${snapshot.error}'),
+                              );
+                            } else {
+                              if (!snapshot.hasData) {
                                 return Center(
-                                  child: Center(
-                                    child: Text(
-                                      '<no event>',
-                                      style: TextStyle(
-                                          fontFamily: 'iceland',
-                                          fontSize: 20,
-                                          color: Paletter.blackText
-                                              .withOpacity(0.5)),
-                                    ),
-                                  ),
+                                  child: CircularProgressIndicator(
+                                      color: Colors.blue.shade300
+                                          .withOpacity(0.5)),
                                 );
                               } else {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Text(
-                                    events[index],
-                                    style: TextStyle(
-                                        fontFamily: 'iceland',
-                                        fontSize: 15,
-                                        color: Paletter.blackText
-                                            .withOpacity(0.5)),
-                                  ),
-                                );
+                                var meetings = snapshot.data!.toList();
+                                if (meetings.isEmpty) {
+                                  return Center(
+                                    child: Text(
+                                      '<<<No events>>>',
+                                      style: TextStyle(
+                                        fontSize: screenHeight * 0.023,
+                                        color:
+                                            Paletter.blackText.withOpacity(0.4),
+                                        fontFamily: 'conthrax',
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return ListView.builder(
+                                    itemCount: meetings.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final meeting = meetings[index];
+                                      Duration offset =
+                                          DateTime.now().timeZoneOffset;
+                                      DateTime startUTC = meeting['startTime'];
+                                      DateTime endUTC = meeting['endTime'];
+                                      DateTime localStartTime =
+                                          startUTC.add(offset);
+                                      DateTime localEndTime =
+                                          endUTC.add(offset);
+                                      String startTime = DateFormat('HH:mm a')
+                                          .format(localStartTime);
+                                      String endTime = DateFormat('HH:mm a')
+                                          .format(localEndTime);
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: screenHeight * 0.01),
+                                        child: Column(children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // Meeting name and dotted line
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    height: screenHeight * 0.08,
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        screenWidth * 0.01,
+                                                        screenHeight * 0,
+                                                        screenWidth * 0,
+                                                        screenHeight * 0),
+                                                    width: screenWidth * 0.38,
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            screenWidth * 0.014,
+                                                            screenHeight * 0.01,
+                                                            screenWidth * 0.014,
+                                                            screenHeight *
+                                                                0.014),
+                                                    decoration: BoxDecoration(
+                                                      color: Color.fromARGB(
+                                                          255, 117, 165, 204),
+                                                      border: Border.all(
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              117,
+                                                              165,
+                                                              204)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
+                                                    ),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              meeting['title'],
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    screenHeight *
+                                                                        0.02,
+                                                                color: Paletter
+                                                                    .blackText
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                fontFamily:
+                                                                    'conthrax',
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                                height:
+                                                                    screenHeight *
+                                                                        0.0015),
+                                                            Text(
+                                                              startTime +
+                                                                  " - " +
+                                                                  endTime,
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    screenHeight *
+                                                                        0.02,
+                                                                color: Paletter
+                                                                    .blackText
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                fontFamily:
+                                                                    'conthrax',
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      height:
+                                                          screenHeight * 0.001),
+                                                  Container(
+                                                      margin:
+                                                          EdgeInsets.fromLTRB(
+                                                              screenWidth *
+                                                                  0.014,
+                                                              screenHeight *
+                                                                  0.004,
+                                                              screenWidth * 0,
+                                                              screenHeight * 0),
+                                                      child: DottedLine(
+                                                          dashRadius: 16.0,
+                                                          dashColor: Colors
+                                                              .grey.shade800
+                                                              .withOpacity(0.4),
+                                                          dashGapLength:
+                                                              screenWidth *
+                                                                  0.002,
+                                                          lineLength:
+                                                              screenWidth *
+                                                                  0.37,
+                                                          lineThickness:
+                                                              screenHeight *
+                                                                  0.0038)),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ]),
+                                      );
+                                    },
+                                  );
+                                }
                               }
-                            }))
+                            }
+                          }),
+                    )
                   ],
                 ),
               ),
@@ -139,40 +290,40 @@ class _calendarMainState extends State<calendarMain> {
                 todayTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: 20,
+                  fontSize: screenHeight * 0.20,
                 ),
                 selectedTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: 20,
+                  fontSize: screenHeight * 0.20,
                 ),
                 defaultTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: 20,
+                  fontSize: screenHeight * 0.20,
                 ),
                 outsideDaysVisible: false,
                 weekendTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: 20,
+                  fontSize: screenHeight * 0.20,
                 ),
                 holidayTextStyle: TextStyle(
                   fontFamily: 'iceland',
                   color: Paletter.blackText,
-                  fontSize: 20,
+                  fontSize: screenHeight * 0.20,
                 ),
               ),
               daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
                   fontFamily: 'neuropol',
                   color: Paletter.blackText,
-                  fontSize: 20,
+                  fontSize: screenHeight * 0.20,
                 ),
                 weekendStyle: TextStyle(
                   fontFamily: 'neuropol',
                   color: Paletter.blackText,
-                  fontSize: 20,
+                  fontSize: screenHeight * 0.20,
                 ),
               ),
               headerStyle: HeaderStyle(
@@ -181,7 +332,7 @@ class _calendarMainState extends State<calendarMain> {
                 formatButtonVisible: false,
                 titleTextStyle: TextStyle(
                   fontFamily: 'neuropol',
-                  fontSize: 30,
+                  fontSize: screenHeight * 0.30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -191,6 +342,7 @@ class _calendarMainState extends State<calendarMain> {
               selectedDayPredicate: (day) => isSameDay(day, today),
               onDaySelected: (today, event) {
                 _DisplayDialog(context, today, events);
+                _eventsStream = MongoDB.getEventsOnSelectedDate(today);
               },
             )
           ],

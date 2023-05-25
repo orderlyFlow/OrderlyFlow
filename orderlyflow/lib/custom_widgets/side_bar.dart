@@ -56,24 +56,7 @@ class _SideBarState extends State<SideBar> {
                 height: ScreenHeight * 0.04,
               ),
               Center(
-                  child: /*FutureBuilder(
-                    future: StoreController.currentUser,
-                    builder: (buildContext, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Container(
-                          margin: EdgeInsets.fromLTRB(
-                              0, ScreenHeight * 0.045, 0, 0),
-                          width: ScreenWidth * 0.078,
-                          height: ScreenHeight * 0.078,
-                          child: const Center(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.hasData) {*/
-                      //return
-                      Column(children: [
+                  child: Column(children: [
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -133,9 +116,9 @@ class _SideBarState extends State<SideBar> {
                       height: ScreenHeight * 0.07,
                       width: ScreenWidth * 0.08),
                   onTap: () {
-                    StoreController.groups = [];
-                    StoreController.individualRecIDs = [];
-                    StoreController.indRec = [];
+                    //StoreController.groups = [];
+                    //StoreController.individualRecIDs = [];
+                    //StoreController.indRec = [];
 
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => mainPage(),
@@ -158,7 +141,6 @@ class _SideBarState extends State<SideBar> {
                       height: ScreenHeight * 0.07,
                       width: ScreenWidth * 0.08),
                   onTap: () {
-                    StoreController.renderedTasks = [];
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => chatPage(),
                       maintainState: true,

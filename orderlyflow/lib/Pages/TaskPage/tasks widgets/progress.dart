@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:orderlyflow/Database/textControllers.dart';
@@ -23,19 +25,22 @@ class _userProgressState extends State<userProgress> {
   double percent = 0.0;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    for (var task in widget.taskInfo){
+    for (var task in widget.taskInfo) {
       values.add(task.status!);
     }
-    int trueCount =values.where((element) => element ==  true).length;
-    percent= trueCount / values.length;
+    int trueCount = values.where((element) => element == true).length;
+    percent = trueCount / values.length;
   }
 
   @override
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
+    final photoData = StoreController.currentUser!['profilePicture'];
+    Uint8List photoBytes = base64Decode(photoData);
+    ImageProvider imageProvider = MemoryImage(photoBytes);
     return Container(
       height: ScreenHeight * 0.34,
       width: ScreenWidth * 0.4,
@@ -49,132 +54,74 @@ class _userProgressState extends State<userProgress> {
           children: [
             Row(
               children: [
-                FutureBuilder(
-                    future: MongoDB.getProfilePic(),
-                    builder: (buildContext, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Container(
-                          width: ScreenWidth * 0.1,
-                          height: ScreenHeight * 0.1,
-                          child: const Center(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.hasData) {
-                        return Column(children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      childCurrent: const employeeData(),
-                                      child: employeeData(),
-                                      type: PageTransitionType.theme,
-                                      duration: const Duration(seconds: 2)));
-                            },
-                            child: Container(
-                                width: ScreenWidth * 0.1,
-                                height: ScreenHeight * 0.1,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: FittedBox(
-                                    fit: BoxFit
-                                        .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
-                                    child: CircleAvatar(
-                                      backgroundImage: snapshot.data,
-                                    ))),
-                          )
-                        ]);
-                      } else {
-                        return Container(
-                          width: ScreenWidth * 0.1,
-                          height: ScreenHeight * 0.01,
-                          child: const Center(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                            ),
-                          ),
-                        );
-                      }
-                    }),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            childCurrent: const employeeData(),
+                            child: employeeData(),
+                            type: PageTransitionType.theme,
+                            duration: const Duration(seconds: 2)));
+                  },
+                  child: Container(
+                      width: ScreenWidth * 0.1,
+                      height: ScreenHeight * 0.1,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: FittedBox(
+                          fit: BoxFit
+                              .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                          child: CircleAvatar(
+                            backgroundImage: imageProvider,
+                          ))),
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    FutureBuilder(
-                        future: MongoDB.getInfo(),
-                        builder: (buildContext, AsyncSnapshot snapshot) {
-                          if (snapshot.hasError) {
-                            return Text('Error');
-                          } else if (snapshot.hasData) {
-                            return Container(
-                              child: Text(
-                                '${snapshot.data['name']}',
-                                style: TextStyle(
-                                    fontSize: ScreenHeight * 0.03,
-                                    fontFamily: 'conthrax',
-                                    color: Paletter.blackText),
-                              ),
-                            );
-                          } else {
-                            return Text(
-                              '',
-                              style: TextStyle(
-                                  fontSize: ScreenHeight * 0.02,
-                                  fontFamily: 'conthrax',
-                                  color: Paletter.blackText),
-                            );
-                          }
-                        }),
+                    Container(
+                      child: Text(
+                        StoreController.currentUser!['name'],
+                        style: TextStyle(
+                            fontSize: ScreenHeight * 0.03,
+                            fontFamily: 'conthrax',
+                            color: Paletter.blackText),
+                      ),
+                    ),
                     SizedBox(
                       height: ScreenHeight * 0.02,
                     ),
-                    FutureBuilder(
-                        future: MongoDB.getInfo(),
-                        builder: (buildContext, AsyncSnapshot snapshot) {
-                          if (snapshot.hasError) {
-                            return Text('Error');
-                          } else if (snapshot.hasData) {
-                            return Container(
-                              child: Text(
-                                '${snapshot.data['jobDescription']}',
-                                style: TextStyle(
-                                    fontSize: ScreenHeight * 0.02,
-                                    fontFamily: 'iceland',
-                                    color: Paletter.blackText),
-                              ),
-                            );
-                          } else {
-                            return Text(
-                              '',
-                              style: TextStyle(
-                                  fontSize: ScreenHeight * 0.02,
-                                  fontFamily: 'iceland',
-                                  color: Paletter.blackText),
-                            );
-                          }
-                        }),
+                    Container(
+                      child: Text(
+                        StoreController.currentUser!['jobDescription'],
+                        style: TextStyle(
+                            fontSize: ScreenHeight * 0.02,
+                            fontFamily: 'iceland',
+                            color: Paletter.blackText),
+                      ),
+                    ),
                   ],
                 )
               ],
             ),
-           SizedBox(height: ScreenHeight * 0.04,),
-          Center(
-            child: Container(
-              width: ScreenWidth *0.25,
-              child: LinearProgressIndicator(
-                
-                value: percent,
-                backgroundColor: Color.fromRGBO(231, 76, 60, 1),
-                valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(39, 174, 96, 1)),
-               semanticsLabel: '${(percent * 100).toStringAsFixed(0)}% true',
-                  semanticsValue: '${(percent * 100).toStringAsFixed(0)}%',
-              ),
+            SizedBox(
+              height: ScreenHeight * 0.04,
             ),
-          )
+            Center(
+              child: Container(
+                width: ScreenWidth * 0.25,
+                child: LinearProgressIndicator(
+                  value: percent,
+                  backgroundColor: Color.fromRGBO(231, 76, 60, 1),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromRGBO(39, 174, 96, 1)),
+                  semanticsLabel: '${(percent * 100).toStringAsFixed(0)}% true',
+                  semanticsValue: '${(percent * 100).toStringAsFixed(0)}%',
+                ),
+              ),
+            )
           ],
         ),
       ),
