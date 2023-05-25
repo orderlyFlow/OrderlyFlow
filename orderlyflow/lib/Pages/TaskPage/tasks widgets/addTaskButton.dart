@@ -135,7 +135,7 @@ class _addTaskButtonState extends State<addTaskButton> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.only(
+                                         padding: EdgeInsets.only(
                                               left: ScreenWidth * 0.0001),
                                           margin: EdgeInsets.only(
                                               left: ScreenWidth * 0.01),
@@ -180,8 +180,7 @@ class _addTaskButtonState extends State<addTaskButton> {
                                         SizedBox(width: ScreenWidth * 0.01),
                                         Container(
                                           height: ScreenHeight * 0.08,
-                                          margin: EdgeInsets.only(
-                                              right: ScreenWidth * 0.01),
+                                          margin: EdgeInsets.only(right: ScreenWidth * 0.01),
                                           child: ElevatedButton(
                                             onPressed: checkID,
                                             child: Icon(Icons.check),

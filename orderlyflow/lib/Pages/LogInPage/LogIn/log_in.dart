@@ -45,6 +45,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   double otp_size = 14;
   var response = 0;
 
+  bool _isDisabled = true;
+
   void handleSending() async {
     setState(() {
       isSendigOTP = true;
@@ -79,15 +81,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void _handleLogin() async {
     setState(() {
       _isLoading = true;
+      _isDisabled = false;
     });
     try {
       await MongoDB.Verify_LogIn();
       // Perform some action for logged in user
     } catch (e) {
       // Perform some action for non-logged in user
-    } finally {
       setState(() {
+        _isDisabled = true;
+      });
+    } finally {
+      setState(() { 
         _isLoading = false;
+
       });
       if (StoreController.Login_found.isTrue) {
         Navigator.push(
@@ -101,6 +108,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Please check your credentials'),
         ));
+        setState(() {        
+          _isDisabled = true;
+        });
       }
     }
   }
@@ -137,242 +147,249 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 Image.asset(
                   'assets/images/logo.png',
                 ),
-                const SizedBox(
-                  height: 25.0,
+                SizedBox(
+                  height: screenHeight * 0.05,
                 ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 500,
-                        child: Center(
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                controller: StoreController.ID_controller.value,
-                                // ignore: prefer_const_constructors
-                                style: TextStyle(
-                                    color: Paletter.blackText,
-                                    fontFamily: 'Neuropol'),
-                                decoration: InputDecoration(
-                                    // ignore: prefer_const_constructors
-                                    prefixIcon: Icon(
-                                      Icons.person_outline,
-                                      color: Paletter.logInText,
-                                    ),
-                                    hintText: 'Enter Your ID',
-                                    // ignore: prefer_const_constructors
-                                    hintStyle:
-                                        TextStyle(color: Paletter.logInText),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        // ignore: prefer_const_constructors
-                                        borderSide: BorderSide(
-                                            color: Color.fromRGBO(
-                                                199, 215, 225, 0.56))),
-                                    filled: true,
-                                    fillColor: const Color.fromRGBO(
-                                        199, 215, 225, 0.56),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                199, 215, 225, 0.56)))),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Enter your ID';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) => user = value!,
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              TextFormField(
-                                controller:
-                                    StoreController.Pass_controller.value,
-                                obscureText: true,
-                                style: const TextStyle(
-                                    color: Paletter.blackText,
-                                    fontFamily: 'Neuropol'),
-                                decoration: InputDecoration(
-                                    prefixIcon: const Icon(
-                                      Icons.lock_outline,
-                                      color: Paletter.logInText,
-                                    ),
-                                    hintText: 'Enter Your Password',
-                                    hintStyle: const TextStyle(
-                                        color: Paletter.logInText),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                199, 215, 225, 0.56))),
-                                    filled: true,
-                                    fillColor: const Color.fromRGBO(
-                                        199, 215, 225, 0.56),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                199, 215, 225, 0.56)))),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Enter Your Password';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) => password = value!,
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              TextFormField(
-                                controller:
-                                    StoreController.OTP_controller.value,
-                                obscureText: true,
-                                style: const TextStyle(
-                                    color: Paletter.blackText,
-                                    fontFamily: 'Neuropol'),
-                                decoration: InputDecoration(
-                                    prefixIcon: const Icon(
-                                      Icons.key_outlined,
-                                      color: Paletter.logInText,
-                                    ),
-                                    hintText: 'Enter Your OTP',
-                                    hintStyle: const TextStyle(
-                                        color: Paletter.logInText),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                199, 215, 225, 0.56))),
-                                    filled: true,
-                                    fillColor: const Color.fromRGBO(
-                                        199, 215, 225, 0.56),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                199, 215, 225, 0.56)))),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Pleaser Enter Your given OTP';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) => otp = value!,
-                              )
-                            ],
+                Container(
+                  margin: EdgeInsets.only(left: screenWidth * 0.1, right: screenWidth * 0.1),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: screenHeight * 0.8,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  controller: StoreController.ID_controller.value,
+                                  enabled: _isDisabled,
+                                  // ignore: prefer_const_constructors
+                                  style: TextStyle(
+                                      color: Paletter.blackText,
+                                      fontFamily: 'Neuropol'),
+                                  decoration: InputDecoration(
+                                      // ignore: prefer_const_constructors
+                                      prefixIcon: Icon(
+                                        Icons.person_outline,
+                                        color: Paletter.logInText,
+                                      ),
+                                      hintText: 'Enter Your ID',
+                                      // ignore: prefer_const_constructors
+                                      hintStyle:
+                                          TextStyle(color: Paletter.logInText),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(screenHeight * 0.4),
+                                          // ignore: prefer_const_constructors
+                                          borderSide: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  199, 215, 225, 0.56))),
+                                      filled: true,
+                                      fillColor: const Color.fromRGBO(
+                                          199, 215, 225, 0.56),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(screenHeight * 0.4),
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  199, 215, 225, 0.56)))),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Enter your ID';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) => user = value!,
+                                ),
+                                SizedBox(
+                                  height:screenHeight * 0.02,
+                                ),
+                                TextFormField(
+                                  controller:
+                                      StoreController.Pass_controller.value,
+                                  enabled: _isDisabled,
+                                  obscureText: true,
+                                  style: const TextStyle(
+                                      color: Paletter.blackText,
+                                      fontFamily: 'Neuropol'),
+                                  decoration: InputDecoration(
+                                      prefixIcon: const Icon(
+                                        Icons.lock_outline,
+                                        color: Paletter.logInText,
+                                      ),
+                                      hintText: 'Enter Your Password',
+                                      hintStyle: const TextStyle(
+                                          color: Paletter.logInText),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(screenHeight * 0.4),
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  199, 215, 225, 0.56))),
+                                      filled: true,
+                                      fillColor: const Color.fromRGBO(
+                                          199, 215, 225, 0.56),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(screenHeight * 0.4),
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  199, 215, 225, 0.56)))),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please Enter Your Password';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) => password = value!,
+                                ),
+                                SizedBox(
+                                  height: screenHeight * 0.02,
+                                ),
+                                TextFormField(
+                                  controller:
+                                      StoreController.OTP_controller.value,
+                                     enabled: _isDisabled,
+                                  obscureText: true,
+                                  style: const TextStyle(
+                                      color: Paletter.blackText,
+                                      fontFamily: 'Neuropol'),
+                                  decoration: InputDecoration(
+                                      prefixIcon: const Icon(
+                                        Icons.key_outlined,
+                                        color: Paletter.logInText,
+                                      ),
+                                      hintText: 'Enter Your OTP',
+                                      hintStyle: const TextStyle(
+                                          color: Paletter.logInText),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(screenHeight * 0.4),
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  199, 215, 225, 0.56))),
+                                      filled: true,
+                                      fillColor: const Color.fromRGBO(
+                                          199, 215, 225, 0.56),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(screenHeight * 0.4),
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  199, 215, 225, 0.56)))),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Pleaser Enter Your given OTP';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) => otp = value!,
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      // ignore: sized_box_for_whitespace
-                      Container(
-                        width: 300,
-                        height: 50,
-                        child: AnimatedBuilder(
-                            animation: _controller,
-                            builder: (context, child) {
-                              return TextButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.grey[700]),
-                                    overlayColor: MaterialStateProperty
-                                        .resolveWith<Color?>(
-                                            (Set<MaterialState> states) {
-                                      if (states
-                                          .contains(MaterialState.hovered))
-                                        return Paletter.logInText;
-                                      return null;
-                                    }),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ))),
-                                onPressed: _isLoading ? null : _handleLogin,
-                                child: _isLoading
-                                    ? SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                  Colors.white),
+                         SizedBox(
+                          height: screenHeight * 0.05,
+                        ),
+                        // ignore: sized_box_for_whitespace
+                        Container(
+                          width: screenWidth * 0.2,
+                          height: screenHeight * 0.06,
+                          child: AnimatedBuilder(
+                              animation: _controller,
+                              builder: (context, child) {
+                                return TextButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(
+                                          Colors.grey[700]),
+                                      overlayColor: MaterialStateProperty
+                                          .resolveWith<Color?>(
+                                              (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.hovered))
+                                          return Paletter.logInText;
+                                        return null;
+                                      }),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(screenHeight * 0.3),
+                                      ))),
+                                  onPressed: _isLoading ? null : _handleLogin,
+                                  child: _isLoading
+                                      ? SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.white),
+                                          ),
+                                        )
+                                      : Text(
+                                          'Log In',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Neuropol',
+                                            fontSize: screenHeight * 0.02,
+                                          ),
                                         ),
-                                      )
-                                    : Text(
-                                        'Log In',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Neuropol',
-                                        ),
-                                      ),
-                              );
-                            }),
-                      ),
-                      const SizedBox(
-                        height: 16.0,
-                      ),
-                      TextButton(
-                          style: ButtonStyle(
-                            backgroundColor: null,
-                            overlayColor:
-                                MaterialStateProperty.resolveWith<Color?>(
-                                    (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.hovered))
-                                return Paletter.logInBg;
-                              return null;
-                            }),
-                          ),
-                          onPressed: () async {
-                            handleSending();
-                            if (response == 200) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Message Sent!'),
-                                      backgroundColor:
-                                          Color.fromARGB(255, 129, 215, 132)));
-                            } else {
-                              if (response != 200 && response != 0) {
+                                );
+                              }),
+                        ),
+                        SizedBox(
+                          height: screenHeight * 0.02,
+                        ),
+                        TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: null,
+                              overlayColor:
+                                  MaterialStateProperty.resolveWith<Color?>(
+                                      (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.hovered))
+                                  return Paletter.logInBg;
+                                return null;
+                              }),
+                            ),
+                            onPressed: () async {
+                              handleSending();
+                              if (response == 200) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content:
-                                            Text('Failed to send message!'),
-                                        backgroundColor: Color.fromARGB(
-                                            255, 217, 123, 116)));
+                                        content: Text('Message Sent!'),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 129, 215, 132)));
+                              } else {
+                                if (response != 200 && response != 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Failed to send message!'),
+                                          backgroundColor: Color.fromARGB(
+                                              255, 217, 123, 116)));
+                                }
                               }
-                            }
-                          },
-                          child: isSendigOTP
-                              ? Container(
-                                  width: screenWidth,
-                                  height: screenHeight * 0.043,
-                                  color: Paletter.logInBg,
-                                  child: SpinKitChasingDots(
-                                    color: Paletter.gradiant3,
-                                    size: screenHeight * 0.033,
+                            },
+                            child: isSendigOTP
+                                ? Container(
+                                    width: screenWidth,
+                                    height: screenHeight * 0.043,
+                                    color: Paletter.logInBg,
+                                    child: SpinKitChasingDots(
+                                      color: Paletter.gradiant3,
+                                      size: screenHeight * 0.033,
+                                    ))
+                                : Text(
+                                    'forgot otp?',
+                                    style: TextStyle(
+                                        color: Paletter.logInText,
+                                        fontFamily: 'Neuropol',
+                                        fontSize: screenHeight * 0.023),
                                   ))
-                              : Text(
-                                  'forgot otp?',
-                                  style: TextStyle(
-                                      color: Paletter.logInText,
-                                      fontFamily: 'Neuropol',
-                                      fontSize: screenHeight * 0.023),
-                                ))
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],

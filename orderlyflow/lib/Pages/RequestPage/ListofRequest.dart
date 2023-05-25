@@ -20,27 +20,7 @@ class requestList extends StatefulWidget {
 }
 
 class _requestListState extends State<requestList> {
-  // static Future<Map<String, dynamic>> logDocumentRequest(String docName) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   int counter = prefs.getInt('counter') ?? 0;
-
-  //   final db1 = await Mongo.Db.create(mongoDB_URL);
-  //   final collection = db1.collection(documentRequestCol);
-  //   await db1.open();
-
-  //   final document = {
-  //     "requestID": counter,
-  //     "userID": int.parse(StoreController.ID_controller.value.text.trim()),
-  //     "documentName": docName,
-  //     "DateTime": DateTime.now()
-  //   };
-  //   counter++;
-  //   prefs.setInt('counter', counter);
-  //   collection.insertOne(document);
-
-  //   return document;
-  // }
-
+  
   static Future<void> requestDocument(String docName) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
     final collection = db1.collection(documentsCol);
@@ -49,7 +29,7 @@ class _requestListState extends State<requestList> {
         .findOne(Mongo.where.eq("docName", docName)) as Map<String, dynamic>;
     dynamic content = document["content"];
     downloadDocument(content);
-    // logDocumentRequest(docName);
+    logDocumentRequest(docName);
     print("success");
   }
 
@@ -67,6 +47,28 @@ class _requestListState extends State<requestList> {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  static Future<Map<String, dynamic>> logDocumentRequest(
+      String docName) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int counter = prefs.getInt('counter') ?? 0;
+
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(documentRequestCol);
+    await db1.open();
+
+    final document = {
+      "requestID": counter,
+      "userID": int.parse(StoreController.ID_controller.value.text.trim()),
+      "documentName": docName,
+      "DateTime": DateTime.now()
+    };
+    counter++;
+    prefs.setInt('counter', counter);
+    collection.insertOne(document);
+
+    return document;
   }
 
   @override
@@ -88,7 +90,7 @@ class _requestListState extends State<requestList> {
                 color: Paletter.containerLight,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(

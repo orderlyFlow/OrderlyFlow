@@ -72,7 +72,6 @@ class MongoDB {
       return null as Map<String, dynamic>;
     }
 
-    //await db.close();
   }
 
 // get doc name
@@ -97,9 +96,6 @@ class MongoDB {
 
   static Future<List<Tasks>> getTask() async {
     var id = int.parse(StoreController.ID_controller.value.text.trim());
-    //print("ID");
-    //print(id.toString());
-    //print(StoreController.renderedTasks.isEmpty);
     final col1 = db.collection(tasksCol);
     if (StoreController.renderedTasks.isEmpty) {
       final getuser = await col1
@@ -350,34 +346,6 @@ class MongoDB {
     }
   }
 
-  /*static Future<List<int>> renderReceivers() async {
-    final recentChat = db.collection(chatsCol);
-    List<List<int>> users = [];
-    List<int> rec = [];
-    var usersList = await recentChat.find({
-      'users': int.parse(StoreController.ID_controller.value.text.trim())
-    }).toList();
-    usersList.forEach((item) {
-      if (item['isGroup'] == false) {
-        users.add(List<int>.from(item['users']));
-      } else {
-        if (item['isGroup'] == true) {
-          StoreController.groups.add(item);
-          print(item.toString());
-        }
-      }
-    });
-    users.forEach((subList) {
-      rec.addAll(subList);
-    });
-    rec.removeWhere((number) =>
-        number == int.parse(StoreController.ID_controller.value.text.trim()));
-    print(rec.toString());
-    /*for (var group in StoreController.groups) {
-      print(group['name'].toString());
-    }*/
-    return rec;
-  }*/
   static Future<bool> getChats() async {
     final recentChat = db.collection(chatsCol);
     final persons = db.collection(personsCol);
@@ -444,7 +412,6 @@ class MongoDB {
   static Future<Map<String, dynamic>> getNotes() async {
     var id = StoreController.currentUser!['ID'];
     final coll = db.collection(notesCol);
-
     final info = await coll.findOne(Mongo.where.eq("noteID", id))
         as Map<String, dynamic>;
 
@@ -506,7 +473,7 @@ class MongoDB {
   static String getEmployeeTeam(int employeeId) {
     String team;
     int firstDigit =
-        employeeId ~/ 100000; // Get the first digit of the employee ID
+        employeeId ~/ 100000;
 
     switch (firstDigit) {
       case 1:
@@ -555,20 +522,7 @@ class MongoDB {
     counter1++;
     prefs1.setInt('counter', counter1);
   }
-
-  /*static Future<String> getFilePath() async {
-    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
-    String appDocumentsPath = appDocumentsDirectory.path; // 2
-    String filePath = '$appDocumentsPath/demoTextFile.txt'; // 3
-
-    return filePath;
-  }*/
-
-  /*List<int> getEmps(){
   
-    List arr
-  }*/
-
   static Future<void> addTask(
       int TaskID, String taskname, List<int> employees) async {
     final db1 = await Mongo.Db.create(mongoDB_URL);
