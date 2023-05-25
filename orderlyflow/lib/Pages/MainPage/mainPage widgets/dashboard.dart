@@ -10,6 +10,7 @@ import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/widgets/tasks.dart
 import 'package:orderlyflow/custom_widgets/palette.dart';
 
 import '../../../Database/db.dart';
+import '../../../Database/textControllers.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -17,10 +18,18 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  void fetchTasks() async {
+    if (StoreController.renderedTasks.isEmpty) {
+      StoreController.renderedFutureTasks = MongoDB.getTask();
+      //StoreController.renderedTasks = await MongoDB.getTask();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     late double ScreenWidth = MediaQuery.of(context).size.width;
     late double ScreenHeight = MediaQuery.of(context).size.height;
+    fetchTasks();
     return Material(
       color: Paletter.mainBgLight,
       child: Container(
@@ -56,28 +65,17 @@ class _DashboardState extends State<Dashboard> {
             ),
             Column(
               children: [
-                FutureBuilder(
-                    future: MongoDB.getInfo(),
-                    builder: (buildContext, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      } else if (snapshot.hasData) {
-                        String UserName = snapshot.data['name'];
-                        return welcome(name: UserName);
-                      } else {
-                        return welcome(name: " ");
-                      }
-                    }),
+                welcome(name: StoreController.currentUser!['name']),
                 SizedBox(
                   height: ScreenHeight * 0.02,
                 ),
                 FutureBuilder(
-                    future: MongoDB.getTask(),
+                    future: StoreController.renderedFutureTasks,
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       } else if (snapshot.hasData) {
-                        return tasks(taskInfo: snapshot.data);
+                        return tasks(taskInfo: StoreController.renderedTasks);
                       } else {
                         return Container(
                             width: ScreenWidth * 0.397,

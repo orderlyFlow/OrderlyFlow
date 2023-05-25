@@ -135,9 +135,10 @@ class _addTaskButtonState extends State<addTaskButton> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.only(
+                                         padding: EdgeInsets.only(
                                               left: ScreenWidth * 0.0001),
-                                              margin: EdgeInsets.only(left: ScreenWidth * 0.01),
+                                          margin: EdgeInsets.only(
+                                              left: ScreenWidth * 0.01),
                                           width: ScreenWidth * 0.4,
                                           child: TextField(
                                             controller: tasksController,

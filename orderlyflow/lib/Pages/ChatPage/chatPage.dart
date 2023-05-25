@@ -35,20 +35,29 @@ class chatPageState extends State<chatPage> {
   bool isVisible = false;
   bool isSearch = StoreController.isSearching.value;
   bool isListening = false;
+  final photoData = StoreController.currentUser!['profilePicture'];
   var newMessage;
-  Future<List<Map<String, dynamic>>>? receiversList;
   Future? _future;
   late StreamController<List<Map<String, dynamic>>> _streamController =
       StreamController<List<Map<String, dynamic>>>();
   var searchedUser;
   SpeechToText _speech = SpeechToText();
   String text = '';
+  late List<dynamic> chatInfo;
 
-  Future<dynamic> sendData(int Rec_ID) async {
-    final data1 = await MongoDB.getPersonByID(Rec_ID);
-    final data2 = await MongoDB.getInfo();
-    if (data1 != null && data2 != null) {
-      return [data1, data2];
+  void sendData(int Rec_ID) {
+    var data1;
+    for (var person in StoreController.indRec) {
+      if (person['ID'] == Rec_ID) {
+        data1 = person;
+      }
+    }
+    final data2 = StoreController.currentUser;
+    final data3 = MongoDB.getMembersName();
+    if (data1 != null &&
+        data2 != null &&
+        StoreController.GroupMembers.isNotEmpty) {
+      chatInfo = [data1, data2, StoreController.GroupMembers];
     }
   }
 
@@ -81,7 +90,9 @@ class chatPageState extends State<chatPage> {
   void initState() {
     super.initState();
     isHovered = false;
-    receiversList = MongoDB.renderReceivers();
+    if (StoreController.AllChats.isEmpty) {
+      StoreController.receiversList = MongoDB.getIndRec();
+    }
   }
 
   void searchHandler() {
@@ -97,6 +108,8 @@ class chatPageState extends State<chatPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    Uint8List photoBytes = base64Decode(photoData);
+    ImageProvider imageProvider = MemoryImage(photoBytes);
     return Scaffold(
         body: Stack(children: [
       const BlueBg(),
@@ -134,48 +147,48 @@ class chatPageState extends State<chatPage> {
                               fontSize: 0.066 * screenHeight),
                         ),
                       ),
-                      FutureBuilder(
-                          future: MongoDB.getProfilePic(),
-                          builder: (buildContext, AsyncSnapshot snapshot) {
-                            if (snapshot.hasError) {
-                              return Column(
-                                children: [
-                                  Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          0, screenHeight * 0.054, 0, 0),
-                                      width: screenWidth * 0.08,
-                                      height: screenHeight * 0.08,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: FittedBox(
-                                          fit: BoxFit
-                                              .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
-                                          child: CircleAvatar(
-                                            backgroundColor: Colors.black,
-                                          ))),
-                                ],
-                              );
-                            } else if (snapshot.hasData) {
-                              return Column(
-                                children: [
-                                  Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          0, screenHeight * 0.054, 0, 0),
-                                      width: screenWidth * 0.08,
-                                      height: screenHeight * 0.08,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: FittedBox(
-                                          fit: BoxFit
-                                              .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
-                                          child: CircleAvatar(
-                                            backgroundImage: snapshot.data,
-                                          ))),
-                                ],
-                              );
-                            } else {
+                      //FutureBuilder(
+                      //  future: StoreController.currentUser,
+                      //builder: (buildContext, AsyncSnapshot snapshot) {
+                      //if (snapshot.hasError) {
+                      //return Column(
+                      //children: [
+                      //Container(
+                      //  margin: EdgeInsets.fromLTRB(
+                      //    0, screenHeight * 0.054, 0, 0),
+                      //width: screenWidth * 0.08,
+                      //height: screenHeight * 0.08,
+                      //decoration: BoxDecoration(
+                      //  shape: BoxShape.circle,
+                      //),
+                      //child: FittedBox(
+                      //fit: BoxFit
+                      //  .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                      //child: CircleAvatar(
+                      //  backgroundColor: Colors.black,
+                      //  ))),
+                      //],
+                      //);
+                      //} else if (snapshot.hasData) {
+                      //return
+                      Column(children: [
+                        Container(
+                            margin: EdgeInsets.fromLTRB(
+                                0, screenHeight * 0.054, 0, 0),
+                            width: screenWidth * 0.08,
+                            height: screenHeight * 0.08,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: FittedBox(
+                                fit: BoxFit
+                                    .contain, // Set the fit property to BoxFit.contain to scale the image proportionally to fit inside the container
+                                child: CircleAvatar(
+                                  backgroundImage: imageProvider,
+                                ))),
+                      ] //,
+                          //);
+                          /*   } else {
                               return Column(
                                 children: [
                                   Container(
@@ -195,7 +208,8 @@ class chatPageState extends State<chatPage> {
                                 ],
                               );
                             }
-                          }),
+                          }),*/
+                          )
                     ]),
                     Container(
                       margin: EdgeInsets.only(
@@ -227,8 +241,7 @@ class chatPageState extends State<chatPage> {
                                 screenWidth * 0,
                                 screenHeight * 0.003),
                             child: FutureBuilder<List<Map<String, dynamic>>>(
-                              future:
-                                  receiversList, //MongoDB.renderReceivers(),
+                              future: StoreController.receiversList,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   StoreController.input = snapshot.data!;
@@ -258,23 +271,22 @@ class chatPageState extends State<chatPage> {
                                                           isVisible =
                                                               !isVisible;
                                                         });
-                                                        _future = sendData(id);
+                                                        sendData(id);
                                                       },
                                                       visualDensity:
                                                           VisualDensity(
                                                               vertical: 1),
                                                       leading: CircleAvatar(
                                                         backgroundImage: MemoryImage(
-                                                            base64Decode(
-                                                                StoreController
-                                                                            .input[
-                                                                        index][
-                                                                    'profilePicture'])),
+                                                            base64Decode(StoreController
+                                                                        .AllChats[
+                                                                    index][
+                                                                'profilePicture'])),
                                                       ),
                                                       title: Text(
                                                           StoreController
-                                                                  .input[index]
-                                                              ['name'],
+                                                                  .AllChats[
+                                                              index]['name'],
                                                           style: TextStyle(
                                                               fontFamily:
                                                                   'conthrax',
@@ -294,35 +306,29 @@ class chatPageState extends State<chatPage> {
                                           0,
                                           screenWidth * 0.12,
                                           0),
-                                      child: Expanded(
-                                          child: ListView.builder(
-                                              itemCount: 5,
-                                              itemExtent: screenHeight * 0.0912,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Shimmer.fromColors(
-                                                  baseColor:
+                                      child: ListView.builder(
+                                          itemCount: 5,
+                                          itemExtent: screenHeight * 0.0912,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              child: ListTile(
+                                                leading: CircleAvatar(
+                                                  backgroundColor:
                                                       Colors.grey.shade300,
-                                                  highlightColor:
-                                                      Colors.grey.shade100,
-                                                  child: ListTile(
-                                                    leading: CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.grey.shade300,
-                                                      radius: 30,
-                                                    ),
-                                                    title: Container(
-                                                      height:
-                                                          screenHeight * 0.04,
-                                                      width:
-                                                          screenWidth * 0.00009,
-                                                      color:
-                                                          Colors.grey.shade300,
-                                                    ),
-                                                  ),
-                                                );
-                                              })));
+                                                  radius: 30,
+                                                ),
+                                                title: Container(
+                                                  height: screenHeight * 0.04,
+                                                  width: screenWidth * 0.00009,
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                              ),
+                                            );
+                                          }));
                                 }
                               },
                             )),
@@ -696,7 +702,7 @@ class chatPageState extends State<chatPage> {
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: screenHeight * 0.01,
-                                  horizontal: screenWidth * 0.08),
+                                  horizontal: screenWidth * 0.02),
                               hintText: 'Enter text here',
                               hintStyle: TextStyle(
                                   color: Colors.grey,
@@ -708,12 +714,6 @@ class chatPageState extends State<chatPage> {
                                   fontSize: 0.027 * screenHeight),
                               fillColor: Colors.grey[350],
                               filled: true,
-                              /*prefixIcon: IconButton(
-                                  onPressed: _listen,
-                                  icon: Icon(
-                                    isListening ? Icons.mic : Icons.mic_none,
-                                    color: Paletter.containerDark,
-                                  )),*/
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   Icons.send_rounded,

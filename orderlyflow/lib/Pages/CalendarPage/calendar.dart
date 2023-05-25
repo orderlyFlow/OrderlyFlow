@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:dotted_line/dotted_line.dart';
 
 import '../../Database/db.dart';
+import '../../Database/textControllers.dart';
 import '../../custom_widgets/BlueBg.dart';
 import 'package:intl/intl.dart';
 
@@ -38,7 +39,6 @@ class _calendarState extends State<calendar> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    var padd;
     TextEditingController title_controller = new TextEditingController();
     TextEditingController loc_controller = new TextEditingController();
     TextEditingController part_controller = new TextEditingController();
@@ -73,7 +73,6 @@ class _calendarState extends State<calendar> {
                       shouldFillViewport: true,
                       firstDay: DateTime(2023),
                       lastDay: DateTime(2025),
-                      focusedDay: DateTime.now(),
                       calendarStyle: CalendarStyle(
                         cellMargin: EdgeInsets.fromLTRB(
                             screenWidth * 0.0001,
@@ -111,17 +110,17 @@ class _calendarState extends State<calendar> {
                         weekdayStyle: TextStyle(
                           fontFamily: 'neuropol',
                           color: Paletter.blackText,
-                          fontSize: screenHeight * 0.03,
+                          fontSize: screenHeight * 0.024,
                         ),
                         weekendStyle: TextStyle(
                           fontFamily: 'neuropol',
                           color: Paletter.blackText,
-                          fontSize: screenHeight * 0.3,
+                          fontSize: screenHeight * 0.024,
                         ),
                       ),
                       headerStyle: HeaderStyle(
                         headerMargin:
-                            EdgeInsets.only(bottom: screenHeight * 0.0013),
+                            EdgeInsets.only(bottom: screenHeight * 0.00001),
                         titleCentered: true,
                         formatButtonVisible: false,
                         titleTextStyle: TextStyle(
@@ -130,10 +129,11 @@ class _calendarState extends State<calendar> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      focusedDay: today,
                       selectedDayPredicate: (day) => isSameDay(day, today),
                       onDaySelected: (today, focusedDay) {
                         setState(() {
-                          today = today;
+                          today = focusedDay;
                           _eventsStream =
                               MongoDB.getEventsOnSelectedDate(today);
                         });
@@ -311,7 +311,7 @@ class _calendarState extends State<calendar> {
           ],
         ),
         Visibility(
-          visible: true, //StoreController.isDirector.value,
+          visible: StoreController.isDirector.value,
           child: Container(
               margin: EdgeInsets.fromLTRB(screenWidth * 0, screenHeight * 0,
                   screenWidth * 0.005, screenHeight * 0.01),

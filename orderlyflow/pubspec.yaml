@@ -67,6 +67,8 @@ dependencies:
   platform: ^3.0.0
   speech_to_text: ^6.1.1
   audioplayers: ^4.0.1
+  pie_chart: ^5.3.2
+  glass: ^1.0.1+1
 
 
 

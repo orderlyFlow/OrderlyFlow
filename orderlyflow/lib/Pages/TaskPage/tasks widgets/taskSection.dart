@@ -8,6 +8,7 @@ import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:page_transition/page_transition.dart';
 
+import '../../../Database/textControllers.dart';
 import '../tasks.dart';
 
 class userTasks extends StatefulWidget {
@@ -61,10 +62,10 @@ class _userTasksState extends State<userTasks> {
             Row(
               children: [
                 FutureBuilder(
-                    future: MongoDB.getTeamName()  ,
+                    future: MongoDB.getTeamInfo(),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
-                        return Text('Error');
+                        return Text('${snapshot.error.toString()}');
                       } else if (snapshot.hasData) {
                         return Container(
                           margin: EdgeInsets.only(top: ScreenHeight * 0.01),
@@ -86,14 +87,6 @@ class _userTasksState extends State<userTasks> {
                         );
                       }
                     }),
-                // Text(
-                //   'Development Team',
-                //   style: TextStyle(
-                //     color: Paletter.blackText,
-                //     fontFamily: 'conthrax',
-                //     fontSize: ScreenHeight * 0.033,
-                //   ),
-                // ),
                 SizedBox(
                   width: ScreenWidth * 0.02,
                 ),
@@ -108,32 +101,16 @@ class _userTasksState extends State<userTasks> {
                 SizedBox(
                   width: ScreenWidth * 0.02,
                 ),
-                FutureBuilder(
-                    future: MongoDB.getInfo(),
-                    builder: (buildContext, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Error');
-                      } else if (snapshot.hasData) {
-                        return Container(
-                          margin: EdgeInsets.only(top: ScreenHeight * 0.01),
-                          child: Text(
-                            '${snapshot.data['name']}',
-                            style: TextStyle(
-                                fontSize: ScreenHeight * 0.044,
-                                fontFamily: 'iceland',
-                                color: Colors.black),
-                          ),
-                        );
-                      } else {
-                        return Text(
-                          '',
-                          style: TextStyle(
-                              fontSize: ScreenHeight * 0.024,
-                              fontFamily: 'iceland',
-                              color: Colors.black),
-                        );
-                      }
-                    }),
+                Container(
+                  margin: EdgeInsets.only(top: ScreenHeight * 0.01),
+                  child: Text(
+                    StoreController.currentUser!['name'],
+                    style: TextStyle(
+                        fontSize: ScreenHeight * 0.044,
+                        fontFamily: 'iceland',
+                        color: Colors.black),
+                  ),
+                ),
               ],
             ),
             SizedBox(
@@ -149,17 +126,24 @@ class _userTasksState extends State<userTasks> {
                       fontSize: ScreenHeight * 0.03,
                       fontFamily: "conthrax"),
                 ),
-                SizedBox(width: ScreenWidth * 0.3,),
-               FutureBuilder(
-                    future: Future.wait([MongoDB.getIds(), MongoDB.getInfo(), MongoDB.fetchNamesForIds()]),
+                SizedBox(
+                  width: ScreenWidth * 0.3,
+                ),
+                FutureBuilder(
+                    future: Future.wait(
+                        [MongoDB.getIds(), MongoDB.fetchNamesForIds()]),
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       } else if (snapshot.hasData) {
-                        int userID = snapshot.data[1]['ID'];
+                        int userID = StoreController.currentUser!['ID'];
                         List<int> ids = snapshot.data[0] as List<int>;
-                        List<String> names = snapshot.data[2] as List<String>;
-                        return addTaskButton(ID: userID, ids: ids, names: names,);
+                        List<String> names = snapshot.data[1] as List<String>;
+                        return addTaskButton(
+                          ID: userID,
+                          ids: ids,
+                          names: names,
+                        );
                       } else {
                         return CircularProgressIndicator(
                           color: Colors.white,

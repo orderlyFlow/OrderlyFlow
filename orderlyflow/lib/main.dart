@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orderlyflow/Pages/CalendarPage/calendar.dart';
 import 'package:orderlyflow/Pages/ChatPage/chatPage.dart';
+import 'package:orderlyflow/Pages/HrPage/HRpage.dart';
 import 'package:orderlyflow/Pages/MainPage/mainPage%20widgets/dashboard.dart';
 import 'package:orderlyflow/Pages/RequestPage/requests.dart';
 import 'package:orderlyflow/Pages/TaskPage/tasks.dart';
