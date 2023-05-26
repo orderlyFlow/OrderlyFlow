@@ -670,4 +670,55 @@ class MongoDB {
     List<Map<String, dynamic>> list = [];
     final info = coll.insertOne(doc);
   }
+
+  static Future<dynamic> getSalaryhr(int IDUser) async {
+    final coll = db.collection(payrollCol);
+    final sal_info = await coll.findOne(Mongo.where.eq("ID", IDUser))
+        as Map<String, dynamic>;
+    return sal_info;
+  }
+
+  static Future<Map<String, dynamic>> requestDocumentfile(int uploderID) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(documentsFiled);
+    // final await db1.open();
+    final document =
+        await collection.findOne((Mongo.where.eq("uploderID", uploderID)))
+            as Map<String, dynamic>;
+    dynamic content = document["base64"];
+    downloadDocument(content);
+    print("success");
+    return document;
+  }
+
+  static Future<List<dynamic>> getIndividualForms() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection('DocumentsFiled');
+    await db1.open();
+
+    final documents = await coll
+        .find(where.eq("uploaderID", StoreController.selectedUser!['ID']))
+        .toList();
+    return documents;
+  }
+
+  static changeAttribute(attribute, value) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(personsCol);
+    await db1.open();
+
+    final document = await collection
+        .findOne(Mongo.where.eq("ID", StoreController.selectedUser!['ID']));
+    print(attribute);
+    print(value);
+    collection.updateOne(document, Mongo.modify.set(attribute, value));
+  }
+
+  static Future<List<dynamic>> getIndividualForms1() async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final coll = db1.collection('DocumentsFiled');
+    await db1.open();
+    final documents = await coll.find().toList();
+    return documents;
+  }
 }

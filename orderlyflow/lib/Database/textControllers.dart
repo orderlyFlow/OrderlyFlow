@@ -26,6 +26,8 @@ class StoreController extends GetxController {
   static Map<String, dynamic>? currentUser;
   static Future<List<Tasks>>? renderedFutureTasks;
   static List<Tasks> renderedTasks = [];
+  static Map<String, dynamic>? selectedUser;
+  static List<Map<String, dynamic>> allUsers = [];
   static Future<List<Map<String, dynamic>>>? receiversList;
   static List<Map<String, dynamic>> AllChats = [];
   static List<String> teamMembersName = [];
