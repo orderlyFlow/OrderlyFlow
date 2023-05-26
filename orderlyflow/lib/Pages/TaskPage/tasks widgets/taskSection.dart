@@ -21,6 +21,7 @@ class userTasks extends StatefulWidget {
 }
 
 class _userTasksState extends State<userTasks> {
+  Future? _future;
   Future<void> updateTask(int id, bool status) async {
     var db = await Mongo.Db.create(mongoDB_URL);
     await db.open();
@@ -41,6 +42,18 @@ class _userTasksState extends State<userTasks> {
       widget.taskInfo.clear();
       widget.taskInfo.addAll(updatedTaskList);
     });
+  }
+
+  Future<dynamic> sendData() async {
+    final data2 = await MongoDB.fetchNamesForIds();
+    final data1 = StoreController.teamMemberIDs;
+    return [data1, data2];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _future = sendData();
   }
 
   @override
@@ -130,8 +143,7 @@ class _userTasksState extends State<userTasks> {
                   width: ScreenWidth * 0.3,
                 ),
                 FutureBuilder(
-                    future: Future.wait(
-                        [MongoDB.getIds(), MongoDB.fetchNamesForIds()]),
+                    future: _future,
                     builder: (buildContext, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
                         return Text('${snapshot.error}');

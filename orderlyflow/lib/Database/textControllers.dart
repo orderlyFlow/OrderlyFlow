@@ -22,12 +22,14 @@ class StoreController extends GetxController {
   static List<int> individualRecIDs = [];
   static List<Map<String, dynamic>> groups = [];
   static List<Map<String, dynamic>> indRec = [];
+  static List<int> teamMemberIDs = [];
   static Map<String, dynamic>? currentUser;
   static Future<List<Tasks>>? renderedFutureTasks;
   static List<Tasks> renderedTasks = [];
   static Future<List<Map<String, dynamic>>>? receiversList;
   static List<Map<String, dynamic>> AllChats = [];
-  static List<String> GroupMembers = [];
+  static List<String> teamMembersName = [];
+  static List<Map<String, dynamic>> teamMembers = [];
 
   static RxInt Rec_ID = 0.obs;
   static RxInt Searched_ID = 0.obs;

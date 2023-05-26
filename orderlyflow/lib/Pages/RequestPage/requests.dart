@@ -123,21 +123,8 @@ class _requestsState extends State<requests> {
                                   SizedBox(
                                     width: ScreenWidth * 0.03,
                                   ),
-                                  FutureBuilder(
-                                      future: MongoDB.getInfo(),
-                                      builder: (buildContext,
-                                          AsyncSnapshot snapshot) {
-                                        if (snapshot.hasError) {
-                                          return Text('${snapshot.error}');
-                                        } else if (snapshot.hasData) {
-                                          var userID = snapshot.data["ID"];
-                                          return addReq(ID: userID);
-                                        } else {
-                                          return CircularProgressIndicator(
-                                            color: Colors.white,
-                                          );
-                                        }
-                                      }),
+                                  addReq(
+                                      ID: StoreController.currentUser!["ID"]),
                                 ],
                               ),
                               SizedBox(

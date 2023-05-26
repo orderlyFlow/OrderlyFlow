@@ -318,16 +318,18 @@ class _calendarMainState extends State<calendarMain> {
                 weekdayStyle: TextStyle(
                   fontFamily: 'neuropol',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.03,
+                  fontWeight: FontWeight.bold,
+                  fontSize: screenHeight * 0.022,
                 ),
                 weekendStyle: TextStyle(
                   fontFamily: 'neuropol',
                   color: Paletter.blackText,
-                  fontSize: screenHeight * 0.03,
+                  fontWeight: FontWeight.bold,
+                  fontSize: screenHeight * 0.022,
                 ),
               ),
               headerStyle: HeaderStyle(
-                headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.02),
+                headerMargin: EdgeInsets.only(bottom: ScreenHeight * 0.0152),
                 titleCentered: true,
                 formatButtonVisible: false,
                 titleTextStyle: TextStyle(
