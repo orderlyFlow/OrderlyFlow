@@ -220,7 +220,7 @@ class _SideBarState extends State<SideBar> {
                           Navigator.push(
                               context,
                               PageTransition(
-                                  child: HrPage(),
+                                  child: HRpage(),
                                   type: PageTransitionType.theme,
                                   duration: const Duration(seconds: 2)));
                         },

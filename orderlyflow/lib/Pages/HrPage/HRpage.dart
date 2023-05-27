@@ -226,7 +226,7 @@ class HRpageState extends State<HRpage> {
                                       width: ScreenWidth * 0.36,
                                       height: ScreenHeight * 0.35,
                                       child: FutureBuilder<List<dynamic>>(
-                                        future: MongoDB.getIndividualForms(),
+                                        future: MongoDB.getIndividualForms1(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot snapshot) {
                                           if (snapshot.hasData) {

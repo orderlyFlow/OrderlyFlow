@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:intl/intl.dart';
 
 import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import 'package:orderlyflow/Database/constant.dart';
@@ -60,17 +61,20 @@ class chatPageState extends State<chatPage> {
     db = await Mongo.Db.create(mongoDB_URL);
     int id = int.parse(StoreController.ID_controller.value.text.trim());
     await db.open();
-    final messages_in_Group;
-    final messages = await db
-        .collection('ChatsHistory')
-        .find(Mongo.where.eq("sender", id).or(Mongo.where.eq("receiver", id)))
-        .toList();
-    if (StoreController.Rec_ID.value < 100000) {
-      messages_in_Group = await db
+    //if (StoreController.teamMembers.isEmpty) {
+    //await MongoDB.fetchNamesForIds();
+    //}
+    var messages;
+    if (StoreController.Rec_ID.value >= 100000) {
+      messages = await db
+          .collection('ChatsHistory')
+          .find(Mongo.where.eq("sender", id).or(Mongo.where.eq("receiver", id)))
+          .toList();
+    } else {
+      messages = await db
           .collection('ChatsHistory')
           .find(Mongo.where.eq("receiver", StoreController.Rec_ID.value))
           .toList();
-      messages.addAll(messages_in_Group);
     }
     Stream<List<Map<String, dynamic>>> messageStream =
         Stream.fromIterable([messages]);
@@ -88,14 +92,6 @@ class chatPageState extends State<chatPage> {
     }
   }
 
-  void getMembersOfGroup() async {
-    if (StoreController.teamMembers.isEmpty) {
-      if (StoreController.AllChats.isNotEmpty) {
-        _future = (await MongoDB.fetchNamesForIds()) as Future<List<String>>?;
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -103,7 +99,6 @@ class chatPageState extends State<chatPage> {
     if (StoreController.AllChats.isEmpty) {
       StoreController.receiversList = MongoDB.getIndRec();
     }
-    getMembersOfGroup();
   }
 
   void searchHandler() {
@@ -470,6 +465,20 @@ class chatPageState extends State<chatPage> {
                                       itemCount: messages.length,
                                       itemBuilder: (context, index) {
                                         final message = messages[index];
+                                        Duration offset =
+                                            DateTime.now().timeZoneOffset;
+                                        DateTime timeUTC = message['datetime'];
+                                        DateTime localMsgTime =
+                                            timeUTC.add(offset);
+                                        String TimeandDate =
+                                            DateFormat('HH:mm a')
+                                                    .format(localMsgTime) +
+                                                ' - ' +
+                                                timeUTC.day.toString() +
+                                                '/' +
+                                                timeUTC.month.toString() +
+                                                '/' +
+                                                timeUTC.year.toString();
                                         final isSender = message['sender'] ==
                                             int.parse(StoreController
                                                 .ID_controller.value.text
@@ -491,7 +500,8 @@ class chatPageState extends State<chatPage> {
                                               if (StoreController.Rec_ID.value <
                                                   100000) ...[
                                                 FutureBuilder(
-                                                    future: _future,
+                                                    future: MongoDB
+                                                        .fetchNamesForIds(),
                                                     builder: (context,
                                                         AsyncSnapshot<dynamic>
                                                             snapshot) {
@@ -520,9 +530,6 @@ class chatPageState extends State<chatPage> {
                                                           final userInfo =
                                                               StoreController
                                                                   .currentUser!;
-                                                          print(StoreController
-                                                              .teamMembers
-                                                              .isEmpty);
                                                           for (var person
                                                               in StoreController
                                                                   .teamMembers) {
@@ -530,6 +537,9 @@ class chatPageState extends State<chatPage> {
                                                                     'sender'] ==
                                                                 person['ID']) {
                                                               otherInfo =
+                                                                  person;
+                                                              StoreController
+                                                                      .person =
                                                                   person;
                                                             }
                                                           }
@@ -572,12 +582,10 @@ class chatPageState extends State<chatPage> {
                                               ] else ...[
                                                 SizedBox.shrink()
                                               ],
-                                              /////////////////////////////////////////////////////
-                                              SizedBox(height: 4),
-                                              ((message['sender'] ==
-                                                              StoreController
-                                                                  .Rec_ID
-                                                                  .value &&
+                                              //////////////////////////////////////////////////////////////////
+                                              SizedBox(
+                                                  height: screenHeight * 0.004),
+                                              ((message['sender'] == StoreController.Rec_ID.value &&
                                                           message['receiver'] ==
                                                               int.parse(StoreController
                                                                   .ID_controller
@@ -589,12 +597,17 @@ class chatPageState extends State<chatPage> {
                                                                   .Rec_ID
                                                                   .value &&
                                                           message['sender'] ==
-                                                              int.parse(
-                                                                  StoreController
-                                                                      .ID_controller
-                                                                      .value
-                                                                      .text
-                                                                      .trim())))
+                                                              int.parse(StoreController
+                                                                  .ID_controller
+                                                                  .value
+                                                                  .text
+                                                                  .trim())) ||
+                                                      (message['receiver'] ==
+                                                              StoreController
+                                                                  .Rec_ID
+                                                                  .value &&
+                                                          StoreController.Rec_ID.value <
+                                                              100000))
                                                   ? Container(
                                                       margin: EdgeInsets.fromLTRB(
                                                           isSender
@@ -655,10 +668,7 @@ class chatPageState extends State<chatPage> {
                                                   : SizedBox.shrink(),
                                               SizedBox(
                                                   height: screenHeight * 0.001),
-                                              ((message['sender'] ==
-                                                              StoreController
-                                                                  .Rec_ID
-                                                                  .value &&
+                                              ((message['sender'] == StoreController.Rec_ID.value &&
                                                           message['receiver'] ==
                                                               int.parse(StoreController
                                                                   .ID_controller
@@ -670,15 +680,19 @@ class chatPageState extends State<chatPage> {
                                                                   .Rec_ID
                                                                   .value &&
                                                           message['sender'] ==
-                                                              int.parse(
-                                                                  StoreController
-                                                                      .ID_controller
-                                                                      .value
-                                                                      .text
-                                                                      .trim())))
+                                                              int.parse(StoreController
+                                                                  .ID_controller
+                                                                  .value
+                                                                  .text
+                                                                  .trim())) ||
+                                                      (message['receiver'] ==
+                                                              StoreController
+                                                                  .Rec_ID
+                                                                  .value &&
+                                                          StoreController.Rec_ID.value <
+                                                              100000))
                                                   ? Text(
-                                                      message['datetime']
-                                                          .toString(),
+                                                      TimeandDate,
                                                       style: TextStyle(
                                                         color: Colors
                                                             .blueGrey[700],
@@ -753,12 +767,6 @@ class chatPageState extends State<chatPage> {
                                       );
                                       StoreController.isSendingMessage.value =
                                           true;
-                                      /* if (StoreController
-                                                    .isSendingMessage.isTrue &&
-                                                newMessage != null) {
-                                              _streamController
-                                                  .add([newMessage]);
-                                            }*/
                                     });
                                   }
                                 },

@@ -280,7 +280,7 @@ class MongoDB {
     Map<String, dynamic> doc = {
       "sender": sender,
       "receiver": receiver,
-      "datetime": DateTime.now(),
+      "datetime": DateTime.now().toLocal(),
       "content": content
     };
     final info = coll.insertOne(doc);
@@ -720,5 +720,17 @@ class MongoDB {
     await db1.open();
     final documents = await coll.find().toList();
     return documents;
+  }
+
+  static changeAttributeInt(attribute, value) async {
+    final db1 = await Mongo.Db.create(mongoDB_URL);
+    final collection = db1.collection(personsCol);
+    await db1.open();
+
+    final document = await collection
+        .findOne(Mongo.where.eq("ID", StoreController.selectedUser!['ID']));
+
+    collection.updateOne(
+        document, Mongo.modify.set(attribute, int.parse(value)));
   }
 }

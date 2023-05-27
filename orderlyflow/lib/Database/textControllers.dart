@@ -32,6 +32,7 @@ class StoreController extends GetxController {
   static List<Map<String, dynamic>> AllChats = [];
   static List<String> teamMembersName = [];
   static List<Map<String, dynamic>> teamMembers = [];
+  static Map<String, dynamic>? person;
 
   static RxInt Rec_ID = 0.obs;
   static RxInt Searched_ID = 0.obs;
