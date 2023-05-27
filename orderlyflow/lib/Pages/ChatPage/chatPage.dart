@@ -351,9 +351,9 @@ class chatPageState extends State<chatPage> {
                                                                   .value = snapshot
                                                                       .data![
                                                                   index]['ID'];
-                                                              print(StoreController
-                                                                  .Searched_ID
-                                                                  .value);
+                                                              // print(StoreController
+                                                              //     .Searched_ID
+                                                              //     .value);
                                                               searchedUser =
                                                                   snapshot.data![
                                                                       index];

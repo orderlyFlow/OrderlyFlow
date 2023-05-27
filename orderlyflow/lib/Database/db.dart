@@ -45,7 +45,7 @@ class MongoDB {
     await db.open();
     inspect(db);
     var status = db.serverStatus();
-    print(status);
+    //print(status);
   }
 
   static Future<Map<String, dynamic>> getInfo() async {
@@ -136,8 +136,8 @@ class MongoDB {
     final team = await coll.findOne(Mongo.where.eq("director", int.parse(id)));
     final teamMembers = (team["members"] as List<dynamic>).cast<int>().toList();
     StoreController.teamMemberIDs = teamMembers;
-    print('team members');
-    print(teamMembers.toString());
+    //print('team members');
+    //print(teamMembers.toString());
     return teamMembers;
   }
 
@@ -151,7 +151,7 @@ class MongoDB {
         document = await collection.findOne(Mongo.where.eq("ID", idlist[i]))
             as Map<String, dynamic>;
         StoreController.teamMembers.add(document);
-        print(StoreController.teamMembers.length);
+        //print(StoreController.teamMembers.length);
         StoreController.teamMembersName.add(document['name']);
       }
       return StoreController.teamMembersName;
@@ -284,7 +284,7 @@ class MongoDB {
       "content": content
     };
     final info = coll.insertOne(doc);
-    print(doc);
+    //print(doc);
     return doc;
 // working
   }
@@ -401,14 +401,17 @@ class MongoDB {
   }
 
   static Future<List<Map<String, dynamic>>> fetchAll() async {
-    final coll = db.collection(personsCol);
-    await db.open();
-
-    final pers_info = await coll.find().toList();
-    if (pers_info != null) {
-      return pers_info;
+    if (StoreController.allUsers.isEmpty) {
+      final coll = db.collection(personsCol);
+      final pers_info = await coll.find().toList();
+      if (pers_info != null) {
+        StoreController.allUsers = pers_info;
+        return StoreController.allUsers;
+      } else {
+        return [];
+      }
     } else {
-      return [];
+      return StoreController.allUsers;
     }
   }
 
@@ -450,14 +453,14 @@ class MongoDB {
       final teams = db.collection('Teams');
       final result = await collection.findOne(where.eq('teamID', teamId));
       if (result == null) {
-        print('No document found with teamID: $teamId');
+        //print('No document found with teamID: $teamId');
         return [];
       }
       final employees = result['members'] ?? [];
-      print('Employees found: $employees');
+      //print('Employees found: $employees');
       return employees;
     } catch (e) {
-      print('Error retrieving employees: $e');
+      //print('Error retrieving employees: $e');
       return [];
     }
   }
@@ -709,8 +712,8 @@ class MongoDB {
 
     final document = await collection
         .findOne(Mongo.where.eq("ID", StoreController.selectedUser!['ID']));
-    print(attribute);
-    print(value);
+    //print(attribute);
+    //print(value);
     collection.updateOne(document, Mongo.modify.set(attribute, value));
   }
 

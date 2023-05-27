@@ -55,10 +55,17 @@ class HRpageState extends State<HRpage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (StoreController.allUsers.isEmpty) {
+      StoreController.allUsersFuture = MongoDB.fetchAll();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
     double ScreenHeight = MediaQuery.of(context).size.height;
-    Map<String, double> dataMap;
 
     return Scaffold(
         body: Stack(children: [
@@ -94,8 +101,8 @@ class HRpageState extends State<HRpage> {
                     ),
                     child: Container(
                       margin: EdgeInsets.fromLTRB(
-                          ScreenWidth * 0.03,
-                          ScreenHeight * 0.03,
+                          ScreenWidth * 0,
+                          ScreenHeight * 0.015,
                           ScreenWidth * 0,
                           ScreenHeight * 0),
                       child: Column(mainAxisSize: MainAxisSize.max, children: [
@@ -117,14 +124,15 @@ class HRpageState extends State<HRpage> {
                             ),
                             child: SingleChildScrollView(
                                 child: FutureBuilder(
-                                    future: MongoDB.fetchAll(),
+                                    future: StoreController.allUsersFuture,
                                     builder:
                                         (buildContext, AsyncSnapshot snapshot) {
                                       if (snapshot.hasError) {
                                         return Text('${snapshot.error}');
                                       } else if (snapshot.hasData) {
                                         return ListView.builder(
-                                          itemCount: snapshot.data!.length,
+                                          itemCount:
+                                              StoreController.allUsers.length,
                                           physics:
                                               NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
@@ -187,11 +195,17 @@ class HRpageState extends State<HRpage> {
                                         );
                                       } else {
                                         return Center(
+                                            child: Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              ScreenWidth * 0,
+                                              ScreenHeight * 0.15,
+                                              ScreenWidth * 0,
+                                              ScreenHeight * 0),
                                           child: CircularProgressIndicator(
                                             color: Colors.blueGrey
                                                 .withOpacity(0.5),
                                           ),
-                                        );
+                                        ));
                                       }
                                     }))),
                       ]),
