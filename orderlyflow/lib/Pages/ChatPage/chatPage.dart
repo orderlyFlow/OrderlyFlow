@@ -61,9 +61,9 @@ class chatPageState extends State<chatPage> {
     db = await Mongo.Db.create(mongoDB_URL);
     int id = int.parse(StoreController.ID_controller.value.text.trim());
     await db.open();
-    //if (StoreController.teamMembers.isEmpty) {
-    //await MongoDB.fetchNamesForIds();
-    //}
+    if (StoreController.teamMembers.isEmpty) {
+      await MongoDB.fetchNamesForIds();
+    }
     var messages;
     if (StoreController.Rec_ID.value >= 100000) {
       messages = await db

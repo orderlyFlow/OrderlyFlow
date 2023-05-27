@@ -6,11 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:orderlyflow/Database/textControllers.dart';
 import 'package:orderlyflow/Pages/hrpage/threepoint.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 import 'package:glass/glass.dart';
 import 'package:orderlyflow/custom_widgets/side_bar.dart';
 import '../../Database/db.dart';
 import '../../custom_widgets/BlueBg.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HRpage extends StatefulWidget {
   const HRpage({super.key});
@@ -27,6 +32,27 @@ class HRpageState extends State<HRpage> {
     Color.fromARGB(255, 118, 155, 138),
   ];
   bool ischecked = false;
+
+  static Future<void> downloadDocument(
+      String base64String, String docName, int ID) async {
+    try {
+      List<int> bytes = base64.decode(base64String);
+
+      final directory = await getApplicationDocumentsDirectory();
+      String path = '${directory.path}' +
+          '/' +
+          '${docName}' +
+          '${ID.toString()}' +
+          '.docx';
+
+      final file = File(path);
+      await file.writeAsBytes(bytes);
+
+      await Process.run('explorer', [path]);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -246,23 +272,51 @@ class HRpageState extends State<HRpage> {
                                                         .format(localTime);
                                                 String date = dateUTC.weekday
                                                         .toString() +
+                                                    '/' +
                                                     dateUTC.month.toString() +
+                                                    '/' +
                                                     dateUTC.year.toString();
                                                 return Container(
                                                     width: ScreenWidth * 0.34,
                                                     height: ScreenHeight * 0.09,
                                                     child: ListTile(
-                                                      onTap: () {},
+                                                      onTap: () {
+                                                        downloadDocument(
+                                                            snapshot.data![
+                                                                    index]
+                                                                ['base64'],
+                                                            snapshot.data![
+                                                                index]['title'],
+                                                            snapshot.data![
+                                                                    index]
+                                                                ['uploaderID']);
+                                                      },
                                                       title: Text(
                                                         snapshot.data![index]
                                                             ['title'],
-                                                        style: ThemeStyles
-                                                            .containerText,
+                                                        style: TextStyle(
+                                                          color: Paletter
+                                                              .containerLight,
+                                                          fontFamily:
+                                                              'neuropol',
+                                                          fontSize:
+                                                              ScreenHeight *
+                                                                  0.028,
+                                                        ),
                                                       ),
                                                       subtitle: Text(
-                                                        localReqTime + date,
-                                                        style: ThemeStyles
-                                                            .containerText,
+                                                        localReqTime +
+                                                            " - " +
+                                                            date,
+                                                        style: TextStyle(
+                                                          color: Paletter
+                                                              .containerLight,
+                                                          fontFamily:
+                                                              'neuropol',
+                                                          fontSize:
+                                                              ScreenHeight *
+                                                                  0.028,
+                                                        ),
                                                       ),
                                                     ));
                                               },

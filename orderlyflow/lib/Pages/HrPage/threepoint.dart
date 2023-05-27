@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:orderlyflow/Pages/hrpage/HRpage.dart';
+import 'package:orderlyflow/custom_widgets/palette.dart';
 import 'package:orderlyflow/custom_widgets/searchBar.dart';
 import 'package:orderlyflow/custom_widgets/side_bar.dart';
+import '../../Database/constant.dart';
 import '../../Database/db.dart';
+import 'package:mongo_dart/mongo_dart.dart' as Mongo;
 import '../../Database/textControllers.dart';
 import '../../custom_widgets/BlueBg.dart';
 import 'package:orderlyflow/Database/db.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class threepoint extends StatefulWidget {
   const threepoint({super.key});
@@ -34,6 +40,27 @@ class threepointState extends State<threepoint> {
   final HOWController = TextEditingController();
   final bounsController = TextEditingController();
   final DaysOffController = TextEditingController();
+
+  static Future<void> downloadDocument(
+      String base64String, String docName, int ID) async {
+    try {
+      List<int> bytes = base64.decode(base64String);
+
+      final directory = await getApplicationDocumentsDirectory();
+      String path = '${directory.path}' +
+          '/' +
+          '${docName}' +
+          '${ID.toString()}' +
+          '.docx';
+
+      final file = File(path);
+      await file.writeAsBytes(bytes);
+
+      await Process.run('explorer', [path]);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   void initState() {
@@ -94,6 +121,7 @@ class threepointState extends State<threepoint> {
                               },
                               child: Icon(
                                 Icons.arrow_back,
+                                color: Colors.white,
                               )),
                         ),
                         Container(
@@ -113,12 +141,6 @@ class threepointState extends State<threepoint> {
                                         "status", statusController.text);
                                     MongoDB.changeAttribute(
                                         "name", nameController.text);
-                                    // MongoDB.changeAttribute(
-                                    // "ID", idController.text);
-                                    // MongoDB.changeAttribute(
-                                    //"password", passwordController.text);
-                                    //MongoDB.changeAttribute(
-                                    //"OTP", OTPController.text);
                                     MongoDB.changeAttribute(
                                         "phone", phoneController.text);
                                     MongoDB.changeAttribute(
@@ -130,7 +152,11 @@ class threepointState extends State<threepoint> {
                               },
                               child: Text(
                                 "EDIT&SAVE",
-                                style: ThemeStyles.containerText,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenHeight * 0.033,
+                                  fontFamily: "neuropol",
+                                ),
                               )),
                         ),
                       ]),
@@ -164,16 +190,17 @@ class threepointState extends State<threepoint> {
                             child: TextField(
                               enabled: isEnable,
                               controller: nameController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = nameController.text;
                                 String textFieldName = "name";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
+
                                 //ThemeStyles1.containerText;
                               },
                             )),
@@ -195,16 +222,16 @@ class threepointState extends State<threepoint> {
                             ),
                             child: TextField(
                               controller: idController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = idController.text;
                                 String textFieldName = "ID";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
                                 //ThemeStyles1.containerText;
                               },
                             )),
@@ -221,22 +248,20 @@ class threepointState extends State<threepoint> {
                             width: ScreenWidth * 0.75,
                             height: ScreenHeight * 0.05,
                             decoration: BoxDecoration(
-                              //color: const Color.fromARGB(205, 92, 92, 92),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: TextField(
                               controller: OTPController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = OTPController.text;
                                 String textFieldName = "OTP";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
-                                //ThemeStyles1.containerText;
                               },
                             )),
                         const Divider(
@@ -252,22 +277,20 @@ class threepointState extends State<threepoint> {
                             width: ScreenWidth * 0.75,
                             height: ScreenHeight * 0.05,
                             decoration: BoxDecoration(
-                              //  color: const Color.fromARGB(205, 92, 92, 92),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: TextField(
                               controller: phoneController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = phoneController.text;
                                 String textFieldName = "phone";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
-                                //ThemeStyles1.containerText;
                               },
                             )),
                         const Divider(
@@ -283,22 +306,20 @@ class threepointState extends State<threepoint> {
                             width: ScreenWidth * 0.75,
                             height: ScreenHeight * 0.05,
                             decoration: BoxDecoration(
-                              //color: const Color.fromARGB(205, 92, 92, 92),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: TextField(
                               controller: emailController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = emailController.text;
                                 String textFieldName = "email";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
-                                //ThemeStyles1.containerText;
                               },
                             )),
                         const Divider(
@@ -314,22 +335,20 @@ class threepointState extends State<threepoint> {
                             width: ScreenWidth * 0.75,
                             height: ScreenHeight * 0.05,
                             decoration: BoxDecoration(
-                              //color: const Color.fromARGB(205, 92, 92, 92),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: TextField(
                               controller: passwordController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = passwordController.text;
                                 String textFieldName = "password";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
-                                //ThemeStyles1.containerText;
                               },
                             )),
                         const Divider(
@@ -345,22 +364,20 @@ class threepointState extends State<threepoint> {
                             width: ScreenWidth * 0.75,
                             height: ScreenHeight * 0.05,
                             decoration: BoxDecoration(
-                              //color: const Color.fromARGB(205, 92, 92, 92),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: TextField(
                               controller: titleController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = titleController.text;
                                 String textFieldName = "password";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
-                                //ThemeStyles1.containerText;
                               },
                             )),
                         const Divider(
@@ -376,22 +393,20 @@ class threepointState extends State<threepoint> {
                             width: ScreenWidth * 0.75,
                             height: ScreenHeight * 0.05,
                             decoration: BoxDecoration(
-                              //color: const Color.fromARGB(205, 92, 92, 92),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: TextField(
                               controller: statusController,
+                              style: TextStyle(
+                                color: Paletter.containerLight,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.028,
+                              ),
                               onSubmitted: (value) {
                                 String enteredText = statusController.text;
                                 String textFieldName = "status";
                                 MongoDB.changeAttribute(
                                     textFieldName, enteredText);
-                                style:
-                                const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'neuropol',
-                                );
-                                //ThemeStyles1.containerText;
                               },
                             )),
                       ])
@@ -439,16 +454,21 @@ class threepointState extends State<threepoint> {
                                 String localReqTime =
                                     DateFormat('HH:mm:a').format(localTime);
                                 String date = dateUTC.weekday.toString() +
+                                    '/' +
                                     dateUTC.month.toString() +
+                                    '/' +
                                     dateUTC.year.toString();
                                 return Container(
                                     width: ScreenWidth * 0.34,
                                     height: ScreenHeight * 0.13,
                                     child: ListTile(
-                                      title: GestureDetector(
-                                        onTap: () {
-                                          MongoDB.downloadDocument(
-                                              snapshot.data![index]['title']);
+                                      title: TextButton(
+                                        onPressed: () {
+                                          downloadDocument(
+                                              snapshot.data![index]['base64'],
+                                              snapshot.data![index]['title'],
+                                              snapshot.data![index]
+                                                  ['uploaderID']);
                                         },
                                         child: Text(
                                           snapshot.data![index]['title'],
@@ -456,7 +476,7 @@ class threepointState extends State<threepoint> {
                                         ),
                                       ),
                                       subtitle: Text(
-                                        localReqTime + date,
+                                        localReqTime + " - " + date,
                                         style: ThemeStyles.containerText,
                                       ),
                                     ));
@@ -520,27 +540,30 @@ class threepointState extends State<threepoint> {
                                   Container(
                                       child: TextField(
                                     controller: payrollController,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'neuropol',
+                                      fontSize: ScreenHeight * 0.022,
+                                    ),
                                     onSubmitted: (value) {
                                       String enteredText =
                                           payrollController.text;
                                       String textFieldName = "Basepay";
                                       MongoDB.changeAttributeInt(
                                           textFieldName, enteredText);
-                                      style:
-                                      TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'neuropol',
-                                        fontSize: ScreenHeight * 0.12,
-                                      );
                                     },
                                   )),
                                   Container(
                                       decoration: BoxDecoration(
-                                        //color: const Color.fromARGB(205, 92, 92, 92),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: TextField(
                                         controller: HOWController,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: 'neuropol',
+                                          fontSize: ScreenHeight * 0.22,
+                                        ),
                                         onSubmitted: (value) {
                                           String enteredText =
                                               HOWController.text;
@@ -548,64 +571,58 @@ class threepointState extends State<threepoint> {
                                               "Hours Of Work";
                                           MongoDB.changeAttributeInt(
                                               textFieldName, enteredText);
-                                          style:
-                                          TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'neuropol',
-                                            fontSize: ScreenHeight * 0.12,
-                                          );
-                                          //ThemeStyles1.containerText;
                                         },
                                       )),
                                   Container(
                                       decoration: BoxDecoration(
-                                        //color: const Color.fromARGB(205, 92, 92, 92),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: TextField(
                                         controller: bounsController,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: 'neuropol',
+                                          fontSize: ScreenHeight * 0.22,
+                                        ),
                                         onSubmitted: (value) {
                                           String enteredText =
                                               bounsController.text;
                                           String textFieldName = "Bonus";
                                           MongoDB.changeAttributeInt(
                                               textFieldName, enteredText);
-                                          style:
-                                          TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'neuropol',
-                                            fontSize: ScreenHeight * 0.12,
-                                          );
-                                          //ThemeStyles1.containerText;
                                         },
                                       )),
                                   Container(
                                       decoration: BoxDecoration(
-                                        // color: const Color.fromARGB(205, 92, 92, 92),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: TextField(
                                         controller: DaysOffController,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: 'neuropol',
+                                          fontSize: ScreenHeight * 0.22,
+                                        ),
                                         onSubmitted: (value) {
                                           String enteredText =
                                               DaysOffController.text;
                                           String textFieldName = "Days Off";
                                           MongoDB.changeAttributeInt(
                                               textFieldName, enteredText);
-                                          style:
-                                          TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'neuropol',
-                                            fontSize: ScreenHeight * 0.12,
-                                          );
-                                          //ThemeStyles1.containerText;
                                         },
                                       ))
                                 ],
                               ),
                             );
                           } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
+                            return Text(
+                              'OOoopss! Error while fetching',
+                              style: TextStyle(
+                                color: Paletter.gradiant3,
+                                fontFamily: 'neuropol',
+                                fontSize: ScreenHeight * 0.032,
+                              ),
+                            );
                           } else {
                             DaysOffController.text = "Loading";
                             payrollController.text = "Loading";
@@ -632,7 +649,7 @@ class ThemeStyles {
     fontSize: 22.0,
     decoration: TextDecoration.none,
     fontFamily: 'neuropol',
-    color: Color.fromRGBO(18, 20, 30, 10),
+    color: Paletter.gradiant1,
   );
 }
 
@@ -641,7 +658,7 @@ class ThemeStylestitle {
     fontSize: 29.0,
     decoration: TextDecoration.none,
     fontFamily: 'neuropol',
-    color: Color.fromRGBO(20, 70, 103, 1),
+    color: Paletter.gradiant3,
   );
 }
 
