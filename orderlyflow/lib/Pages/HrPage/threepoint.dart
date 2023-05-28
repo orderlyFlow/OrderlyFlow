@@ -543,7 +543,7 @@ class threepointState extends State<threepoint> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'neuropol',
-                                      fontSize: ScreenHeight * 0.022,
+                                      fontSize: ScreenHeight * 0.032,
                                     ),
                                     onSubmitted: (value) {
                                       String enteredText =
@@ -562,7 +562,7 @@ class threepointState extends State<threepoint> {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'neuropol',
-                                          fontSize: ScreenHeight * 0.22,
+                                          fontSize: ScreenHeight * 0.032,
                                         ),
                                         onSubmitted: (value) {
                                           String enteredText =
@@ -582,7 +582,7 @@ class threepointState extends State<threepoint> {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'neuropol',
-                                          fontSize: ScreenHeight * 0.22,
+                                          fontSize: ScreenHeight * 0.032,
                                         ),
                                         onSubmitted: (value) {
                                           String enteredText =
@@ -601,7 +601,7 @@ class threepointState extends State<threepoint> {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'neuropol',
-                                          fontSize: ScreenHeight * 0.22,
+                                          fontSize: ScreenHeight * 0.032,
                                         ),
                                         onSubmitted: (value) {
                                           String enteredText =
